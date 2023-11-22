@@ -1,5 +1,6 @@
 return {
   "folke/flash.nvim",
+  enabled = false,
   event = "VeryLazy",
   ---@type Flash.Config
   opts = {},
@@ -13,9 +14,10 @@ return {
       end,
       desc = "Flash",
     },
-
+    { "S", false },
+    -- {
     --   "S",
-    --   mode = { "n", "o", "x" },
+    --   mode = { "n" },
     --   function()
     --     require("flash").treesitter()
     --   end,

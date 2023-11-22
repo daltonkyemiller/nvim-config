@@ -5,6 +5,7 @@ return {
       javascript = { "prettierd" },
       typescript = { "prettierd" },
       typescriptreact = { "prettierd" },
+      javascriptreact = { "prettierd" },
     },
   },
 }

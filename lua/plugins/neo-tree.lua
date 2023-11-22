@@ -1,8 +1,26 @@
+local Util = require("lazyvim.util")
+
 return {
   "nvim-neo-tree/neo-tree.nvim",
+  keys = {
+    {
+      "<leader>fe",
+      function()
+        require("neo-tree.command").execute({ toggle = true, dir = Util.root(), reveal = true })
+      end,
+      desc = "Explorer Neotree (root dir)",
+    },
+    {
+      "<leader>fE",
+      function()
+        require("neo-tree.command").execute({ toggle = true, dir = vim.loop.cwd(), reveal = true })
+      end,
+      desc = "Explorer Neotree (cwd)",
+    },
+  },
   opts = function(_, opts)
     local non_icons = require("nvim-nonicons")
-    opts.auto_clean_after_session_restore = true
+    -- opts.auto_clean_after_session_restore = true
     opts.default_source = "filesystem"
     opts.close_if_last_window = true
     opts.sources = { "filesystem", "buffers", "git_status" }
@@ -67,16 +85,9 @@ return {
     opts.window.mappings["[b"] = "prev_source"
     opts.window.mappings["]b"] = "next_source"
 
-    opts.default_source = "filesystem"
+    -- opts.default_source = "filesystem"
 
-    -- opts.filesystem = {
-    --   bind_to_cwd = false,
-    --   follow_current_file = { enabled = true },
-    --   hijack_netrw_behavior = "open_current",
-    --   use_libuv_file_watcher = true,
-    -- }
-    --
-    opts.filesystem.hijack_netrw_behavior = "open_current"
+    opts.filesystem.hijack_netrw_behavior = "disabled"
     opts.filesystem.follow_current_file = { enabled = true }
     opts.filesystem.use_libuv_file_watcher = true
 

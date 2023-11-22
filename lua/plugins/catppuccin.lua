@@ -54,7 +54,7 @@ return {
         types = {},
         operators = {},
       },
-      -- transparent_background = true,
+      transparent_background = true,
       show_end_of_buffer = false,
       custom_highlights = function(colors)
         return {

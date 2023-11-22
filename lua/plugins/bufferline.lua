@@ -1,4 +1,12 @@
 return {
   "akinsho/bufferline.nvim",
-  opts = {},
+  keys = {
+    {
+      "<leader>bb",
+      function()
+        require("bufferline").pick()
+      end,
+      desc = "Pick buffer",
+    },
+  },
 }
