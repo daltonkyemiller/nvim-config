@@ -1,0 +1,160 @@
+# Functions
+
+# Function
+snippet fun "function"
+	function ${1:function_name}(${2}) {
+		${0:${VISUAL}}
+	}
+# Asynchronous Function
+snippet asf "async function"
+	async function ${1:function_name}(${2}) {
+		${0:${VISUAL}}
+	}
+
+# Anonymous Function
+snippet anf "" w
+	function(${1}) {
+		${0:${VISUAL}}
+	}
+
+# Flow control
+# if
+snippet if "if (condition) { ... }"
+	if (${1:true}) {
+		${0:${VISUAL}}
+	}
+# if ... else
+snippet ife "if (condition) { ... } else { ... }"
+	if (${1:true}) {
+		${0:${VISUAL}}
+	} else {
+		${2}
+	}
+# ternary conditional
+snippet ter Ternary: `condition ? true : false`
+	$1 ? $2: $0
+
+# switch
+snippet switch
+	switch (${1:expression}) {
+		case '${3:case}':
+			${4}
+			break;
+		${0}
+		default:
+			${2}
+	}
+
+snippet case "case 'xyz': ... break"
+	case '${1:case}':
+		${0:${VISUAL}}
+		break;
+
+snippet try "try { ... } catch(e) { ... }"
+	try {
+		${0:${VISUAL}}
+	} catch (${1:e}) {
+		${2:/* handle error */}
+	}
+
+snippet tryf "try { ... } catch(e) { ... } finally { ... }"
+	try {
+		${0:${VISUAL}}
+	} catch (${1:e}) {
+		${2:/* handle error */}
+	} finally {
+		${3:/* be executed regardless of the try / catch result*/}
+	}
+
+# throw Error
+snippet terr
+	throw new Error('${1:error message}')
+
+# return
+snippet ret
+	return ${0:result};
+
+snippet for "for (...) {...}"
+	for (let ${1:i} = 0, ${2:len} = ${3:Things.length}; $1 < $2; $1++) {
+		${0:${VISUAL}}
+	}
+
+snippet forr "reversed for (...) {...}"
+	for (let ${2:i} = ${1:Things.length} - 1; $2 >= 0; $2--) {
+		${0:${VISUAL}}
+	}
+
+# For in loop
+snippet fori
+	for (let ${1:prop} in ${2:object}) {
+		${0:$2[$1]}
+	}
+
+# For of loop
+snippet foro
+	for (const ${1} of ${2}) {
+		${3}
+	}
+snippet forof
+	for (const ${1} of ${2}) {
+		${3}
+	}
+snippet forin
+	for (const ${1} in ${2}) {
+		${3}
+	}
+
+# detructure props
+snippet cp "const { prop } = props"
+  const { ${1} } = ${2:props}
+# Documentation
+# docstring
+snippet /**
+	/**
+	 * ${0:description}
+	 *
+	 */
+snippet @par
+	@param {${1:type}} ${2:name} ${0:description}
+
+snippet @ret
+	@return {${1:type}} ${0:description}
+
+snippet cl "console.log"
+	console.log(${0});
+snippet cd "console.debug"
+	console.debug(${0});
+snippet ce "console.error"
+	console.error(${0});
+snippet cw "console.warn"
+	console.warn(${0});
+snippet ci "console.info"
+	console.info(${0});
+
+
+# setTimeout function
+snippet timeout
+	setTimeout(function () {${0}}${2}, ${1:10});
+snippet im "import xyz from 'xyz'"
+	import ${1} from '${2:$1}';
+snippet imm "import { member } from 'xyz'"
+	import { ${1} } from '${2}';
+
+snippet c=>
+	const ${1:function_name} = (${2}) => {
+		${0:${VISUAL}}
+	}
+
+snippet ca=>
+	const ${1:function_name} = async (${2}) => {
+		${0:${VISUAL}}
+	}
+
+snippet af "() =>"
+	(${1}) => ${0:${VISUAL}}
+
+snippet as "async"
+	async ${0}
+
+snippet aw "await"
+	await ${0:${VISUAL}}
