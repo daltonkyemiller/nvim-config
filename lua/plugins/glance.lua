@@ -1,15 +1,15 @@
 --- @type LazySpec
 return {
-  'dnlhc/glance.nvim',
+  "dnlhc/glance.nvim",
   event = "BufRead",
   config = true,
   opts = {
     list = {
-      position = 'left',
+      position = "left",
       width = 30,
     },
   },
   keys = {
-    { 'gr', '<CMD>Glance references<CR>', desc = '[G]oto [R]eferences' },
+    { "gr", "<CMD>Glance references<CR>", desc = "[G]oto [R]eferences" },
   },
 }

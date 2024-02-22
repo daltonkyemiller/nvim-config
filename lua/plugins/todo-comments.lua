@@ -1,5 +1,5 @@
 return {
   "folke/todo-comments.nvim",
   event = "VeryLazy",
-  config = true
+  config = true,
 }

@@ -1,4 +1,15 @@
-# Functions
+snippet rc "React Component"
+	type ${1}Props = {
+		${2}
+	}
+
+	export function ${1:${TM_FILENAME_BASE}}(props: ${TM_FILENAME_BASE}Props) {
+		return (
+			<section>
+				${3}
+			</section>
+		);
+	}
 
 # Function
 snippet fun "function"

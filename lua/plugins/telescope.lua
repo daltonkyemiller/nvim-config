@@ -1,67 +1,83 @@
 local telescope_path_display = function(opts, path)
-  local tail = require('telescope.utils').path_tail(path)
-  return string.format('%s - %s', tail, path), { { { 1, #tail }, 'Constant' } }
+  local tail = require("telescope.utils").path_tail(path)
+  return string.format("%s - %s", tail, path), { { { 1, #tail }, "Constant" } }
 end
 
 --- @type LazySpec
 return {
-  'nvim-telescope/telescope.nvim',
-  branch = '0.1.x',
+  "nvim-telescope/telescope.nvim",
+  branch = "0.1.x",
   dependencies = {
-    'nvim-lua/plenary.nvim',
+    "nvim-lua/plenary.nvim",
     {
-      'nvim-telescope/telescope-fzf-native.nvim',
-      build = 'make',
+      "nvim-telescope/telescope-fzf-native.nvim",
+      build = "make",
       cond = function()
-        return vim.fn.executable 'make' == 1
+        return vim.fn.executable("make") == 1
       end,
     },
   },
   opts = function()
-    local icons = require 'nvim-nonicons'
+    local icons = require("nvim-nonicons")
     return {
       defaults = {
-        layout_strategy = 'flex',
+        layout_strategy = "flex",
         layout_config = {
           vertical = { width = 0.9 },
         },
-        prompt_prefix = '  ' .. icons.get 'telescope' .. '  ',
+        prompt_prefix = "  " .. icons.get("telescope") .. "  ",
         mappings = {
           i = {
-            ['<C-j>'] = require('telescope.actions').move_selection_next,
-            ['<C-k>'] = require('telescope.actions').move_selection_previous,
+            ["<C-j>"] = require("telescope.actions").move_selection_next,
+            ["<C-k>"] = require("telescope.actions").move_selection_previous,
           },
         },
-        file_ignore_patterns = { 'node_modules', '.git', 'dist', '^DEPRECATED', '^deprecated' },
+        file_ignore_patterns = { "node_modules", ".git", "dist", "^DEPRECATED", "^deprecated" },
       },
     }
   end,
   keys = function()
-    local tel_builtin = require 'telescope.builtin'
+    local tel_builtin = require("telescope.builtin")
     return {
       {
-        '<leader>/',
+        "<leader>/",
         function()
-          tel_builtin.live_grep {
+          tel_builtin.live_grep({
             path_display = telescope_path_display,
-          }
+          })
         end,
-        desc = 'Find [/] in cwd',
+        desc = "Find [/] in cwd",
       },
       {
-        '<leader>ff',
+        "<leader>ff",
         function()
-          tel_builtin.find_files {
+          tel_builtin.find_files({
             path_display = telescope_path_display,
-          }
+          })
         end,
-        desc = '[F]ind files',
+        desc = "[F]ind files",
+      },
+      {
+        "<leader>fb",
+        function()
+          tel_builtin.buffers({
+            path_display = telescope_path_display,
+          })
+        end,
+        desc = "[F]ind [B]uffers",
+      },
+      {
+        "<leader>fs",
+        function()
+          tel_builtin.lsp_dynamic_workspace_symbols()
+        end,
+        desc = "[F]ind [S]ymbols",
       },
     }
   end,
   init = function()
-    local telescope = require 'telescope'
-    telescope.load_extension 'fzf'
+    local telescope = require("telescope")
+    telescope.load_extension("fzf")
   end,
 }
 

@@ -1,4 +1,5 @@
 ((jsx_element) @tag.outer)
+
 ((jsx_self_closing_element) @tag.outer)
 
 ((jsx_element (jsx_opening_element) . (_) @_start (_) @_end . (jsx_closing_element))

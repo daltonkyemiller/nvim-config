@@ -2,7 +2,6 @@ local moves = { "d", "c", "v", "y" }
 
 local jsx_tag_motion = require("daltonkyemiller.jsx_tag_motion").jsx_tag_motion
 
-
 for _, value in pairs(moves) do
   vim.keymap.set("n", value .. "it", function()
     jsx_tag_motion(value, "i")
