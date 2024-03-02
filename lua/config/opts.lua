@@ -29,6 +29,9 @@ vim.o.undofile = true
 vim.o.ignorecase = true
 vim.o.smartcase = true
 
+-- Smart indentation
+vim.o.smartindent = true
+
 -- Keep signcolumn on by default
 vim.wo.signcolumn = "yes"
 
@@ -41,3 +44,7 @@ vim.o.completeopt = "menuone,noselect"
 
 -- NOTE: You should make sure your terminal supports this
 vim.o.termguicolors = true
+
+vim.o.splitright = true
+vim.o.splitbelow = true
+

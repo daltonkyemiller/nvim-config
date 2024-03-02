@@ -9,6 +9,7 @@ return {
   branch = "0.1.x",
   dependencies = {
     "nvim-lua/plenary.nvim",
+    "nvim-telescope/telescope-live-grep-args.nvim",
     {
       "nvim-telescope/telescope-fzf-native.nvim",
       build = "make",
@@ -38,13 +39,18 @@ return {
   end,
   keys = function()
     local tel_builtin = require("telescope.builtin")
+    local live_grep_args = require("telescope").extensions.live_grep_args.live_grep_args
     return {
       {
         "<leader>/",
         function()
-          tel_builtin.live_grep({
+          live_grep_args({
             path_display = telescope_path_display,
           })
+
+          -- tel_builtin.live_grep({
+          --   path_display = telescope_path_display,
+          -- })
         end,
         desc = "Find [/] in cwd",
       },

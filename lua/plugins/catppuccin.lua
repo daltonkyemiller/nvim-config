@@ -59,6 +59,8 @@ return {
       show_end_of_buffer = false,
       custom_highlights = function(colors)
         return {
+          -- ["@tag.attribute.tsx"] = { fg = colors.rosewater },
+          -- ["@tag.tsx"] = { fg = colors.maroon },
           -- Visual = { bg = colors.base },
           NormalFloat = { bg = colors.crust },
           CursorLine = { bg = colors.surface1 },
