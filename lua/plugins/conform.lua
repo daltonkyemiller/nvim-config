@@ -1,16 +1,24 @@
+local function get_correct_formatter_js()
+  local cwd = vim.fn.getcwd()
+  local has_biome_file = vim.fn.filereadable(cwd .. "/biome.json") == 1
+  return has_biome_file and { "biome" } or { "prettierd" }
+end
+
 --- @type LazySpec
 return {
   "stevearc/conform.nvim",
   opts = {
     formatters_by_ft = {
-      javascript = { { "biome", "prettierd" } },
-      typescript = { { "biome", "prettierd" } },
-      json = { { "biome", "prettierd" } },
-      typescriptreact = { { "biome", "prettierd" } },
-      javascriptreact = { { "biome", "prettierd" } },
+      astro = { "prettierd" },
+      javascript = get_correct_formatter_js,
+      typescript = get_correct_formatter_js,
+      json = get_correct_formatter_js,
+      typescriptreact = get_correct_formatter_js,
+      javascriptreact = get_correct_formatter_js,
       prisma = { "prettierd" },
       lua = { "stylua" },
       starlark = { "black" },
+      sql = { "pg_format" },
     },
   },
   config = true,

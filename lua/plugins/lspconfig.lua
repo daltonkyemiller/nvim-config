@@ -33,6 +33,16 @@ local on_attach = function(client, bufnr)
         },
       })
     end, "[C]ode Remove [U]nused Code")
+
+    nmap("<leader>cl", function()
+      vim.lsp.buf.code_action({
+        apply = true,
+        context = {
+          only = { "source.fixAll.biome" },
+          diagnostics = {},
+        },
+      })
+    end, "[C]ode [L]int Fix All")
   end
 
   nmap("<leader>cr", vim.lsp.buf.rename, "[C]ode [R]ename")
@@ -73,6 +83,21 @@ local servers = {
       diagnostics = { disable = { "missing-fields" } },
     },
   },
+  glsl_analyzer = {},
+  biome = {},
+  tailwindcss = {
+    tailwindCSS = {
+      experimental = {
+        classRegex = {
+          {
+            "cn\\(([^]*)\\)",
+            "(?:'|\"|`)([^\"'`]*)(?:'|\"|`)",
+          },
+        },
+      },
+    },
+  },
+  astro = {}
 }
 
 --- @type LazySpec

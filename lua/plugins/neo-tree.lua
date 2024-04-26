@@ -106,6 +106,7 @@ return {
       -- },
       mappings = {
         ["/"] = false,
+        ["z"] = false,
         ["l"] = "child_or_open",
         ["h"] = "parent_or_close",
       },

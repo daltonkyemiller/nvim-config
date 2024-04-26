@@ -13,7 +13,7 @@ vim.api.nvim_create_autocmd("TextYankPost", {
 vim.api.nvim_create_autocmd("VimEnter", {
   callback = function()
     local first_arg = vim.fn.argv()[1]
-    if first_arg == nil or first_arg == "." then require("persistence").load() end
+    if first_arg == "." then require("persistence").load() end
   end,
   nested = true,
 })

@@ -25,16 +25,29 @@ local function get_line(bufnr, row)
   return vim.api.nvim_buf_get_lines(bufnr, row, row + 1, false)[1]
 end
 
+local js_nodes = { "jsx_element", "jsx_self_closing_element" }
+local astro_nodes = { "element", "self_closing_element" }
+
+local node_map = {
+  ["javascriptreact"] = js_nodes,
+  ["typescriptreact"] = js_nodes,
+  ["astro"] = astro_nodes,
+}
+
 ---@param type 'd' | 'c' | 'v'
 ---@param mode 'i' | 'a'
 M.jsx_tag_motion = function(type, mode)
-  if vim.bo.filetype ~= "typescriptreact" and vim.bo.filetype ~= "javascriptreact" then return nil end
+  if vim.bo.filetype ~= "typescriptreact" and vim.bo.filetype ~= "javascriptreact" and vim.bo.filetype ~= "astro" then
+    return nil
+  end
 
   local ts_utils = require("nvim-treesitter.ts_utils")
   local node = ts_utils.get_node_at_cursor()
   if node == nil then return end
 
-  local nearest_node = find_nearest_node(node, { "jsx_element", "jsx_self_closing_element" })
+  local search_node_types = node_map[vim.bo.filetype]
+
+  local nearest_node = find_nearest_node(node, search_node_types)
 
   if nearest_node == nil then return end
 
@@ -42,7 +55,7 @@ M.jsx_tag_motion = function(type, mode)
   local start_row, start_col, end_row, end_col = nearest_node:range()
 
   -- if it's inner tag, we need to find the range of the children, unless it's a self closing tag
-  if mode == "i" and nearest_node:type() ~= "jsx_self_closing_element" then
+  if mode == "i" and nearest_node:type() ~= search_node_types[2] then
     local children = ts_utils.get_named_children(nearest_node)
 
     local first_child = children[1]

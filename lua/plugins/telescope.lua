@@ -1,12 +1,7 @@
-local telescope_path_display = function(opts, path)
-  local tail = require("telescope.utils").path_tail(path)
-  return string.format("%s - %s", tail, path), { { { 1, #tail }, "Constant" } }
-end
-
 --- @type LazySpec
 return {
   "nvim-telescope/telescope.nvim",
-  branch = "0.1.x",
+  branch = "master",
   dependencies = {
     "nvim-lua/plenary.nvim",
     "nvim-telescope/telescope-live-grep-args.nvim",
@@ -22,6 +17,9 @@ return {
     local icons = require("nvim-nonicons")
     return {
       defaults = {
+        path_display = {
+          "filename_first",
+        },
         layout_strategy = "flex",
         layout_config = {
           vertical = { width = 0.9 },
@@ -42,11 +40,16 @@ return {
     local live_grep_args = require("telescope").extensions.live_grep_args.live_grep_args
     return {
       {
+        "<leader>fr",
+        function()
+          tel_builtin.resume()
+        end,
+        desc = "[F]ind [R]esume",
+      },
+      {
         "<leader>/",
         function()
-          live_grep_args({
-            path_display = telescope_path_display,
-          })
+          live_grep_args()
 
           -- tel_builtin.live_grep({
           --   path_display = telescope_path_display,
@@ -57,18 +60,23 @@ return {
       {
         "<leader>ff",
         function()
-          tel_builtin.find_files({
-            path_display = telescope_path_display,
-          })
+          tel_builtin.find_files()
         end,
         desc = "[F]ind files",
       },
       {
+        "<leader>fF",
+        function()
+          tel_builtin.find_files({
+            no_ignore = true,
+            hidden = true,
+          })
+        end,
+      },
+      {
         "<leader>fb",
         function()
-          tel_builtin.buffers({
-            path_display = telescope_path_display,
-          })
+          tel_builtin.buffers()
         end,
         desc = "[F]ind [B]uffers",
       },

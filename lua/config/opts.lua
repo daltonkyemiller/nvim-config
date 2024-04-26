@@ -1,4 +1,16 @@
-vim.cmd.colorscheme("catppuccin")
+vim.o.expandtab = true
+vim.o.smartindent = true
+vim.o.tabstop = 2
+vim.o.shiftwidth = 2
+
+-- vim.cmd.colorscheme("catppuccin")
+vim.cmd.colorscheme("rose-pine")
+
+vim.opt.spelllang = "en_us"
+vim.opt.spell = true
+vim.opt.spelloptions = "camel,noplainbuffer"
+
+vim.opt.cursorline = true
 
 vim.wo.relativenumber = true
 -- [[ Setting options ]]
@@ -48,3 +60,9 @@ vim.o.termguicolors = true
 vim.o.splitright = true
 vim.o.splitbelow = true
 
+vim.filetype.add({
+  extension = {
+    vert = "glsl",
+    frag = "glsl",
+  },
+})

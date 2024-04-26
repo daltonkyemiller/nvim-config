@@ -25,7 +25,12 @@ vim.opt.rtp:prepend(lazypath)
 
 require("lazy").setup({
   -- Git related plugins
-  "tpope/vim-fugitive",
+  {
+    "tpope/vim-fugitive",
+    config = function()
+      vim.g.fugitive_summary_format = "%cs || %<(20,trunc)%an || %s"
+    end,
+  },
   "tpope/vim-rhubarb",
 
   -- Detect tabstop and shiftwidth automatically
@@ -33,20 +38,6 @@ require("lazy").setup({
 
   -- Useful plugin to show you pending keybinds.
   { "folke/which-key.nvim", opts = {} },
-
-  -- {
-  --   -- Set lualine as statusline
-  --   "nvim-lualine/lualine.nvim",
-  --   -- See `:help lualine.txt`
-  --   opts = {
-  --     options = {
-  --       icons_enabled = false,
-  --       theme = "auto",
-  --       component_separators = "|",
-  --       section_separators = "",
-  --     },
-  --   },
-  -- },
 
   {
     -- Add indentation guides even on blank lines

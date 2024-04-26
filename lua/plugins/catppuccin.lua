@@ -1,7 +1,7 @@
 --- @type LazySpec
 return {
   "catppuccin/nvim",
-  enabled = true,
+  enabled = false,
   lazy = false,
   priority = 150,
   name = "catppuccin",
