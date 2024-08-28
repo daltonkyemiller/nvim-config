@@ -32,14 +32,6 @@ return {
         { source = "diagnostics" },
       },
     }
-    opts.event_handlers = {
-      {
-        event = "neo_tree_buffer_enter",
-        handler = function(_)
-          vim.opt_local.signcolumn = "auto"
-        end,
-      },
-    }
 
     opts.default_component_configs = {
       indent = { padding = 0 },
@@ -64,6 +56,20 @@ return {
     }
 
     opts.commands = {
+      rename_ts = function(state)
+        local node = state.tree:get_node()
+        local path = node:get_id()
+        local path_without_file_name = vim.fn.fnamemodify(path, ":h")
+        vim.ui.input({ prompt = "Rename to: " }, function(input)
+          vim.cmd("VtsRename" .. path .. " " .. path_without_file_name .. "/" .. input)
+        end)
+      end,
+      system_open = function(state)
+        local node = state.tree:get_node()
+        local path = node:get_id()
+        -- macOs: open file in default application in the background.
+        vim.fn.jobstart({ "open", path }, { detach = true })
+      end,
       child_or_open = function(state)
         local node = state.tree:get_node()
         if node.type == "directory" or node:has_children() then
@@ -96,6 +102,43 @@ return {
         local node = state.tree:get_node()
         require("neo-tree.ui.renderer").focus_node(state, node:get_parent_id())
       end,
+      copy_selector = function(state)
+        local node = state.tree:get_node()
+        local filepath = node:get_id()
+        local filename = node.name
+        local modify = vim.fn.fnamemodify
+
+        local vals = {
+          ["BASENAME"] = modify(filename, ":r"),
+          ["EXTENSION"] = modify(filename, ":e"),
+          ["FILENAME"] = filename,
+          ["PATH (CWD)"] = modify(filepath, ":."),
+          ["PATH (HOME)"] = modify(filepath, ":~"),
+          ["PATH"] = filepath,
+          ["URI"] = vim.uri_from_fname(filepath),
+        }
+
+        local options = vim.tbl_filter(function(val)
+          return vals[val] ~= ""
+        end, vim.tbl_keys(vals))
+        if vim.tbl_isempty(options) then
+          vim.notify("No values to copy", vim.log.levels.WARN)
+          return
+        end
+        table.sort(options)
+        vim.ui.select(options, {
+          prompt = "Choose to copy to clipboard:",
+          format_item = function(item)
+            return ("%s: %s"):format(item, vals[item])
+          end,
+        }, function(choice)
+          local result = vals[choice]
+          if result then
+            vim.notify(("Copied: `%s`"):format(result))
+            vim.fn.setreg("+", result)
+          end
+        end)
+      end,
     }
     opts.window = {
       position = "float",
@@ -107,8 +150,11 @@ return {
       mappings = {
         ["/"] = false,
         ["z"] = false,
+        ["O"] = "system_open",
         ["l"] = "child_or_open",
         ["h"] = "parent_or_close",
+        ["Y"] = "copy_selector",
+        ["R"] = "rename_ts",
       },
     }
     -- opts.default_source = "filesystem"
@@ -118,12 +164,14 @@ return {
       follow_current_file = { enabled = true },
       use_libuv_file_watcher = true,
     }
+    opts.use_popups_for_input = false
 
     opts.event_handlers = {
       {
         event = "neo_tree_buffer_enter",
         handler = function(_)
           vim.opt_local.signcolumn = "auto"
+          vim.opt_local.relativenumber = true
         end,
       },
     }

@@ -1,17 +1,1 @@
 extends typescript
-
-snippet cn className
-	className="${1}"
-
-snippet cnf cn function
-  className={cn(${1})}
-
-snippet load Remix Loader Function
-  export async function loader({ request }: LoaderFunctionArgs) {
-    ${1}
-  }
-
-snippet act Remix Action Function
-  export async function action({ request }: ActionFunctionArgs) {
-    ${1}
-  }

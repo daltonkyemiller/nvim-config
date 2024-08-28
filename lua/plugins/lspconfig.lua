@@ -13,7 +13,7 @@ local on_attach = function(client, bufnr)
     vim.keymap.set("n", keys, func, { buffer = bufnr, desc = desc })
   end
 
-  if client.name == "tsserver" then
+  if client.name == "vtsls" then
     nmap("<leader>co", function()
       vim.lsp.buf.code_action({
         apply = true,
@@ -43,10 +43,41 @@ local on_attach = function(client, bufnr)
         },
       })
     end, "[C]ode [L]int Fix All")
+
+    nmap("<leader>cL", function()
+      vim.lsp.buf.execute_command({
+        command = "typescript.openTsServerLog",
+      })
+    end)
+
+    nmap("<leader>cR", function()
+      vim.lsp.buf.execute_command({
+        command = "typescript.reloadProjects",
+      })
+    end, "[C]ode [R]estart Server")
+
+    nmap("<leader>cV", function()
+      vim.lsp.buf.execute_command({
+        command = "typescript.selectTypeScriptVersion",
+      })
+    end, "[C]ode [V]ersion")
+
+    nmap("<leader>cD", function()
+      local position_params = vim.lsp.util.make_position_params()
+
+      vim.lsp.buf.execute_command({
+        command = "typescript.goToSourceDefinition",
+        arguments = { vim.api.nvim_buf_get_name(0), position_params.position },
+      })
+    end, "[C]ode [D]efinition")
   end
 
   nmap("<leader>cr", vim.lsp.buf.rename, "[C]ode [R]ename")
   nmap("<leader>cd", vim.diagnostic.open_float, "[C]ode [D]iagnostics")
+  nmap("<leader>ci", function()
+    local is_enabled = vim.lsp.inlay_hint.is_enabled({})
+    vim.lsp.inlay_hint.enable(not is_enabled)
+  end, "[C]ode [I]nlay Hints")
 
   nmap("<leader>ca", function()
     vim.lsp.buf.code_action({ context = { only = { "quickfix", "refactor", "source" } } })
@@ -73,7 +104,28 @@ local on_attach = function(client, bufnr)
 end
 
 local servers = {
-  tsserver = {},
+  vtsls = {
+    vtsls = {
+
+      autoUseWorkspaceTsdk = true,
+    },
+    typescript = {
+      inlayHints = {
+        parameterNames = {
+          enabled = "all",
+        },
+        variableTypes = {
+          enabled = true,
+        },
+        propertyDeclarationTypes = {
+          enabled = true,
+        },
+        functionLikeReturnTypes = {
+          enabled = true,
+        },
+      },
+    },
+  },
   prismals = {},
   lua_ls = {
     Lua = {
@@ -97,7 +149,16 @@ local servers = {
       },
     },
   },
-  astro = {}
+  astro = {},
+}
+local vtsls_handlers = {
+  ["workspace/executeCommand"] = function(err, result, ctx, config)
+    if ctx.params.command ~= "typescript.goToSourceDefinition" then return end
+    vim.print(vim.inspect(result))
+    if result == nil or #result == 0 then return end
+
+    vim.lsp.util.jump_to_location(result[1], "utf-8")
+  end,
 }
 
 --- @type LazySpec
@@ -118,11 +179,14 @@ return {
           ensure_installed = vim.tbl_keys(servers),
           handlers = {
             function(server_name)
+              local handlers = server_name == "vtsls" and vtsls_handlers or {}
+
               require("lspconfig")[server_name].setup({
                 capabilities = capabilities,
                 on_attach = on_attach,
                 settings = servers[server_name],
                 filetypes = (servers[server_name] or {}).filetypes,
+                handlers = handlers,
               })
             end,
           },

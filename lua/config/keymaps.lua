@@ -11,6 +11,7 @@ vim.keymap.set("n", "j", "v:count == 0 ? 'gj' : 'j'", { expr = true, silent = tr
 -- Diagnostic keymaps
 vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, { desc = "Go to previous diagnostic message" })
 vim.keymap.set("n", "]d", vim.diagnostic.goto_next, { desc = "Go to next diagnostic message" })
+
 -- vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float, { desc = 'Open floating diagnostic message' })
 vim.keymap.set("n", "<leader>q", vim.diagnostic.setloclist, { desc = "Open diagnostics list" })
 
@@ -25,7 +26,13 @@ vim.keymap.set("n", "<C-d>", "<C-d>zz", { desc = "Move cursor down half page", n
 -- [[ Buffer keymaps]]
 -- Delete buffer
 vim.keymap.set("n", "<leader>bd", "<Cmd>bd<CR>", { desc = "[B]uffer [D]elete", noremap = true, silent = true })
-vim.keymap.set("n", "<leader>bo", '<Cmd>%bdelete|edit #|normal `"<CR>zz', { desc = "[B]uffer Delete [O]thers" })
+vim.keymap.set("n", "<leader>bo", function()
+  local current_buffer = vim.api.nvim_get_current_buf()
+  local open_buffers = vim.api.nvim_list_bufs()
+  for _, buf in ipairs(open_buffers) do
+    if buf ~= current_buffer then vim.api.nvim_buf_delete(buf, { force = true }) end
+  end
+end, { desc = "[B]uffer Delete [O]thers" })
 
 -- Open lazy plugin manager
 vim.keymap.set("n", "<leader>l", "<Cmd>Lazy<CR>", { desc = "Open [L]azy plugin manager" })

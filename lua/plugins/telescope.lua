@@ -37,7 +37,9 @@ return {
   end,
   keys = function()
     local tel_builtin = require("telescope.builtin")
+    local telescope = require("telescope")
     local live_grep_args = require("telescope").extensions.live_grep_args.live_grep_args
+
     return {
       {
         "<leader>fr",
@@ -62,7 +64,7 @@ return {
         function()
           tel_builtin.find_files()
         end,
-        desc = "[F]ind files",
+        desc = "[F]ind [F]iles",
       },
       {
         "<leader>fF",
@@ -72,6 +74,7 @@ return {
             hidden = true,
           })
         end,
+        desc = "[F]ind [F]iles (include hidden)",
       },
       {
         "<leader>fb",
@@ -86,6 +89,13 @@ return {
           tel_builtin.lsp_dynamic_workspace_symbols()
         end,
         desc = "[F]ind [S]ymbols",
+      },
+      {
+        "<leader>fn",
+        function()
+          telescope.extensions.notify.notify()
+        end,
+        desc = "[F]ind [N]otifications",
       },
     }
   end,

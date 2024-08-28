@@ -146,10 +146,8 @@ snippet ci "console.info"
 # setTimeout function
 snippet timeout
 	setTimeout(function () {${0}}${2}, ${1:10});
-snippet im "import xyz from 'xyz'"
-	import ${1} from '${2:$1}';
-snippet imm "import { member } from 'xyz'"
-	import { ${1} } from '${2}';
+snippet im "import { member } from "xyz""
+	import { ${1} } from "${2}";
 
 snippet c=>
 	const ${1:function_name} = (${2}) => {
