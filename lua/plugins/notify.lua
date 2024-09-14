@@ -40,6 +40,7 @@ return {
   config = function()
     require("notify").setup({
       max_width = 60,
+      top_down = false,
       background_colour = "#000000",
     })
   end,

@@ -16,6 +16,8 @@ return {
     "MunifTanjim/nui.nvim",
     { "yamatsum/nvim-nonicons", config = true },
   },
+  --- @param _ LazyPlugin
+  --- @return table
   opts = function(_, opts)
     local non_icons = require("nvim-nonicons")
     opts.auto_clean_after_session_restore = true
@@ -59,8 +61,10 @@ return {
       rename_ts = function(state)
         local node = state.tree:get_node()
         local path = node:get_id()
+        local file_name = vim.fn.fnamemodify(path, ":t")
         local path_without_file_name = vim.fn.fnamemodify(path, ":h")
-        vim.ui.input({ prompt = "Rename to: " }, function(input)
+        vim.ui.input({ prompt = "Rename to: ", default = file_name }, function(input)
+          if input == nil or input == "" or input == file_name then return end
           vim.cmd("VtsRename" .. path .. " " .. path_without_file_name .. "/" .. input)
         end)
       end,

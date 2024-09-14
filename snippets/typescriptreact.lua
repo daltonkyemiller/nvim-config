@@ -89,9 +89,9 @@ export default function <>(){
 
 local remix_component_snippet = s(
   {
-    trig = "rec",
-    name = "Remix Component",
-    desc = "Creates a Remix component from file name",
+    trig = "rmr",
+    name = "Remix Route",
+    desc = "Creates a Remix route from file name",
   },
   fmta(remix_component_snippet_template, {
     c(1, {

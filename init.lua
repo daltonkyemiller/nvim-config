@@ -54,6 +54,7 @@ require("lazy").setup({
 require("config.opts")
 require("config.autocmds")
 require("config.keymaps")
+require("config.user-commands")
 
 -- document existing key chains
 require("which-key").add({

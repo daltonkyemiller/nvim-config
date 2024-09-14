@@ -7,6 +7,14 @@ return {
     {
       "L3MON4D3/LuaSnip",
       keys = {
+        -- {
+        --   "<Enter>",
+        --   function()
+        --     return require("luasnip").expand_or_jump()
+        --   end,
+        --   mode = "i",
+        --
+        -- },
         {
           "<C-c>",
           function()
@@ -38,27 +46,6 @@ return {
           mode = { "i", "s" },
         },
       },
-      -- opts = function()
-      --   local ls = require("luasnip")
-      --   return {
-      --     snip_env = {
-      --       s = function(...)
-      --         local snip = ls.s(...)
-      --         -- we can't just access the global `ls_file_snippets`, since it will be
-      --         -- resolved in the environment of the scope in which it was defined.
-      --         table.insert(getfenv(2).ls_file_snippets, snip)
-      --       end,
-      --       t = function(...)
-      --         local snip = ls.t(...)
-      --         table.insert(getfenv(2).ls_file_snippets, snip)
-      --       end,
-      --       parse = function(...)
-      --         local snip = ls.parser.parse_snippet(...)
-      --         table.insert(getfenv(2).ls_file_snippets, snip)
-      --       end,
-      --     },
-      --   }
-      -- end,
       init = function()
         require("luasnip.loaders.from_snipmate").load()
         require("luasnip.loaders.from_lua").load({
