@@ -5,6 +5,7 @@ vim.defer_fn(function()
   require("nvim-treesitter.configs").setup({
     -- Add languages to be installed here that you want installed for treesitter
     ensure_installed = {
+      "regex",
       "astro",
       "c",
       "cpp",
@@ -13,8 +14,13 @@ vim.defer_fn(function()
       "python",
       "rust",
       "tsx",
+      "html",
+      "json",
+      "css",
       "javascript",
       "typescript",
+      "markdown",
+      "markdown_inline",
       "prisma",
       "vimdoc",
       "vim",
@@ -29,7 +35,7 @@ vim.defer_fn(function()
     ignore_install = {},
     -- You can specify additional Treesitter modules here: -- For example: -- playground = {--enable = true,-- },
     modules = {},
-    highlight = { enable = true },
+    highlight = { enable = true, additional_vim_regex_highlighting = false },
     -- indent = {  enable = true },
     incremental_selection = {
       enable = true,
