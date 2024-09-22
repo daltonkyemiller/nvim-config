@@ -76,6 +76,7 @@ return {
       },
       link = {
         hyperlink = icons.get("link") .. " ",
+        image = icons.get("image") .. " ",
         custom = {
           web = { icon = icons.get("link") .. " ", highlight = "RenderMarkdownLink" },
         },
