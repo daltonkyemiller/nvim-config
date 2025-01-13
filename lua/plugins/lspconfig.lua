@@ -73,9 +73,13 @@ local on_attach = function(client, bufnr)
     vim.lsp.inlay_hint.enable(not is_enabled)
   end, "[C]ode [I]nlay Hints")
 
-  nmap("<leader>ca", function()
+  vim.keymap.set({ "n", "x" }, "<leader>ca", function()
     vim.lsp.buf.code_action({ context = { only = { "quickfix", "refactor", "source" } } })
-  end, "[C]ode [A]ction")
+  end, { desc = "[C]ode [A]ction" })
+
+  -- nmap("<leader>ca", function()
+  --   vim.lsp.buf.code_action({ context = { only = { "quickfix", "refactor", "source" } } })
+  -- end, "[C]ode [A]ction")
 
   -- nmap("gd", require("telescope.builtin").lsp_definitions, "[G]oto [D]efinition")
   -- nmap("gr", require("telescope.builtin").lsp_references, "[G]oto [R]eferences")
@@ -103,8 +107,15 @@ local servers = {
   vtsls = {
     vtsls = {
       autoUseWorkspaceTsdk = true,
+      experimental = {
+        completion = {
+          enableServerSideFuzzyMatch = true,
+          entriesLimit = 25,
+        },
+      },
     },
     typescript = {
+      maxTsServerMemory = 8192,
       inlayHints = {
         parameterNames = {
           enabled = "all",

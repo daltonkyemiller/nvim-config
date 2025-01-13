@@ -23,6 +23,7 @@ return {
         layout_strategy = "flex",
         layout_config = {
           vertical = { width = 0.9 },
+          horizontal = { width = 0.9 },
         },
         prompt_prefix = "  " .. icons.get("telescope") .. "  ",
         mappings = {

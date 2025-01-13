@@ -18,6 +18,7 @@ vim.defer_fn(function()
       "json",
       "css",
       "javascript",
+      "glsl",
       "typescript",
       "markdown",
       "markdown_inline",

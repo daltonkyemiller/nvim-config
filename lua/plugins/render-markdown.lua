@@ -3,8 +3,8 @@ return {
   "MeanderingProgrammer/render-markdown.nvim",
   init = function()
     local color1_bg = "#f6c177"
-    local color2_bg = "#eb6f92"
-    local color3_bg = "#c4a7e7"
+    local color2_bg = "#c4a7e7"
+    local color3_bg = "#eb6f92"
     local color4_bg = "#9ccfd8"
     local color5_bg = "#9ccfd8"
     local color6_bg = "#ebbcba"
@@ -83,6 +83,9 @@ return {
       },
       file_types = { "markdown", "Avante" },
       heading = {
+        border = true,
+        -- above = icons.get("chevron-up"),
+        -- below = icons.get("chevron-down"),
         -- sign = false,
         icons = { "1 ", "2 ", "3 ", "4 ", "5 ", "6 " },
         backgrounds = {

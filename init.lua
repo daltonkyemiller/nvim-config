@@ -23,6 +23,7 @@ end
 
 vim.opt.rtp:prepend(lazypath)
 
+
 require("lazy").setup({
   -- Git related plugins
   {

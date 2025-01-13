@@ -6,11 +6,13 @@ vim.o.shiftwidth = 2
 -- vim.cmd.colorscheme("catppuccin")
 vim.cmd.colorscheme("rose-pine")
 
-vim.opt.spelllang = "en_us"
-vim.opt.spell = true
-vim.opt.spelloptions = "camel,noplainbuffer"
+vim.o.spelllang = "en_us"
+vim.o.spell = true
+vim.o.spelloptions = "camel,noplainbuffer"
 
-vim.opt.cursorline = true
+vim.o.laststatus = 3
+
+vim.o.cursorline = true
 
 vim.wo.relativenumber = true
 

@@ -1,5 +1,6 @@
 --- @type LazySpec
 return {
+  enabled = false,
   -- Autocompletion
   "hrsh7th/nvim-cmp",
   dependencies = {

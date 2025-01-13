@@ -8,7 +8,7 @@ return {
     require("rose-pine").setup({
       variant = "moon",
       styles = {
-        italic = false,
+        -- italic = false,
         transparency = true,
       },
       palette = {

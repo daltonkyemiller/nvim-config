@@ -40,3 +40,4 @@ vim.keymap.set("n", "<leader>l", "<Cmd>Lazy<CR>", { desc = "Open [L]azy plugin m
 -- Open new empty buffer
 vim.keymap.set("n", "<leader>bn", "<Cmd>enew<CR>", { desc = "[B]uffer [N]ew" })
 
+vim.keymap.set("n", "gf", require("daltonkyemiller.fig_comment").create_fig_comment, { desc = "Create [F]ig Comment" })
