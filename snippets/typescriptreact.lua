@@ -74,6 +74,31 @@ local react_component_snippet = s(
   })
 )
 
+local expo_react_component_snippet_template = [[
+import { SafeAreaView } from "react-native-safe-area-context";
+
+export default function <>(){
+
+  return (
+    <<SafeAreaView>>
+      <>
+    <</SafeAreaView>>
+  )
+}
+]]
+
+local expo_react_component_snippet = s(
+  {
+    trig = "erc",
+    name = "Expo React Component",
+    desc = "Creates a Expo React component from file name",
+  },
+  fmta(expo_react_component_snippet_template, {
+    d(1, file_name_function),
+    i(2),
+  })
+)
+
 local remix_component_snippet_template = [[
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
 
@@ -114,4 +139,5 @@ local remix_component_snippet = s(
 return {
   react_component_snippet,
   remix_component_snippet,
+  expo_react_component_snippet,
 }

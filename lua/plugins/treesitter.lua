@@ -3,6 +3,7 @@
 -- Defer Treesitter setup after first render to improve startup time of 'nvim {filename}'
 vim.defer_fn(function()
   require("nvim-treesitter.configs").setup({
+
     -- Add languages to be installed here that you want installed for treesitter
     ensure_installed = {
       "regex",
@@ -36,7 +37,10 @@ vim.defer_fn(function()
     ignore_install = {},
     -- You can specify additional Treesitter modules here: -- For example: -- playground = {--enable = true,-- },
     modules = {},
-    highlight = { enable = true, additional_vim_regex_highlighting = false },
+    highlight = {
+      enable = true,
+      additional_vim_regex_highlighting = false,
+    },
     -- indent = {  enable = true },
     incremental_selection = {
       enable = true,

@@ -23,6 +23,7 @@ return {
       css = { "prettierd" },
       markdown = { "prettierd" },
       glsl = { "clang_format" },
+      ["*"] = { "injected" },
     },
   },
   config = true,
@@ -31,7 +32,17 @@ return {
   keys = function()
     local conform = require("conform")
     return {
-      { "<leader>cf", conform.format, desc = "LSP: [C]ode [F]ormat" },
+      {
+        "<leader>cf",
+        function()
+          if require("daltonkyemiller.util").is_specific_lsp_attached_to_buffer("tailwindcss") then
+            vim.cmd("TailwindSort")
+          end
+
+          conform.format()
+        end,
+        desc = "LSP: [C]ode [F]ormat",
+      },
     }
   end,
 }

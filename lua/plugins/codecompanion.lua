@@ -8,7 +8,11 @@ return {
   },
   opts = {
     display = {
+      chat = {
+        diff = { enabled = true },
+      },
       diff = {
+        enabled = true,
         provider = "mini_diff",
       },
     },

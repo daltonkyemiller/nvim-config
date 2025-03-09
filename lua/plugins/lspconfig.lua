@@ -74,19 +74,20 @@ local on_attach = function(client, bufnr)
   end, "[C]ode [I]nlay Hints")
 
   vim.keymap.set({ "n", "x" }, "<leader>ca", function()
-    vim.lsp.buf.code_action({ context = { only = { "quickfix", "refactor", "source" } } })
+    vim.lsp.buf.code_action()
   end, { desc = "[C]ode [A]ction" })
 
-  -- nmap("<leader>ca", function()
-  --   vim.lsp.buf.code_action({ context = { only = { "quickfix", "refactor", "source" } } })
-  -- end, "[C]ode [A]ction")
+  nmap("<leader>ca", function()
+    vim.lsp.buf.code_action({ context = { only = { "quickfix", "refactor", "source" } } })
+  end, "[C]ode [A]ction")
 
-  -- nmap("gd", require("telescope.builtin").lsp_definitions, "[G]oto [D]efinition")
+  nmap("gd", require("snacks.picker").lsp_definitions, "[G]oto [D]efinition")
+  nmap("gD", require("snacks.picker").lsp_type_definitions, "[G]oto [D]efinition")
   -- nmap("gr", require("telescope.builtin").lsp_references, "[G]oto [R]eferences")
-  nmap("gd", vim.lsp.buf.definition, "[G]oto [D]efinition")
+  -- nmap("gd", vim.lsp.buf.definition, "[G]oto [D]efinition")
   -- nmap("gr", require("telescope.builtin").lsp_references, "[G]oto [R]eferences")
-  nmap("gI", require("telescope.builtin").lsp_implementations, "[G]oto [I]mplementation")
-  nmap("<leader>D", require("telescope.builtin").lsp_type_definitions, "Type [D]efinition")
+  -- nmap("gI", require("telescope.builtin").lsp_implementations, "[G]oto [I]mplementation")
+  -- nmap("<leader>D", require("telescope.builtin").lsp_type_definitions, "Type [D]efinition")
   -- nmap("<leader>d", require("telescope.builtin").lsp_document_symbols, "[D]ocument [S]ymbols")
   -- nmap("<leader>ws", require("telescope.builtin").lsp_dynamic_workspace_symbols, "[W]orkspace [S]ymbols")
 
@@ -95,7 +96,7 @@ local on_attach = function(client, bufnr)
   nmap("<C-k>", vim.lsp.buf.signature_help, "Signature Documentation")
 
   -- Lesser used LSP functionality
-  nmap("gD", vim.lsp.buf.declaration, "[G]oto [D]eclaration")
+  -- nmap("gD", vim.lsp.buf.declaration, "[G]oto [D]eclaration")
   nmap("<leader>wa", vim.lsp.buf.add_workspace_folder, "[W]orkspace [A]dd Folder")
   nmap("<leader>wr", vim.lsp.buf.remove_workspace_folder, "[W]orkspace [R]emove Folder")
   nmap("<leader>wl", function()
@@ -115,7 +116,10 @@ local servers = {
       },
     },
     typescript = {
-      maxTsServerMemory = 8192,
+      preferences = {
+        includeCompletionsForImportStatements = true,
+      },
+      maxTsServerMemory = 16384,
       inlayHints = {
         parameterNames = {
           enabled = "all",
@@ -189,8 +193,9 @@ return {
     {
       "williamboman/mason-lspconfig.nvim",
       config = function()
-        local capabilities = vim.lsp.protocol.make_client_capabilities()
-        capabilities = require("cmp_nvim_lsp").default_capabilities(capabilities)
+        local lspconfig = require("lspconfig")
+        local blink_cmp = require("blink.cmp")
+        local capabilities = blink_cmp.get_lsp_capabilities()
 
         require("mason-lspconfig").setup({
           ensure_installed = vim.tbl_keys(servers),
@@ -198,7 +203,7 @@ return {
             function(server_name)
               local handlers = server_name == "vtsls" and vtsls_handlers or {}
 
-              require("lspconfig")[server_name].setup({
+              lspconfig[server_name].setup({
                 capabilities = capabilities,
                 on_attach = on_attach,
                 settings = servers[server_name],

@@ -27,10 +27,15 @@ vim.keymap.set("n", "<C-d>", "<C-d>zz", { desc = "Move cursor down half page", n
 -- Delete buffer
 vim.keymap.set("n", "<leader>bd", "<Cmd>bd<CR>", { desc = "[B]uffer [D]elete", noremap = true, silent = true })
 vim.keymap.set("n", "<leader>bo", function()
-  local current_buffer = vim.api.nvim_get_current_buf()
+  local current_windows = vim.api.nvim_list_wins()
+  local current_buffers = {}
+  for _, win in ipairs(current_windows) do
+    local buf = vim.api.nvim_win_get_buf(win)
+    table.insert(current_buffers, buf)
+  end
   local open_buffers = vim.api.nvim_list_bufs()
   for _, buf in ipairs(open_buffers) do
-    if buf ~= current_buffer then vim.api.nvim_buf_delete(buf, { force = true }) end
+    if not vim.tbl_contains(current_buffers, buf) then vim.api.nvim_buf_delete(buf, { force = true }) end
   end
 end, { desc = "[B]uffer Delete [O]thers" })
 
