@@ -53,6 +53,7 @@ return {
         })
       end,
     },
+    "Kaiser-Yang/blink-cmp-avante",
   },
 
   -- use a release tag to download pre-built binaries
@@ -65,6 +66,32 @@ return {
   ---@module 'blink.cmp'
   ---@type blink.cmp.Config
   opts = {
+    cmdline = {
+      enabled = true,
+      completion = {
+        menu = {
+          auto_show = true,
+        },
+        list = {
+          selection = {
+            preselect = false,
+          },
+        },
+      },
+
+      keymap = {
+        ["<C-j>"] = { "select_next", "fallback" },
+        ["<C-k>"] = { "select_prev", "fallback" },
+        ["<C-d>"] = { "scroll_documentation_down", "fallback" },
+        ["<C-u>"] = { "scroll_documentation_up", "fallback" },
+        ["<Tab>"] = {
+          function(cmp)
+            if cmp.is_menu_visible() then return cmp.accept() end
+          end,
+          "fallback",
+        },
+      },
+    },
 
     snippets = { preset = "luasnip" },
     signature = { enabled = true },
@@ -75,9 +102,7 @@ return {
 
       list = {
         selection = {
-          preselect = function(ctx)
-            return ctx.mode == "default" and true or false
-          end,
+          preselect = false,
         },
       },
     },
@@ -93,7 +118,12 @@ return {
       ["<C-k>"] = { "select_prev", "fallback" },
       ["<C-d>"] = { "scroll_documentation_down", "fallback" },
       ["<C-u>"] = { "scroll_documentation_up", "fallback" },
-      ["<CR>"] = { "accept", "fallback" },
+      ["<Tab>"] = {
+        function(cmp)
+          if cmp.is_menu_visible() then return cmp.accept() end
+        end,
+        "fallback",
+      },
     },
 
     appearance = {
@@ -109,7 +139,7 @@ return {
     -- Default list of enabled providers defined so that you can extend it
     -- elsewhere in your config, without redefining it, due to `opts_extend`
     sources = {
-      default = { "lsp", "snippets", "path", "buffer", "codecompanion" },
+      default = { "avante", "codecompanion", "lsp", "snippets", "path", "buffer" },
       providers = {
         lsp = {
           transform_items = function(_, items)
@@ -131,6 +161,13 @@ return {
           name = "CodeCompanion",
           module = "codecompanion.providers.completion.blink",
           enabled = true,
+        },
+        avante = {
+          module = "blink-cmp-avante",
+          name = "Avante",
+          opts = {
+            -- options for blink-cmp-avante
+          },
         },
       },
     },

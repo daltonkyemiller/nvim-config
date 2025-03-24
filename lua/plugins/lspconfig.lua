@@ -111,7 +111,6 @@ local servers = {
       experimental = {
         completion = {
           enableServerSideFuzzyMatch = true,
-          entriesLimit = 25,
         },
       },
     },
@@ -160,6 +159,7 @@ local servers = {
     },
   },
   astro = {},
+  reason_ls = {},
 }
 
 local vtsls_handlers = {

@@ -63,7 +63,11 @@ vim.filetype.add({
   extension = {
     vert = "glsl",
     frag = "glsl",
+    re = "reason"
   },
 })
 
 vim.g.bullets_enable_in_empty_buffers = 0
+
+vim.g.neovide_opacity = 0.3
+vim.g.neovide_normal_opacity = 0.3

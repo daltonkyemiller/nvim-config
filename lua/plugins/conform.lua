@@ -23,7 +23,17 @@ return {
       css = { "prettierd" },
       markdown = { "prettierd" },
       glsl = { "clang_format" },
+      reason = { "reason_fmt" },
+      rust = { "rustfmt" },
       ["*"] = { "injected" },
+    },
+
+    formatters = {
+      reason_fmt = function()
+        return {
+          command = "refmt",
+        }
+      end,
     },
   },
   config = true,

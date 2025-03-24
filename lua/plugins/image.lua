@@ -1,5 +1,6 @@
 --- @type LazySpec
 return {
+  enabled = false,
   "3rd/image.nvim",
   config = function()
     require("image").setup({
