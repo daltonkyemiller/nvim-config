@@ -2,34 +2,37 @@
 return {
   "yetone/avante.nvim",
   event = "VeryLazy",
-  version = false, -- Set this to "*" to always pull the latest release version, or set it to false to update to the latest code changes.
+  version = "*", -- Set this to "*" to always pull the latest release version, or set it to false to update to the latest code changes.
 
   ---@type avante.Config
   opts = {
     -- add any opts here
     -- for example
-    provider = "claude",
+    provider = "openai",
+    openai = {
+      model = "gpt-4o"
+    },
     claude = {
       model = "claude-3-5-sonnet-latest",
       max_tokens = 8192,
+    },
+    rag_service = {
+      enabled = true,
+      host_mount = os.getenv("HOME"),
+      provider = "openai",
+      llm_model = "gpt-4o",
+      embed_model = "text-embedding-ada-002",
+      endpoint = "https://api.openai.com/v1/",
     },
     file_selector = {
       provider = "snacks",
     },
     behaviour = {
+      auto_suggestions = false,
+
+
       -- auto_apply_diff_after_generation = true,
-    },
-    mappings = {
-      --- @type AvanteConflictMappings
-      diff = {
-        ours = "co",
-        theirs = "ct",
-        all_theirs = "ca",
-        both = "cb",
-        cursor = "cc",
-        next = "]x",
-        prev = "[x",
-      },
+      -- enable_claude_text_editor_tool_mode = true,
     },
   },
   -- if you want to build from source then do `make BUILD_FROM_SOURCE=true`
