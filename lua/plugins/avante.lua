@@ -2,13 +2,13 @@
 return {
   "yetone/avante.nvim",
   event = "VeryLazy",
-  version = "*", -- Set this to "*" to always pull the latest release version, or set it to false to update to the latest code changes.
+  -- version = "*", -- Set this to "*" to always pull the latest release version, or set it to false to update to the latest code changes.
 
   ---@type avante.Config
   opts = {
     -- add any opts here
     -- for example
-    provider = "openai",
+    provider = "claude",
     openai = {
       model = "gpt-4o"
     },
@@ -29,6 +29,7 @@ return {
     },
     behaviour = {
       auto_suggestions = false,
+      use_cwd_as_project_root = true,
 
 
       -- auto_apply_diff_after_generation = true,

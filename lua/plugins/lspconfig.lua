@@ -174,6 +174,7 @@ local vtsls_handlers = {
 
 --- @type LazySpec
 return {
+  enabled = false,
   -- LSP Configuration & Plugins
   "neovim/nvim-lspconfig",
   dependencies = {

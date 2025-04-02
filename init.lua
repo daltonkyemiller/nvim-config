@@ -56,6 +56,8 @@ require("config.opts")
 require("config.autocmds")
 require("config.keymaps")
 require("config.user-commands")
+require("config.lsp")
+require("daltonkyemiller.globals")
 
 -- document existing key chains
 require("which-key").add({
