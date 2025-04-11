@@ -90,6 +90,13 @@ return {
         end,
         desc = "[F]ind [R]esume",
       },
+      {
+        "<leader>fh",
+        function()
+          snacks.picker.search_history()
+        end,
+        desc = "[F]ind [H]istory",
+      },
 
       {
         "<leader>fs",

@@ -1,6 +1,6 @@
 --- @type LazySpec
 return {
-  -- enabled = false,
+  enabled = false,
   "olimorris/codecompanion.nvim",
   dependencies = {
     "nvim-lua/plenary.nvim",

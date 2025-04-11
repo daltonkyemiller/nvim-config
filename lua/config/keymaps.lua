@@ -46,3 +46,23 @@ vim.keymap.set("n", "<leader>l", "<Cmd>Lazy<CR>", { desc = "Open [L]azy plugin m
 vim.keymap.set("n", "<leader>bn", "<Cmd>enew<CR>", { desc = "[B]uffer [N]ew" })
 
 vim.keymap.set("n", "gf", require("daltonkyemiller.fig_comment").create_fig_comment, { desc = "Create [F]ig Comment" })
+
+vim.keymap.set("v", "<leader>r", function()
+  local pos1 = vim.fn.getpos("v")
+  local pos2 = vim.fn.getpos(".")
+
+  local text = vim.fn.getregion(pos1, pos2)[1]
+
+  local escape_pattern = "/\\.*$^~[]"
+  -- Escape special characters
+  local escaped_text = vim.fn.escape(text, escape_pattern)
+
+  vim.ui.input({
+    prompt = "Replace with: ",
+  }, function(replace_with)
+    if replace_with == "" then return end
+    replace_with = vim.fn.escape(replace_with, escape_pattern)
+
+    vim.cmd("%s/" .. escaped_text .. "/" .. replace_with .. "/g")
+  end)
+end, { noremap = true, desc = "[R]eplace visual selection in file" })

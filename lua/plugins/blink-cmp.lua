@@ -96,6 +96,10 @@ return {
     snippets = { preset = "luasnip" },
     signature = { enabled = true },
     completion = {
+      documentation = {
+        auto_show = true,
+      },
+
       menu = {
         max_height = 20,
       },
@@ -139,7 +143,7 @@ return {
     -- Default list of enabled providers defined so that you can extend it
     -- elsewhere in your config, without redefining it, due to `opts_extend`
     sources = {
-      default = { "lazydev", "avante", "codecompanion", "lsp", "snippets", "path", "buffer" },
+      default = { "claude_code", "lazydev", "avante", "lsp", "snippets", "path", "buffer" },
       providers = {
         lsp = {
           transform_items = function(_, items)
@@ -157,9 +161,14 @@ return {
           module = "blink.cmp.sources.lsp",
           -- max_items = 20,
         },
-        codecompanion = {
-          name = "CodeCompanion",
-          module = "codecompanion.providers.completion.blink",
+        -- codecompanion = {
+        --   name = "CodeCompanion",
+        --   module = "codecompanion.providers.completion.blink",
+        --   enabled = true,
+        -- },
+        claude_code = {
+          name = "Claude Code",
+          module = "claude-code.integrations.blink",
           enabled = true,
         },
         avante = {

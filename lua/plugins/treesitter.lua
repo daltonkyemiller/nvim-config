@@ -1,17 +1,30 @@
 -- [[ Configure Treesitter ]]
 -- See `:help nvim-treesitter`
 -- Defer Treesitter setup after first render to improve startup time of 'nvim {filename}'
-vim.defer_fn(function()
-  local list = require("nvim-treesitter.parsers").get_parser_configs()
+-- vim.defer_fn(function()
+--   local list = require("nvim-treesitter.parsers").get_parser_configs()
+--
+--   list.reason = {
+--     install_info = {
+--       url = "https://github.com/reasonml-editor/tree-sitter-reason",
+--       files = { "src/parser.c", "src/scanner.c" },
+--       branch = "master",
+--     },
+--   }
+--
+--   require("nvim-treesitter.configs").setup()
+-- end, 0)
 
-  list.reason = {
-    install_info = {
-      url = "https://github.com/reasonml-editor/tree-sitter-reason",
-      files = { "src/parser.c", "src/scanner.c" },
-      branch = "master",
-    },
-  }
-  require("nvim-treesitter.configs").setup({
+--- @type LazySpec
+return {
+  -- Highlight, edit, and navigate code
+  "nvim-treesitter/nvim-treesitter",
+  main = "nvim-treesitter.configs", -- Sets main module to use for opts
+  dependencies = {
+    "nvim-treesitter/nvim-treesitter-textobjects",
+  },
+  build = ":TSUpdate",
+  opts = {
     -- Add languages to be installed here that you want installed for treesitter
     ensure_installed = {
       "regex",
@@ -35,6 +48,7 @@ vim.defer_fn(function()
       "vimdoc",
       "vim",
       "bash",
+      "sql"
     },
 
     -- Autoinstall languages that are not installed. Defaults to false (but you can change for yourself!)
@@ -103,15 +117,5 @@ vim.defer_fn(function()
         },
       },
     },
-  })
-end, 0)
-
---- @type LazySpec
-return {
-  -- Highlight, edit, and navigate code
-  "nvim-treesitter/nvim-treesitter",
-  dependencies = {
-    "nvim-treesitter/nvim-treesitter-textobjects",
   },
-  build = ":TSUpdate",
 }

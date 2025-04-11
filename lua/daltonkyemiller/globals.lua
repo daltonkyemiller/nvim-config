@@ -1,3 +1,4 @@
+---@param v any
 P = function(v)
   vim.print(vim.inspect(v))
   return v

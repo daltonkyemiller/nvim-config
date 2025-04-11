@@ -163,7 +163,28 @@ vim.lsp.config("vtsls", {
   },
 })
 
+vim.lsp.config("tailwindcss", {
+  filetypes = { "html", "css", "scss", "javascript", "typescript", "javascriptreact", "typescriptreact" },
+})
+
+vim.lsp.config("json-lsp", {
+  filetypes = { "json", "jsonc" },
+  cmd = { "vscode-json-language-server", "--stdio" },
+})
+
+vim.lsp.config("css-lsp", {
+  filetypes = { "css", "scss", "less" },
+  cmd = { "vscode-css-language-server", "--stdio" },
+})
+
+vim.lsp.config("prismals", {
+  filetypes = { "prisma" },
+  cmd = { "prisma-language-server", "--stdio" },
+})
+
 vim.lsp.enable({
+  "css-lsp",
+  "json-lsp",
   "lua_ls",
   "vtsls",
   "prismals",

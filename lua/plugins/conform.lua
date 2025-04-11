@@ -13,6 +13,7 @@ return {
       javascript = get_correct_formatter_js,
       typescript = get_correct_formatter_js,
       json = { "prettierd" },
+      jsonc = { "prettierd" },
       typescriptreact = get_correct_formatter_js,
       javascriptreact = get_correct_formatter_js,
       prisma = { "prettierd" },
