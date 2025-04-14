@@ -32,3 +32,19 @@
  (#set! injection.language "typescriptreact")
 )
           
+; query
+;; comment lua injection
+((comment)
+ @comment .
+ (variable_declaration 
+   (assignment_statement 
+     (expression_list 
+       (string 
+         (string_content) @injection.content)
+       )
+     )
+   )
+ (#match? @comment "^--+( )*[lL][uU][aA]( )*")
+ (#set! injection.language "lua")
+)
+          

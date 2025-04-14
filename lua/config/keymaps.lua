@@ -33,9 +33,13 @@ vim.keymap.set("n", "<leader>bo", function()
     local buf = vim.api.nvim_win_get_buf(win)
     table.insert(current_buffers, buf)
   end
+
   local open_buffers = vim.api.nvim_list_bufs()
+
   for _, buf in ipairs(open_buffers) do
-    if not vim.tbl_contains(current_buffers, buf) then vim.api.nvim_buf_delete(buf, { force = true }) end
+    if not vim.tbl_contains(current_buffers, buf) and vim.fn.buflisted(buf) == 1 then
+      vim.api.nvim_buf_delete(buf, { force = true })
+    end
   end
 end, { desc = "[B]uffer Delete [O]thers" })
 
@@ -66,3 +70,13 @@ vim.keymap.set("v", "<leader>r", function()
     vim.cmd("%s/" .. escaped_text .. "/" .. replace_with .. "/g")
   end)
 end, { noremap = true, desc = "[R]eplace visual selection in file" })
+
+vim.keymap.set("n", "<leader>p", function()
+  local get_char = vim.fn.getchar(-1)
+  if type(get_char) == "string" then return end
+  local char = vim.fn.nr2char(get_char)
+
+  local motion = "vi" .. char .. "p"
+
+  vim.cmd("normal! " .. motion)
+end, { desc = "[P]aste inside" })

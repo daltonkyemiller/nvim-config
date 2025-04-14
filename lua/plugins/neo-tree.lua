@@ -153,6 +153,7 @@ return {
       mappings = {
         ["/"] = false,
         ["z"] = false,
+        ["?" ] = false,
         ["O"] = "system_open",
         ["l"] = "child_or_open",
         ["h"] = "parent_or_close",

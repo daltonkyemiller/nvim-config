@@ -25,6 +25,7 @@ return {
         langs = {
           { name = "typescript", match = "^--+( )*{lang}( )*" },
           { name = "typescriptreact", match = "^--+( )*{lang}( )*" },
+          { name = "lua", match = "^--+( )*{lang}( )*" },
         },
         query = [[
 ; query

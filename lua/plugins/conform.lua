@@ -26,6 +26,7 @@ return {
       glsl = { "clang_format" },
       reason = { "reason_fmt" },
       rust = { "rustfmt" },
+      toml = { "taplo" },
       ["*"] = { "injected" },
     },
 

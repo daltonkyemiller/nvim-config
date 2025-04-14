@@ -182,10 +182,39 @@ vim.lsp.config("prismals", {
   cmd = { "prisma-language-server", "--stdio" },
 })
 
+vim.lsp.config("taplo", {
+  filetypes = { "toml" },
+  cmd = { "taplo", "lsp", "stdio" },
+  -- ---@param fname string
+  -- root_dir = function(fname)
+  --   return vim.fs.dirname(vim.fs.find(".git", {
+  --     follow = true,
+  --     upward = true,
+  --   })[1])
+  -- end,
+  settings = {
+    evenBetterToml = {
+      schema = {
+        associations = {
+          ["stylua.toml"] = "https://raw.githubusercontent.com/SchemaStore/schemastore/refs/heads/master/src/schemas/json/stylua.json",
+          [".stylua.toml"] = "https://raw.githubusercontent.com/SchemaStore/schemastore/refs/heads/master/src/schemas/json/stylua.json",
+        },
+      },
+    },
+  },
+})
+
+vim.lsp.config("rust-analyzer", {
+  filetypes = { "rust" },
+  cmd = { "rust-analyzer" },
+})
+
 vim.lsp.enable({
+  "rust-analyzer",
   "css-lsp",
   "json-lsp",
   "lua_ls",
+  "taplo",
   "vtsls",
   "prismals",
   "glsl_analyzer",
