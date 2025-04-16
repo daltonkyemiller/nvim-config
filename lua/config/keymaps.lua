@@ -80,3 +80,11 @@ vim.keymap.set("n", "<leader>p", function()
 
   vim.cmd("normal! " .. motion)
 end, { desc = "[P]aste inside" })
+
+vim.keymap.set("n", "H", "^", {
+  desc = "Move to start of line",
+})
+
+vim.keymap.set("n", "L", "$", {
+  desc = "Move to end of line",
+})

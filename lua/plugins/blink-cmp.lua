@@ -7,14 +7,6 @@ return {
     {
       "L3MON4D3/LuaSnip",
       keys = {
-        -- {
-        --   "<Enter>",
-        --   function()
-        --     return require("luasnip").expand_or_jump()
-        --   end,
-        --   mode = "i",
-        --
-        -- },
         {
           "<C-c>",
           function()
@@ -47,7 +39,9 @@ return {
         },
       },
       init = function()
-        require("luasnip.loaders.from_snipmate").load()
+        require("luasnip.loaders.from_snipmate").load({
+          paths = { "~/.config/nvim/snippets" },
+        })
         require("luasnip.loaders.from_lua").load({
           paths = { "~/.config/nvim/snippets" },
         })
@@ -143,7 +137,7 @@ return {
     -- Default list of enabled providers defined so that you can extend it
     -- elsewhere in your config, without redefining it, due to `opts_extend`
     sources = {
-      default = { "claude_code", "lazydev", "avante", "lsp", "snippets", "path", "buffer" },
+      default = { "claude_code", "lazydev", "avante", "snippets", "lsp", "path", "buffer" },
       providers = {
         lsp = {
           transform_items = function(_, items)

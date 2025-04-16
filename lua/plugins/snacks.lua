@@ -25,7 +25,7 @@ local dropdown_layout = {
   layout = {
     backdrop = false,
     row = 1,
-    width = 0.4,
+    width = 0.5,
     min_width = 80,
     height = 0.9,
     border = "none",
@@ -60,7 +60,6 @@ return {
       layout = dropdown_layout,
 
       win = {
-
         keys = {
           ["<CR>"] = { "confirm", mode = { "n", "i" } },
         },
