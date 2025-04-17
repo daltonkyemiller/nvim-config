@@ -5,6 +5,7 @@ return {
   opts = {
     library = {
       "~/dev/nvim-plugins/claude-code.nvim",
+      "~/dev/nvim-plugins/claude-code.nvim/.tests/data/nvim/lazy/nvim-cmp",
       "~/.config/nvim/lua/daltonkyemiller/globals",
       "lazy.nvim",
       "flash.nvim",

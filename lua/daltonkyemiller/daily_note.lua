@@ -6,7 +6,7 @@ M.create_daily_note = function(options)
     day = false,
   }
 
-  local cwd = vim.loop.cwd()
+  local cwd = vim.uv.cwd()
 
   if not cwd then
     vim.notify("Could not get current working directory", vim.log.levels.ERROR)
@@ -38,6 +38,9 @@ M.create_daily_note = function(options)
 ---
 date: %s
 ---
+
+# TODO:
+
 ]],
     date_string
   )
