@@ -18,6 +18,7 @@ local ts_js_query = [[
 
 --- @type LazySpec
 return {
+  enabled = false,
   "dariuscorvus/tree-sitter-language-injection.nvim",
   opts = {
     lua = {
