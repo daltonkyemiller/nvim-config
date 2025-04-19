@@ -1,5 +1,6 @@
 --- @type LazySpec
 return {
+  enabled = false,
   "rose-pine/neovim",
   name = "rose-pine",
   lazy = false,

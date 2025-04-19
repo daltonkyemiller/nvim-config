@@ -139,6 +139,11 @@ return {
     sources = {
       default = { "claude_code", "lazydev", "avante", "snippets", "lsp", "path", "buffer" },
       providers = {
+        claude_code = {
+          name = "Claude Code",
+          module = "claude-code.integrations.completion.blink",
+          enabled = true,
+        },
         lsp = {
           transform_items = function(_, items)
             return vim.tbl_filter(function(item)
@@ -160,11 +165,6 @@ return {
         --   module = "codecompanion.providers.completion.blink",
         --   enabled = true,
         -- },
-        claude_code = {
-          name = "Claude Code",
-          module = "claude-code.integrations.blink",
-          enabled = true,
-        },
         avante = {
           module = "blink-cmp-avante",
           name = "Avante",

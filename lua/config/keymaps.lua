@@ -49,7 +49,7 @@ vim.keymap.set("n", "<leader>l", "<Cmd>Lazy<CR>", { desc = "Open [L]azy plugin m
 -- Open new empty buffer
 vim.keymap.set("n", "<leader>bn", "<Cmd>enew<CR>", { desc = "[B]uffer [N]ew" })
 
-vim.keymap.set("n", "gf", require("daltonkyemiller.fig_comment").create_fig_comment, { desc = "Create [F]ig Comment" })
+vim.keymap.set("n", "gF", require("daltonkyemiller.fig_comment").create_fig_comment, { desc = "Create [F]ig Comment" })
 
 vim.keymap.set("v", "<leader>r", function()
   local pos1 = vim.fn.getpos("v")
@@ -81,10 +81,10 @@ vim.keymap.set("n", "<leader>p", function()
   vim.cmd("normal! " .. motion)
 end, { desc = "[P]aste inside" })
 
-vim.keymap.set("n", "H", "^", {
+vim.keymap.set({ "n", "x", "o" }, "H", "^", {
   desc = "Move to start of line",
 })
 
-vim.keymap.set("n", "L", "$", {
+vim.keymap.set({ "n", "x", "o" }, "L", "$", {
   desc = "Move to end of line",
 })

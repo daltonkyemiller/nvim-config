@@ -4,7 +4,7 @@ vim.o.tabstop = 2
 vim.o.shiftwidth = 2
 
 -- vim.cmd.colorscheme("catppuccin")
-vim.cmd.colorscheme("rose-pine")
+vim.cmd.colorscheme("kanagawa")
 
 vim.o.spelllang = "en_us"
 vim.o.spell = true

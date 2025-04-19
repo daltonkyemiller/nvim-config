@@ -6,11 +6,13 @@ vim.g.maplocalleader = " "
 vim.g.loaded_netrwPlugin = 1
 vim.g.loaded_netrw = 1
 
+require("daltonkyemiller.env").load(vim.fn.stdpath("config") .. "/.env")
+
 -- [[ Install `lazy.nvim` plugin manager ]]
 --    https://github.com/folke/lazy.nvim
 --    `:help lazy.nvim.txt` for more info
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
-if not vim.loop.fs_stat(lazypath) then
+if not vim.uv.fs_stat(lazypath) then
   vim.fn.system({
     "git",
     "clone",
@@ -23,7 +25,7 @@ end
 
 vim.opt.rtp:prepend(lazypath)
 
-
+require("daltonkyemiller.globals")
 require("lazy").setup({
   -- Git related plugins
   {
@@ -57,7 +59,6 @@ require("config.autocmds")
 require("config.keymaps")
 require("config.user-commands")
 require("config.lsp")
-require("daltonkyemiller.globals")
 
 -- document existing key chains
 require("which-key").add({
