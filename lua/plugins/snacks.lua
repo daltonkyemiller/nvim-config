@@ -1,26 +1,3 @@
-local telescope_layout = {
-  reverse = true,
-  layout = {
-    box = "horizontal",
-    backdrop = false,
-    width = 0.8,
-    height = 0.9,
-    border = "none",
-    {
-      box = "vertical",
-      { win = "list", title = " Results ", title_pos = "center", border = "rounded" },
-      { win = "input", height = 1, border = "rounded", title = "{title} {live} {flags}", title_pos = "center" },
-    },
-    {
-      win = "preview",
-      title = "{preview:Preview}",
-      width = 0.45,
-      border = "rounded",
-      title_pos = "center",
-    },
-  },
-}
-
 local dropdown_layout = {
   layout = {
     backdrop = false,
@@ -41,6 +18,7 @@ local dropdown_layout = {
     },
   },
 }
+
 --- @type LazySpec
 return {
   "folke/snacks.nvim",
@@ -65,15 +43,70 @@ return {
         },
       },
     },
-    -- notifier = { enabled = true },
-    -- quickfile = { enabled = true },
-    -- scroll = { enabled = true },
-    -- statuscolumn = { enabled = true },
-    -- words = { enabled = true },
+    notifier = { enabled = true, top_down = false },
+    lazygit = { enabled = true },
+    image = { enabled = true },
+    statuscolumn = {
+      enabled = true,
+      left = { "mark", "sign" }, -- priority of signs on the left (high to low)
+      right = { "fold", "git" }, -- priority of signs on the right (high to low)
+      folds = {
+        open = false, -- show open fold icons
+        git_hl = false, -- use Git Signs hl for fold icons
+      },
+      git = {
+        -- patterns to match Git signs
+        patterns = { "GitSign", "MiniDiffSign" },
+      },
+      refresh = 50, -- refresh at most every 50ms
+    },
+    scroll = {
+      enabled = false,
+      animate = {
+        animate = {
+          duration = { step = 10, total = 100 },
+          easing = "linear",
+        },
+        -- faster animation when repeating scroll after delay
+        animate_repeat = {
+          delay = 100, -- delay in ms before using the repeat animation
+          duration = { step = 5, total = 50 },
+          easing = "linear",
+        },
+      },
+    },
+    words = { enabled = true },
+    indent = { enabled = true },
   },
   keys = function()
     local snacks = require("snacks")
     return {
+      {
+        "]w",
+        function()
+          snacks.words.jump(1, true)
+        end,
+        desc = "Next [W]ord",
+      },
+      {
+        "[w",
+        function()
+          snacks.words.jump(-1, true)
+        end,
+        desc = "Previous [W]ord",
+      },
+      {
+        "<leader>g",
+        snacks.lazygit.open,
+        desc = "Open Lazy[G]it",
+      },
+      {
+        "<leader>nd",
+        function()
+          snacks.notifier.hide()
+        end,
+        desc = "[N]otify [D]ismiss All",
+      },
       {
         "<leader><space>",
         function()

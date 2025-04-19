@@ -34,22 +34,12 @@ require("lazy").setup({
       vim.g.fugitive_summary_format = "%cs || %<(20,trunc)%an || %s"
     end,
   },
-  "tpope/vim-rhubarb",
 
   -- Detect tabstop and shiftwidth automatically
   "tpope/vim-sleuth",
 
   -- Useful plugin to show you pending keybinds.
   { "folke/which-key.nvim", opts = {} },
-
-  {
-    -- Add indentation guides even on blank lines
-    "lukas-reineke/indent-blankline.nvim",
-    -- Enable `lukas-reineke/indent-blankline.nvim`
-    -- See `:help ibl`
-    main = "ibl",
-    opts = {},
-  },
 
   { import = "plugins" },
 }, {})
