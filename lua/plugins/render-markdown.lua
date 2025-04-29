@@ -2,17 +2,16 @@
 return {
   "MeanderingProgrammer/render-markdown.nvim",
   init = function()
-    local color1_bg = "#f6c177"
-    local color2_bg = "#c4a7e7"
-    local color3_bg = "#eb6f92"
-    local color4_bg = "#9ccfd8"
-    local color5_bg = "#9ccfd8"
-    local color6_bg = "#ebbcba"
+    local palette = require("daltonkyemiller.colors"):get_palette()
+    local color1_bg = palette.dragonRed
+    local color2_bg = palette.dragonOrange
+    local color3_bg = palette.dragonYellow
+    local color4_bg = palette.dragonGreen
+    local color5_bg = palette.dragonBlue
+    local color6_bg = palette.dragonPurple
 
     local color_fg = "#191724"
-    -- local color_sign = "#ebfafa"
 
-    -- Heading colors (when not hovered over), extends through the entire line
     vim.cmd(string.format([[highlight Headline1Bg guifg=%s guibg=%s]], color_fg, color1_bg))
     vim.cmd(string.format([[highlight Headline2Bg guifg=%s guibg=%s]], color_fg, color2_bg))
     vim.cmd(string.format([[highlight Headline3Bg guifg=%s guibg=%s]], color_fg, color3_bg))

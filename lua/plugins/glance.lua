@@ -8,6 +8,7 @@ end
 
 --- @type LazySpec
 return {
+  enabled = false,
   "dnlhc/glance.nvim",
   event = "BufRead",
   config = true,
@@ -47,7 +48,7 @@ return {
     },
   },
   keys = {
-    { "gr", "<CMD>Glance references<CR>", desc = "[G]oto [R]eferences" },
+    -- { "gr", "<CMD>Glance references<CR>", desc = "[G]oto [R]eferences" },
   },
 }
 

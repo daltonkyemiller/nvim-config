@@ -27,6 +27,7 @@ return {
       reason = { "reason_fmt" },
       rust = { "rustfmt" },
       toml = { "taplo" },
+      yaml = { "prettierd" },
       ["*"] = { "injected" },
     },
 

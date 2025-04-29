@@ -4,7 +4,7 @@ return {
   dev = true,
   dir = "~/dev/nvim-plugins/claude-code.nvim",
   build = "cd node && npm install",
-  ---@type claude-code.ConfigInput
+  ---@type claude-code.Config
   opts = {
     -- debug = true,
     window = {
@@ -24,6 +24,12 @@ return {
       arrow_right = {
         i = "none",
       },
+    },
+    slash_commands = {
+      ["/logout"] = false,
+      ["/login"] = false,
+      ["/vim"] = false,
+      ["/theme"] = false,
     },
     experimental = {
       hide_input_box = true,

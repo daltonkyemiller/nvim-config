@@ -1,16 +1,3 @@
----@param hex string
----@return number brightness from 0 to 1
-local function get_hex_brightness(hex)
-  -- Remove "#" if present
-  hex = hex:gsub("#", "")
-  local r = tonumber(hex:sub(1, 2), 16) / 255
-  local g = tonumber(hex:sub(3, 4), 16) / 255
-  local b = tonumber(hex:sub(5, 6), 16) / 255
-
-  -- Use the luminance formula (ITU-R BT.709)
-  local brightness = 0.2126 * r + 0.7152 * g + 0.0722 * b
-  return brightness
-end
 
 --- @type LazySpec
 return {
@@ -18,21 +5,8 @@ return {
   lazy = false,
   priority = 150,
   config = function()
-    local c = require("kanagawa.lib.color")
-    local colors = require("kanagawa.colors").setup({ theme = "dragon" })
+    local more_saturated_palette = require("daltonkyemiller.colors"):get_palette()
 
-    -- local more_saturated_syn = {}
-    --
-    -- for k, v in pairs(colors.theme.syn) do
-    --   more_saturated_syn[k] = c(v):saturate(0.2):to_hex()
-    -- end
-
-    local more_saturated_palette = {}
-
-    for k, v in pairs(colors.palette) do
-      local brightness = get_hex_brightness(v)
-      more_saturated_palette[k] = brightness > 0.5 and c(v):saturate(0.225):to_hex() or v
-    end
 
     require("kanagawa").setup({
       compile = false, -- enable compiling the colorscheme
@@ -50,9 +24,7 @@ return {
         theme = {
           wave = {},
           lotus = {},
-          dragon = {
-            -- syn = more_saturated_syn,
-          },
+          dragon = {},
           all = {
             ui = {
               float = {

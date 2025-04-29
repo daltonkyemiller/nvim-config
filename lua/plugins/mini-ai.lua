@@ -7,9 +7,9 @@ return {
 
     local ai = require("mini.ai")
     opts.custom_textobjects = {
-      a = ai.gen_spec.treesitter({ a = "@function.outer", i = "@function.inner" }, {}),
+      -- a = ai.gen_spec.treesitter({ a = "@function.outer", i = "@function.inner" }, {}),
       t = ai.gen_spec.treesitter({ a = "@tag.outer", i = "@tag.inner" }, {}),
-      A = ai.gen_spec.treesitter({ a = "@parameters.outer", i = "@parameters.inner" }, {}),
+      -- A = ai.gen_spec.treesitter({ a = "@parameters.outer", i = "@parameters.inner" }, {}),
     }
     return opts
   end,

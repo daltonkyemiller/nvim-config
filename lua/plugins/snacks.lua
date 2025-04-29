@@ -82,6 +82,14 @@ return {
     local snacks = require("snacks")
     return {
       {
+        "gr",
+        function()
+          snacks.picker.lsp_references()
+        end,
+        nowait = true,
+        desc = "[G]oto [R]eferences",
+      },
+      {
         "]w",
         function()
           snacks.words.jump(1, true)
@@ -96,7 +104,14 @@ return {
         desc = "Previous [W]ord",
       },
       {
-        "<leader>g",
+        "<leader>gb",
+        function()
+          snacks.gitbrowse.open()
+        end,
+        desc = "[G]it [B]rowse",
+      },
+      {
+        "<leader>gg",
         snacks.lazygit.open,
         desc = "Open Lazy[G]it",
       },

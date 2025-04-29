@@ -74,6 +74,7 @@ return {
       },
 
       keymap = {
+        preset = "default",
         ["<C-j>"] = { "select_next", "fallback" },
         ["<C-k>"] = { "select_prev", "fallback" },
         ["<C-d>"] = { "scroll_documentation_down", "fallback" },
@@ -137,7 +138,14 @@ return {
     -- Default list of enabled providers defined so that you can extend it
     -- elsewhere in your config, without redefining it, due to `opts_extend`
     sources = {
-      default = { "claude_code", "lazydev", "avante", "snippets", "lsp", "path", "buffer" },
+      default = {
+        "claude_code",
+        "avante",
+        "snippets",
+        "lsp",
+        "path",
+        "buffer",
+      },
       providers = {
         claude_code = {
           name = "Claude Code",

@@ -30,11 +30,11 @@ return {
     behaviour = {
       auto_suggestions = false,
       use_cwd_as_project_root = true,
-
-
-      -- auto_apply_diff_after_generation = true,
-      -- enable_claude_text_editor_tool_mode = true,
     },
+    mappings = {
+      ["<leader>at"] = false
+
+    }
   },
   -- if you want to build from source then do `make BUILD_FROM_SOURCE=true`
   build = "make",
