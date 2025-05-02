@@ -17,7 +17,7 @@ return {
       max_tokens = 8192,
     },
     rag_service = {
-      enabled = true,
+      enabled = false,
       host_mount = os.getenv("HOME"),
       provider = "openai",
       llm_model = "gpt-4o",
