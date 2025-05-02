@@ -5,6 +5,7 @@ vim.lsp.config("*", {
 
 vim.lsp.enable({
   -- "copilot",
+  "hyprls",
   "emmet",
   "rust",
   "css",

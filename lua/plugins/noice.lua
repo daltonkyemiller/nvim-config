@@ -2,7 +2,7 @@ return {
   "folke/noice.nvim",
   event = "VeryLazy",
   opts = function()
-    local Msg = require("noice.ui.msg")
+    local nonicons = require("nvim-nonicons")
 
     return {
       lsp = {
@@ -24,6 +24,31 @@ return {
       },
       ---@type table<string, NoiceFilter>
       status = {},
+      cmdline = {
+        format = {
+          cmdline = { pattern = "^:", icon = "", lang = "vim" },
+          search_down = {
+            kind = "search",
+            pattern = "^/",
+            icon = nonicons.get("arrow-down") .. " " .. nonicons.get("search"),
+            lang = "regex",
+          },
+          search_up = {
+            kind = "search",
+            pattern = "^%?",
+            icon = nonicons.get("arrow-up") .. " " .. nonicons.get("search"),
+            lang = "regex",
+          },
+          filter = { pattern = "^:%s*!", icon = "$", lang = "bash" },
+          lua = {
+            pattern = { "^:%s*lua%s+", "^:%s*lua%s*=%s*", "^:%s*=%s*" },
+            icon = nonicons.get("lua"),
+            lang = "lua",
+          },
+          help = { pattern = "^:%s*he?l?p?%s+", icon = nonicons.get("book-open") },
+          input = { view = "cmdline_input", icon = "󰥻 " },
+        },
+      },
     }
   end,
   dependencies = {
