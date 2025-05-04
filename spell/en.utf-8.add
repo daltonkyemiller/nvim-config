@@ -19,3 +19,7 @@ enabled
 #eturn
 return/!
 return
+Config
+lsp
+Lua
+centerbox
