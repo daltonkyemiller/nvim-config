@@ -9,7 +9,7 @@ return {
     -- debug = true,
     window = {
       position = "float",
-      width = 40,
+      width = 50,
     },
     keymaps = {
       arrow_down = {
