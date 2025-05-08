@@ -16,7 +16,7 @@ return {
       keywordStyle = { italic = true },
       statementStyle = { bold = true },
       typeStyle = {},
-      transparent = false, -- do not set background color
+      transparent = true, -- do not set background color
       dimInactive = false, -- dim inactive window `:h hl-NormalNC`
       terminalColors = true, -- define vim.g.terminal_color_{0,17}
       colors = {
@@ -47,6 +47,10 @@ return {
           NormalFloat = { bg = "none" },
           FloatBorder = { bg = "none" },
           FloatTitle = { bg = "none" },
+
+          MiniTablineCurrent = { bg = "NONE"},
+          MiniTablineVisible = { bg = "NONE"},
+          MiniTablineHidden = { bg = "NONE"},
 
 
           -- NormalNC = { bg = colors.palette.dragonBlack2 },

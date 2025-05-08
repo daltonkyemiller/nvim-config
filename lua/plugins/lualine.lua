@@ -1,11 +1,13 @@
 --- @type LazySpec
 return {
   "nvim-lualine/lualine.nvim",
-  -- event = "VeryLazy",
+  event = "VeryLazy",
   opts = function()
     local noice_api = require("noice.api")
+    local kanagawa = require("lualine.themes.kanagawa")
     return {
       options = {
+        theme = kanagawa,
         section_separators = { left = "", right = "" },
         -- component_separators = { left = "", right = "" },
       },
