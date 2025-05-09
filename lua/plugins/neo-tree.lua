@@ -88,6 +88,11 @@ return {
           vim.cmd("VtsRename" .. path .. " " .. path_without_file_name .. "/" .. input)
         end)
       end,
+      preview_sushi = function(state)
+        P(state.tree:get_node():get_id())
+        vim.fn.jobstart({ "sushi", state.tree:get_node():get_id() }, { detach = true })
+      end,
+
       system_open = function(state)
         local node = state.tree:get_node()
         local path = node:get_id()
@@ -175,6 +180,7 @@ return {
         ["/"] = false,
         ["z"] = false,
         ["?"] = false,
+        ["<Space>"] = "preview_sushi",
         ["O"] = "system_open",
         ["l"] = "child_or_open",
         ["h"] = "parent_or_close",

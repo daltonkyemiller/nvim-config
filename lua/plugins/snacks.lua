@@ -167,6 +167,13 @@ return {
         end,
         desc = "[F]ind [F]iles",
       },
+      {
+        "<leader>fn",
+        function()
+          snacks.picker.notifications()
+        end,
+        desc = "[F]ind [N]otifications",
+      },
       { "<leader>fb", snacks.picker.buffers, desc = "[F]ind [B]uffers" },
       {
         "<leader>/",
