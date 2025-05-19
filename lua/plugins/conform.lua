@@ -30,6 +30,9 @@ return {
       toml = { "taplo" },
       yaml = { "prettierd" },
       sh = { "shfmt" },
+      bash = { "shfmt" },
+      zsh = { "shfmt" },
+      go = { "gofmt" },
       ["*"] = { "injected" },
     },
 

@@ -48,6 +48,12 @@ return {
       end,
     },
     "Kaiser-Yang/blink-cmp-avante",
+    { "MattiasMTS/cmp-dbee", ft = "sql", opts = {} },
+    {
+      "saghen/blink.compat",
+      lazy = true,
+      opts = {},
+    },
   },
 
   -- use a release tag to download pre-built binaries
@@ -60,6 +66,28 @@ return {
   ---@module 'blink.cmp'
   ---@type blink.cmp.Config
   opts = {
+    keymap = {
+      preset = "none",
+      ["<C-j>"] = { "select_next", "fallback" },
+      ["<C-k>"] = { "select_prev", "fallback" },
+      ["<C-d>"] = { "scroll_documentation_down", "fallback" },
+      ["<C-u>"] = { "scroll_documentation_up", "fallback" },
+      ["<C-Space>"] = {
+        function(cmp)
+          if cmp.is_menu_visible() then
+            return cmp.hide()
+          else
+            return cmp.show()
+          end
+        end,
+      },
+      ["<Tab>"] = {
+        function(cmp)
+          if cmp.is_menu_visible() then return cmp.accept() end
+        end,
+        "fallback",
+      },
+    },
     cmdline = {
       enabled = true,
       completion = {
@@ -72,13 +100,21 @@ return {
           },
         },
       },
-
       keymap = {
-        preset = "default",
+        preset = "none",
         ["<C-j>"] = { "select_next", "fallback" },
         ["<C-k>"] = { "select_prev", "fallback" },
         ["<C-d>"] = { "scroll_documentation_down", "fallback" },
         ["<C-u>"] = { "scroll_documentation_up", "fallback" },
+        ["<C-Space>"] = {
+          function(cmp)
+            if cmp.is_menu_visible() then
+              return cmp.hide()
+            else
+              return cmp.show()
+            end
+          end,
+        },
         ["<Tab>"] = {
           function(cmp)
             if cmp.is_menu_visible() then return cmp.accept() end
@@ -105,25 +141,6 @@ return {
         },
       },
     },
-    -- Enable
-
-    -- 'default' for mappings similar to built-in completion
-    -- 'super-tab' for mappings similar to vscode (tab to accept, arrow keys to navigate)
-    -- 'enter' for mappings similar to 'super-tab' but with 'enter' to accept
-    -- See the full "keymap" documentation for information on defining your own keymap.
-    keymap = {
-      preset = "default",
-      ["<C-j>"] = { "select_next", "fallback" },
-      ["<C-k>"] = { "select_prev", "fallback" },
-      ["<C-d>"] = { "scroll_documentation_down", "fallback" },
-      ["<C-u>"] = { "scroll_documentation_up", "fallback" },
-      ["<Tab>"] = {
-        function(cmp)
-          if cmp.is_menu_visible() then return cmp.accept() end
-        end,
-        "fallback",
-      },
-    },
 
     appearance = {
       -- Sets the fallback highlight groups to nvim-cmp's highlight groups
@@ -140,6 +157,7 @@ return {
     sources = {
       default = {
         "claude_code",
+        "cmp-dbee",
         "avante",
         "snippets",
         "lsp",
@@ -147,6 +165,10 @@ return {
         "buffer",
       },
       providers = {
+        ["cmp-dbee"] = {
+          name = "cmp-dbee",
+          module = "blink.compat.source",
+        },
         claude_code = {
           name = "Claude Code",
           module = "claude-code.integrations.completion.blink",

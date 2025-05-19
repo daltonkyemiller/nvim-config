@@ -3,6 +3,7 @@ return {
   "folke/flash.nvim",
   event = "VeryLazy",
   opts = {
+    autohide = true,
     ---@type table<string, Flash.Config>
     modes = {
       search = {
