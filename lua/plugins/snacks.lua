@@ -104,6 +104,7 @@ return {
         desc = "Previous [W]ord",
       },
       {
+        mode = { "n", "x" },
         "<leader>gb",
         function()
           snacks.gitbrowse.open()

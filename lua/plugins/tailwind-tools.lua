@@ -7,6 +7,10 @@ return {
   },
   ---@type TailwindTools.Option
   opts = {
+
+    extension = {
+      queries = { "javascript", "jsx", "typescript", "tsx" },
+    },
     document_color = {
       enabled = false,
     },

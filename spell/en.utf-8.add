@@ -24,3 +24,5 @@ lsp
 Lua
 centerbox
 app
+string/!
+cellData/!
