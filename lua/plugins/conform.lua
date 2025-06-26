@@ -33,10 +33,17 @@ return {
       bash = { "shfmt" },
       zsh = { "shfmt" },
       go = { "gofmt" },
+      qml = { "qml_fmt" },
       ["*"] = { "injected" },
     },
 
     formatters = {
+      qml_fmt = function()
+        return {
+          command = "/usr/lib/qt6/bin/qmlformat",
+          args = { "$FILENAME" },
+        }
+      end,
       reason_fmt = function()
         return {
           command = "refmt",
@@ -56,6 +63,8 @@ return {
           if require("daltonkyemiller.util").is_specific_lsp_attached_to_buffer("tailwindcss") then
             vim.cmd("TailwindSort")
           end
+
+          vim.cmd("w!")
 
           conform.format()
         end,

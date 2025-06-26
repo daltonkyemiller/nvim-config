@@ -46,6 +46,9 @@ vim.keymap.set("n", "<leader>bo", function()
       vim.api.nvim_buf_delete(buf, { force = true })
     end
   end
+
+  -- redraw
+  vim.cmd("redraw!")
 end, { desc = "[B]uffer Delete [O]thers" })
 
 -- Open lazy plugin manager
@@ -93,3 +96,7 @@ vim.keymap.set({ "n", "x", "o" }, "H", "^", {
 vim.keymap.set({ "n", "x", "o" }, "L", "$", {
   desc = "Move to end of line",
 })
+
+vim.keymap.set("n", "<leader>dd", function()
+  require("snacks").terminal("lazydocker")
+end, { desc = "Open Lazy[D]ocker" })

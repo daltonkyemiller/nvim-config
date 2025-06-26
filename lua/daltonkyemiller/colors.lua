@@ -25,4 +25,5 @@ function M:get_palette()
   return more_saturated_palette
 end
 
+
 return M
