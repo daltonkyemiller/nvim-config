@@ -45,7 +45,9 @@ return {
     },
     notifier = { enabled = true, top_down = false },
     lazygit = { enabled = true },
-    image = { enabled = true },
+    image = {
+      enabled = true,
+    },
     statuscolumn = {
       enabled = true,
       left = { "mark", "sign" }, -- priority of signs on the left (high to low)

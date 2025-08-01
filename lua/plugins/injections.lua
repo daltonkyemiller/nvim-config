@@ -18,7 +18,7 @@ local ts_js_query = [[
 
 --- @type LazySpec
 return {
-  enabled = false,
+  enabled = true,
   "dariuscorvus/tree-sitter-language-injection.nvim",
   opts = {
     lua = {
@@ -51,6 +51,7 @@ return {
       comment = {
         langs = {
           { name = "lua", match = "^//+( )*lua( )*" },
+          { name = "sql", match = "^//+( )*sql( )*" },
         },
         query = ts_js_query,
       },
@@ -59,6 +60,7 @@ return {
       comment = {
         langs = {
           { name = "lua", match = "^//+( )*lua( )*" },
+          { name = "sql", match = "^//+( )*sql( )*" },
         },
         query = ts_js_query,
       },

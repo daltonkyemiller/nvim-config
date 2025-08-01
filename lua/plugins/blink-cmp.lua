@@ -65,7 +65,69 @@ return {
 
   ---@module 'blink.cmp'
   ---@type blink.cmp.Config
-  opts = {
+  opts = function()
+    local sources_default = {
+      "cmp-dbee",
+      "avante",
+      "snippets",
+      "lsp",
+      "path",
+      "buffer",
+    }
+    
+    local providers = {
+      ["cmp-dbee"] = {
+        name = "cmp-dbee",
+        module = "blink.compat.source",
+      },
+      lsp = {
+        transform_items = function(_, items)
+          return vim.tbl_filter(function(item)
+            return not (
+              item.labelDetails
+              and item.labelDetails.description
+              and string.find(item.labelDetails.description, "lucide")
+
+            )
+          end, items)
+        end,
+        async = true,
+        name = "LSP",
+        module = "blink.cmp.sources.lsp",
+        -- max_items = 20,
+      },
+      -- codecompanion = {
+      --   name = "CodeCompanion",
+      --   module = "codecompanion.providers.completion.blink",
+      --   enabled = true,
+      -- },
+      avante = {
+        module = "blink-cmp-avante",
+        name = "Avante",
+        opts = {
+          -- options for blink-cmp-avante
+        },
+      },
+      lazydev = {
+        name = "LazyDev",
+        module = "lazydev.integrations.blink",
+        -- make lazydev completions top priority (see `:h blink.cmp`)
+        score_offset = 100,
+      },
+    }
+
+    -- Add claude_code integration if the plugin is available
+    local claude_code_ok = pcall(require, "claude-code.integrations.completion.blink")
+    if claude_code_ok then
+      table.insert(sources_default, 1, "claude_code")
+      providers.claude_code = {
+        name = "Claude Code",
+        module = "claude-code.integrations.completion.blink",
+        enabled = true,
+      }
+    end
+
+    return {
     keymap = {
       preset = "none",
       ["<C-j>"] = { "select_next", "fallback" },
@@ -155,61 +217,10 @@ return {
     -- Default list of enabled providers defined so that you can extend it
     -- elsewhere in your config, without redefining it, due to `opts_extend`
     sources = {
-      default = {
-        "claude_code",
-        "cmp-dbee",
-        "avante",
-        "snippets",
-        "lsp",
-        "path",
-        "buffer",
-      },
-      providers = {
-        ["cmp-dbee"] = {
-          name = "cmp-dbee",
-          module = "blink.compat.source",
-        },
-        claude_code = {
-          name = "Claude Code",
-          module = "claude-code.integrations.completion.blink",
-          enabled = true,
-        },
-        lsp = {
-          transform_items = function(_, items)
-            return vim.tbl_filter(function(item)
-              return not (
-                item.labelDetails
-                and item.labelDetails.description
-                and string.find(item.labelDetails.description, "lucide")
-
-              )
-            end, items)
-          end,
-          async = true,
-          name = "LSP",
-          module = "blink.cmp.sources.lsp",
-          -- max_items = 20,
-        },
-        -- codecompanion = {
-        --   name = "CodeCompanion",
-        --   module = "codecompanion.providers.completion.blink",
-        --   enabled = true,
-        -- },
-        avante = {
-          module = "blink-cmp-avante",
-          name = "Avante",
-          opts = {
-            -- options for blink-cmp-avante
-          },
-        },
-        lazydev = {
-          name = "LazyDev",
-          module = "lazydev.integrations.blink",
-          -- make lazydev completions top priority (see `:h blink.cmp`)
-          score_offset = 100,
-        },
-      },
+      default = sources_default,
+      providers = providers,
     },
-  },
+    }
+  end,
   opts_extend = { "sources.default" },
 }

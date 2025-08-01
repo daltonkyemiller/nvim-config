@@ -60,10 +60,17 @@ vim.o.splitright = true
 vim.o.splitbelow = true
 
 vim.filetype.add({
+  filename = {
+    Caddyfile = "caddy",
+  },
+  pattern = {
+    ["%.env.*"] = "sh",
+  },
+
   extension = {
     vert = "glsl",
     frag = "glsl",
-    re = "reason"
+    re = "reason",
   },
 })
 

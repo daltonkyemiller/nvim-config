@@ -25,5 +25,69 @@ function M:get_palette()
   return more_saturated_palette
 end
 
+function M:export_palette_to_file()
+  local palette = self:get_palette()
+  local config_path = vim.fn.stdpath("config")
+  
+  -- Export Lua version
+  local lua_file = config_path .. "/kanagawa_saturated_palette.lua"
+  local lua_lines = {
+    "-- Auto-generated Kanagawa saturated color palette",
+    "-- Generated on: " .. os.date("%Y-%m-%d %H:%M:%S"),
+    "",
+    "return {",
+  }
+  
+  -- Sort keys for consistent output
+  local sorted_keys = {}
+  for k in pairs(palette) do
+    table.insert(sorted_keys, k)
+  end
+  table.sort(sorted_keys)
+  
+  for _, key in ipairs(sorted_keys) do
+    local value = palette[key]
+    table.insert(lua_lines, string.format('  %s = "%s",', key, value))
+  end
+  
+  table.insert(lua_lines, "}")
+  
+  local file = io.open(lua_file, "w")
+  if file then
+    file:write(table.concat(lua_lines, "\n"))
+    file:close()
+    print("Lua palette exported to: " .. lua_file)
+  else
+    print("Error: Could not write to " .. lua_file)
+  end
+  
+  -- Export JSON version
+  local json_file = config_path .. "/kanagawa_saturated_palette.json"
+  local json_lines = {
+    "{",
+  }
+  
+  for i, key in ipairs(sorted_keys) do
+    local value = palette[key]
+    local comma = i < #sorted_keys and "," or ""
+    table.insert(json_lines, string.format('  "%s": "%s"%s', key, value, comma))
+  end
+  
+  table.insert(json_lines, "}")
+  
+  local json_file_handle = io.open(json_file, "w")
+  if json_file_handle then
+    json_file_handle:write(table.concat(json_lines, "\n"))
+    json_file_handle:close()
+    print("JSON palette exported to: " .. json_file)
+  else
+    print("Error: Could not write to " .. json_file)
+  end
+end
+
+-- Create user command to regenerate palette
+vim.api.nvim_create_user_command("ExportKanagawaPalette", function()
+  M:export_palette_to_file()
+end, { desc = "Export Kanagawa saturated palette to file" })
 
 return M
