@@ -40,3 +40,6 @@ tsconfig
 tmp
 src
 dev
+postgres
+openbao
+healthcheck

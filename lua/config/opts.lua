@@ -60,10 +60,11 @@ vim.o.splitright = true
 vim.o.splitbelow = true
 
 vim.filetype.add({
-  filename = {
-    Caddyfile = "caddy",
-  },
   pattern = {
+    ["Caddyfile.*"] = "caddy",
+    ["compose.*%.ya?ml"] = "yaml.docker-compose",
+    ["docker%-compose.*%.ya?ml"] = "yaml.docker-compose",
+    [".*/%.github[%w/]+workflows[%w/]+.*%.ya?ml"] = "yaml.github",
     ["%.env.*"] = "sh",
   },
 

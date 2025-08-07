@@ -18,7 +18,7 @@ return {
       typeStyle = {},
       transparent = true, -- do not set background color
       dimInactive = false, -- dim inactive window `:h hl-NormalNC`
-      terminalColors = true, -- define vim.g.terminal_color_{0,17}
+      terminalColors = true, -- define vitu.g.terminal_color_{0,17}
       colors = {
         palette = more_saturated_palette,
         theme = {

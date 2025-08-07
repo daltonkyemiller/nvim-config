@@ -17,3 +17,33 @@ vim.api.nvim_create_autocmd("VimEnter", {
   end,
   nested = true,
 })
+-- custom parsers
+vim.api.nvim_create_autocmd("User", {
+  pattern = "TSUpdate",
+  callback = function()
+    vim.notify("Treesitter parsers updated")
+    require("nvim-treesitter.parsers").ghactions = {
+      install_info = {
+        url = "https://github.com/rmuir/tree-sitter-ghactions",
+        queries = "queries",
+      },
+    }
+  end,
+})
+
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = {
+    "typescript",
+    "javascript",
+    "typescriptreact",
+    "javascriptreact",
+    "yaml",
+    "yaml.github",
+    "json",
+    "dockerfile",
+    "caddy",
+  },
+  callback = function()
+    vim.treesitter.start()
+  end,
+})

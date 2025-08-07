@@ -21,6 +21,16 @@ return {
   enabled = true,
   "dariuscorvus/tree-sitter-language-injection.nvim",
   opts = {
+--     ["yaml.github"] = {
+--       comment = {
+--         langs = {
+--           { name = "bash", match = "^--+( )*{lang}( )*" },
+--         },
+--         query = [[
+--
+--         ]]
+-- ;
+--     },
     lua = {
       comment = {
         langs = {

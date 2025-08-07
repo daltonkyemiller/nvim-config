@@ -37,7 +37,7 @@
                    (#set! injection.language "python"))
         
 ;query
-;; comment python injection
+;; comment lua injection
 ((comment)
  @comment .
  (lexical_declaration
@@ -48,24 +48,8 @@
              (call_expression(template_string(string_fragment)@injection.content))
              ]@injection.content)  
    )
-  (#match? @comment "^//+( )*[pP][yY][tT][hH][oO][nN]( )*")
-  (#set! injection.language "python")
- )
-        
-;query
-;; comment sql injection
-((comment)
- @comment .
- (lexical_declaration
-   (variable_declarator 
-     value: [
-             (string(string_fragment)@injection.content) 
-             (template_string(string_fragment)@injection.content)
-             (call_expression(template_string(string_fragment)@injection.content))
-             ]@injection.content)  
-   )
-  (#match? @comment "^//+( )*sql( )*")
-  (#set! injection.language "sql")
+  (#match? @comment "^//+( )*lua( )*")
+  (#set! injection.language "lua")
  )
         
 ;query
@@ -82,6 +66,38 @@
    )
   (#match? @comment "^//+( )*[hH][tT][mM][lL]( )*")
   (#set! injection.language "html")
+ )
+        
+;query
+;; comment python injection
+((comment)
+ @comment .
+ (lexical_declaration
+   (variable_declarator 
+     value: [
+             (string(string_fragment)@injection.content) 
+             (template_string(string_fragment)@injection.content)
+             (call_expression(template_string(string_fragment)@injection.content))
+             ]@injection.content)  
+   )
+  (#match? @comment "^//+( )*[pP][yY][tT][hH][oO][nN]( )*")
+  (#set! injection.language "python")
+ )
+        
+;query
+;; comment css injection
+((comment)
+ @comment .
+ (lexical_declaration
+   (variable_declarator 
+     value: [
+             (string(string_fragment)@injection.content) 
+             (template_string(string_fragment)@injection.content)
+             (call_expression(template_string(string_fragment)@injection.content))
+             ]@injection.content)  
+   )
+  (#match? @comment "^//+( )*[cC][sS][sS]( )*")
+  (#set! injection.language "css")
  )
         
 ;query
@@ -117,7 +133,7 @@
  )
         
 ;query
-;; comment lua injection
+;; comment sql injection
 ((comment)
  @comment .
  (lexical_declaration
@@ -128,23 +144,7 @@
              (call_expression(template_string(string_fragment)@injection.content))
              ]@injection.content)  
    )
-  (#match? @comment "^//+( )*lua( )*")
-  (#set! injection.language "lua")
- )
-        
-;query
-;; comment css injection
-((comment)
- @comment .
- (lexical_declaration
-   (variable_declarator 
-     value: [
-             (string(string_fragment)@injection.content) 
-             (template_string(string_fragment)@injection.content)
-             (call_expression(template_string(string_fragment)@injection.content))
-             ]@injection.content)  
-   )
-  (#match? @comment "^//+( )*[cC][sS][sS]( )*")
-  (#set! injection.language "css")
+  (#match? @comment "^//+( )*sql( )*")
+  (#set! injection.language "sql")
  )
         
