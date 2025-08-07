@@ -1,7 +1,7 @@
 ;extends
 
 ;query
-;; comment sql injection
+;; comment lua injection
 ((comment)
  @comment .
  (lexical_declaration
@@ -12,8 +12,8 @@
              (call_expression(template_string(string_fragment)@injection.content))
              ]@injection.content)  
    )
-  (#match? @comment "^//+( )*sql( )*")
-  (#set! injection.language "sql")
+  (#match? @comment "^//+( )*lua( )*")
+  (#set! injection.language "lua")
  )
         
 ;query
@@ -30,38 +30,6 @@
    )
   (#match? @comment "^//+( )*[hH][tT][mM][lL]( )*")
   (#set! injection.language "html")
- )
-        
-;query
-;; comment typescript injection
-((comment)
- @comment .
- (lexical_declaration
-   (variable_declarator 
-     value: [
-             (string(string_fragment)@injection.content) 
-             (template_string(string_fragment)@injection.content)
-             (call_expression(template_string(string_fragment)@injection.content))
-             ]@injection.content)  
-   )
-  (#match? @comment "^//+( )*[tT][yY][pP][eE][sS][cC][rR][iI][pP][tT]( )*")
-  (#set! injection.language "typescript")
- )
-        
-;query
-;; comment javascript injection
-((comment)
- @comment .
- (lexical_declaration
-   (variable_declarator 
-     value: [
-             (string(string_fragment)@injection.content) 
-             (template_string(string_fragment)@injection.content)
-             (call_expression(template_string(string_fragment)@injection.content))
-             ]@injection.content)  
-   )
-  (#match? @comment "^//+( )*[jJ][aA][vV][aA][sS][cC][rR][iI][pP][tT]( )*")
-  (#set! injection.language "javascript")
  )
         
 ;query
@@ -97,7 +65,7 @@
  )
         
 ;query
-;; comment lua injection
+;; comment typescript injection
 ((comment)
  @comment .
  (lexical_declaration
@@ -108,8 +76,40 @@
              (call_expression(template_string(string_fragment)@injection.content))
              ]@injection.content)  
    )
-  (#match? @comment "^//+( )*lua( )*")
-  (#set! injection.language "lua")
+  (#match? @comment "^//+( )*[tT][yY][pP][eE][sS][cC][rR][iI][pP][tT]( )*")
+  (#set! injection.language "typescript")
+ )
+        
+;query
+;; comment sql injection
+((comment)
+ @comment .
+ (lexical_declaration
+   (variable_declarator 
+     value: [
+             (string(string_fragment)@injection.content) 
+             (template_string(string_fragment)@injection.content)
+             (call_expression(template_string(string_fragment)@injection.content))
+             ]@injection.content)  
+   )
+  (#match? @comment "^//+( )*sql( )*")
+  (#set! injection.language "sql")
+ )
+        
+;query
+;; comment javascript injection
+((comment)
+ @comment .
+ (lexical_declaration
+   (variable_declarator 
+     value: [
+             (string(string_fragment)@injection.content) 
+             (template_string(string_fragment)@injection.content)
+             (call_expression(template_string(string_fragment)@injection.content))
+             ]@injection.content)  
+   )
+  (#match? @comment "^//+( )*[jJ][aA][vV][aA][sS][cC][rR][iI][pP][tT]( )*")
+  (#set! injection.language "javascript")
  )
         
 ; query

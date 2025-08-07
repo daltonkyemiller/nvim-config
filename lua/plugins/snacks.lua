@@ -166,7 +166,7 @@ return {
       {
         "<leader>ff",
         function()
-          snacks.picker.smart()
+          snacks.picker.files()
         end,
         desc = "[F]ind [F]iles",
       },

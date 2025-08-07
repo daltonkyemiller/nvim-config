@@ -4,7 +4,7 @@ return {
   dev = true,
   dir = "~/dev/nvim-plugins/claude-code.nvim",
   build = "cd node && npm install",
-  enabled = true,
+  enabled = false,
   ---@type claude-code.Config
   opts = {
     -- debug = true,

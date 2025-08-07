@@ -42,6 +42,7 @@ vim.api.nvim_create_autocmd("FileType", {
     "json",
     "dockerfile",
     "caddy",
+    "http"
   },
   callback = function()
     vim.treesitter.start()
