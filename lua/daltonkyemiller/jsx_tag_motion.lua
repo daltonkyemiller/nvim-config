@@ -41,8 +41,7 @@ M.jsx_tag_motion = function(type, mode)
     return nil
   end
 
-  local ts_utils = require("nvim-treesitter.ts_utils")
-  local node = ts_utils.get_node_at_cursor()
+  local node = vim.treesitter.get_node()
   if node == nil then return end
 
   local search_node_types = node_map[vim.bo.filetype]
@@ -56,7 +55,12 @@ M.jsx_tag_motion = function(type, mode)
 
   -- if it's inner tag, we need to find the range of the children, unless it's a self closing tag
   if mode == "i" and nearest_node:type() ~= search_node_types[2] then
-    local children = ts_utils.get_named_children(nearest_node)
+    local children = {}
+    for child in nearest_node:iter_children() do
+      if child:named() then
+        table.insert(children, child)
+      end
+    end
 
     local first_child = children[1]
     local last_child = children[#children]

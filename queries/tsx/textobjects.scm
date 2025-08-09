@@ -2,26 +2,21 @@
 
 ((jsx_self_closing_element) @tag.outer)
 
-((jsx_element (jsx_opening_element) . (_) @_start (_) @_end . (jsx_closing_element))
- (#make-range! "tag.inner" @_start @_end))
+((jsx_element (jsx_opening_element) . (_) @tag.inner . (_) @_end . (jsx_closing_element)))
 
 (
- (jsx_element  (jsx_opening_element (jsx_attribute) @_start . (jsx_attribute) @_end))
- (#make-range! "parameters.outer" @_start @_end)
+ (jsx_element  (jsx_opening_element (jsx_attribute) @parameters.outer . (jsx_attribute)))
 )
 
 (
- (jsx_element  (jsx_opening_element (jsx_attribute) @_start @_end))
- (#make-range! "parameter.outer" @_start @_end)
+ (jsx_element  (jsx_opening_element (jsx_attribute) @parameter.outer))
 )
 
 
 (
- (jsx_self_closing_element (jsx_attribute) @_start . (jsx_attribute) @_end)
- (#make-range! "parameters.outer" @_start @_end)
+ (jsx_self_closing_element (jsx_attribute) @parameters.outer . (jsx_attribute))
 )
 
 (
- (jsx_self_closing_element (jsx_attribute) @_start @_end)
- (#make-range! "parameter.outer" @_start @_end)
+ (jsx_self_closing_element (jsx_attribute) @parameter.outer)
 )

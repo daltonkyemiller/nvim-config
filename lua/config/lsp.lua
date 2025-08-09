@@ -5,6 +5,7 @@ vim.lsp.config("*", {
 
 vim.lsp.enable({
   -- "copilot",
+  "ansible_ls",
   "docker_compose_ls",
   "dockerfile_ls",
   "gh_actions_ls",

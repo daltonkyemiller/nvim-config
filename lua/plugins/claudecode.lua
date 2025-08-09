@@ -1,3 +1,4 @@
+local toggle_key = "<leader>ac"
 --- @type LazySpec
 return {
   "coder/claudecode.nvim",
@@ -22,5 +23,27 @@ return {
     { "<leader>aa", "<cmd>ClaudeCodeDiffAccept<cr>", desc = "Accept diff" },
     { "<leader>ad", "<cmd>ClaudeCodeDiffDeny<cr>", desc = "Deny diff" },
   },
-  opts = {}
+  opts = {
+    terminal = {
+      provider = "snacks",
+      split_width_percentage = 0.5,
+      --@module "snacks"
+      ---@type snacks.win.Config|{}
+      snacks_win_opts = {
+        -- position = "float",
+        -- width = 0.9,
+        -- height = 0.9,
+        keys = {
+          claude_hide = {
+            toggle_key,
+            function(self)
+              self:hide()
+            end,
+            mode = "t",
+            desc = "Hide",
+          },
+        },
+      },
+    },
+  },
 }
