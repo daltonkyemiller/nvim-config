@@ -24,6 +24,9 @@ return {
     { "<leader>ad", "<cmd>ClaudeCodeDiffDeny<cr>", desc = "Deny diff" },
   },
   opts = {
+    diff_opts = {
+      keep_terminal_focus = true,
+    },
     terminal = {
       provider = "snacks",
       split_width_percentage = 0.5,

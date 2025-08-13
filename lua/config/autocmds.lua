@@ -42,7 +42,10 @@ vim.api.nvim_create_autocmd("FileType", {
     "json",
     "dockerfile",
     "caddy",
-    "http"
+    "http",
+    "terraform",
+    "terraform-vars",
+    "jinja"
   },
   callback = function()
     vim.treesitter.start()

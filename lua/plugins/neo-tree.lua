@@ -180,7 +180,7 @@ return {
         ["/"] = false,
         ["z"] = false,
         ["?"] = false,
-        ["<Space>"] = "preview_sushi",
+        -- ["<Space>"] = "preview_sushi",
         ["O"] = "system_open",
         ["l"] = "child_or_open",
         ["h"] = "parent_or_close",

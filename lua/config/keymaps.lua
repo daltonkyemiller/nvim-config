@@ -89,14 +89,6 @@ vim.keymap.set("n", "<leader>p", function()
   vim.cmd("normal! " .. motion)
 end, { desc = "[P]aste inside" })
 
-vim.keymap.set({ "n", "x", "o" }, "H", "^", {
-  desc = "Move to start of line",
-})
-
-vim.keymap.set({ "n", "x", "o" }, "L", "$", {
-  desc = "Move to end of line",
-})
-
 vim.keymap.set("n", "<leader>dd", function()
   require("snacks").terminal("lazydocker")
 end, { desc = "Open Lazy[D]ocker" })

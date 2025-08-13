@@ -4,7 +4,7 @@ return {
   cmd = { "tailwindcss-language-server", "--stdio" },
   settings = {
     tailwindCSS = {
-      classFunctions = { "utils.cn", "cn", "cna", "clsx" },
+      classFunctions = { "utils.cn", "cn", "cna", "clsx", "tva" },
     },
   },
 }

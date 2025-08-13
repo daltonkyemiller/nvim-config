@@ -70,6 +70,7 @@ vim.filetype.add({
   },
 
   extension = {
+    j2 = "jinja",
     vert = "glsl",
     frag = "glsl",
     re = "reason",
