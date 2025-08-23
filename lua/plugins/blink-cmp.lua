@@ -74,7 +74,7 @@ return {
       "path",
       "buffer",
     }
-    
+
     local providers = {
       ["cmp-dbee"] = {
         name = "cmp-dbee",
@@ -128,42 +128,10 @@ return {
     end
 
     return {
-    keymap = {
-      preset = "none",
-      ["<C-j>"] = { "select_next", "fallback" },
-      ["<C-k>"] = { "select_prev", "fallback" },
-      ["<C-d>"] = { "scroll_documentation_down", "fallback" },
-      ["<C-u>"] = { "scroll_documentation_up", "fallback" },
-      ["<C-Space>"] = {
-        function(cmp)
-          if cmp.is_menu_visible() then
-            return cmp.hide()
-          else
-            return cmp.show()
-          end
-        end,
-      },
-      ["<Tab>"] = {
-        function(cmp)
-          if cmp.is_menu_visible() then return cmp.accept() end
-        end,
-        "fallback",
-      },
-    },
-    cmdline = {
-      enabled = true,
-      completion = {
-        menu = {
-          auto_show = true,
-        },
-        list = {
-          selection = {
-            preselect = false,
-          },
-        },
-      },
       keymap = {
         preset = "none",
+        ["<Down>"] = { "select_next", "fallback" },
+        ["<Up>"] = { "select_prev", "fallback" },
         ["<C-j>"] = { "select_next", "fallback" },
         ["<C-k>"] = { "select_prev", "fallback" },
         ["<C-d>"] = { "scroll_documentation_down", "fallback" },
@@ -184,42 +152,76 @@ return {
           "fallback",
         },
       },
-    },
-
-    snippets = { preset = "luasnip" },
-    signature = { enabled = true },
-    completion = {
-      documentation = {
-        auto_show = true,
-      },
-
-      menu = {
-        max_height = 20,
-      },
-
-      list = {
-        selection = {
-          preselect = false,
+      cmdline = {
+        enabled = true,
+        completion = {
+          menu = {
+            auto_show = true,
+          },
+          list = {
+            selection = {
+              preselect = false,
+            },
+          },
+        },
+        keymap = {
+          preset = "none",
+          ["<C-j>"] = { "select_next", "fallback" },
+          ["<C-k>"] = { "select_prev", "fallback" },
+          ["<C-d>"] = { "scroll_documentation_down", "fallback" },
+          ["<C-u>"] = { "scroll_documentation_up", "fallback" },
+          ["<C-Space>"] = {
+            function(cmp)
+              if cmp.is_menu_visible() then
+                return cmp.hide()
+              else
+                return cmp.show()
+              end
+            end,
+          },
+          ["<Tab>"] = {
+            function(cmp)
+              if cmp.is_menu_visible() then return cmp.accept() end
+            end,
+            "fallback",
+          },
         },
       },
-    },
 
-    appearance = {
-      -- Sets the fallback highlight groups to nvim-cmp's highlight groups
-      -- Useful for when your theme doesn't support blink.cmp
-      -- Will be removed in a future release
-      use_nvim_cmp_as_default = true,
-      -- Set to 'mono' for 'Nerd Font Mono' or 'normal' for 'Nerd Font'
-      -- Adjusts spacing to ensure icons are aligned
-      nerd_font_variant = "mono",
-    },
+      snippets = { preset = "luasnip" },
+      signature = { enabled = true },
+      completion = {
+        documentation = {
+          auto_show = true,
+        },
 
-    -- Default list of enabled providers defined so that you can extend it
-    -- elsewhere in your config, without redefining it, due to `opts_extend`
-    sources = {
-      default = sources_default,
-      providers = providers,
-    },
+        menu = {
+          max_height = 20,
+        },
+
+        list = {
+          selection = {
+            preselect = false,
+          },
+        },
+      },
+
+      appearance = {
+        -- Sets the fallback highlight groups to nvim-cmp's highlight groups
+        -- Useful for when your theme doesn't support blink.cmp
+        -- Will be removed in a future release
+        use_nvim_cmp_as_default = true,
+        -- Set to 'mono' for 'Nerd Font Mono' or 'normal' for 'Nerd Font'
+        -- Adjusts spacing to ensure icons are aligned
+        nerd_font_variant = "mono",
+      },
+
+      -- Default list of enabled providers defined so that you can extend it
+      -- elsewhere in your config, without redefining it, due to `opts_extend`
+      sources = {
+        default = sources_default,
+        providers = providers,
+      },
     }
   end,
   opts_extend = { "sources.default" },

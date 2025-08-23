@@ -2,5 +2,10 @@
 return {
   filetypes = { "prisma" },
   cmd = { "prisma-language-server", "--stdio" },
+  settings = {
+    prisma = {
+      enableDiagnostics = true,
+    }
+  }
 }
 

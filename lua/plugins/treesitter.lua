@@ -38,6 +38,7 @@ return {
     })
 
     require("nvim-treesitter").install({
+      "prisma",
       "caddy",
       "regex",
       "astro",
