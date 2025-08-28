@@ -59,6 +59,41 @@ vim.keymap.set("n", "<leader>bn", "<Cmd>enew<CR>", { desc = "[B]uffer [N]ew" })
 
 vim.keymap.set("n", "gF", require("daltonkyemiller.fig_comment").create_fig_comment, { desc = "Create [F]ig Comment" })
 
+vim.keymap.set("n", "<leader>yd", function()
+  local diagnostics = vim.diagnostic.get(0)
+
+  if #diagnostics == 0 then vim.notify("No diagnostics found", vim.log.levels.WARN) end
+
+  local file_name = vim.api.nvim_buf_get_name(0)
+  local relative_to_cwd = vim.fn.fnamemodify(file_name, ":.")
+
+  local diagnostics_strs = vim
+    .iter(diagnostics)
+    :map(function(diagnostic)
+      return string.format(
+        "%s %s:%s:%s: %s",
+        vim.diagnostic.severity[diagnostic.severity],
+        diagnostic.lnum,
+        diagnostic.col,
+        diagnostic.severity,
+        diagnostic.message
+      )
+    end)
+    :totable()
+
+  local diagnostics_string = table.concat(diagnostics_strs, "\n")
+
+  local prompt_template = [[
+  Here are the diagnostics for this file: @%s
+  %s
+  ]]
+
+  local prompt = string.format(prompt_template, relative_to_cwd, diagnostics_string)
+
+  -- Yank prompt
+  vim.fn.setreg("+", prompt)
+end, { desc = "[Y]ank [D]iagnostics" })
+
 vim.keymap.set("v", "<leader>r", function()
   local pos1 = vim.fn.getpos("v")
   local pos2 = vim.fn.getpos(".")

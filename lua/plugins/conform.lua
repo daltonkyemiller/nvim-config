@@ -35,6 +35,7 @@ return {
       zsh = { "shfmt" },
       go = { "gofmt" },
       qml = { "qml_fmt" },
+      jinja = { "djlint" },
       ["*"] = { "injected" },
     },
 

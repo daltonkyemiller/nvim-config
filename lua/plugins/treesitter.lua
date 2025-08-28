@@ -105,6 +105,14 @@ return {
       require("nvim-treesitter-textobjects.select").select_textobject("@class.inner", "textobjects")
     end)
 
+    vim.keymap.set({ "x", "o" }, "ab", function()
+      require("nvim-treesitter-textobjects.select").select_textobject("@block.outer", "textobjects")
+    end)
+
+    vim.keymap.set({ "x", "o" }, "ib", function()
+      require("nvim-treesitter-textobjects.select").select_textobject("@block.inner", "textobjects")
+    end)
+
     -- Movement keymaps
     vim.keymap.set({ "n", "x", "o" }, "]f", function()
       require("nvim-treesitter-textobjects.move").goto_next_start("@function.outer")
