@@ -107,11 +107,23 @@ return {
       },
       {
         mode = { "n", "x" },
-        "<leader>gb",
+        "<leader>gbb",
         function()
-          snacks.gitbrowse.open()
+          snacks.gitbrowse.open({
+            what = "branch",
+          })
         end,
-        desc = "[G]it [B]rowse",
+        desc = "[G]it [B]rowse [B]ranch",
+      },
+      {
+        mode = { "n", "x" },
+        "<leader>gbc",
+        function()
+          snacks.gitbrowse.open({
+            what = "commit",
+          })
+        end,
+        desc = "[G]it [B]rowse [C]ommit",
       },
       {
         "<leader>gg",

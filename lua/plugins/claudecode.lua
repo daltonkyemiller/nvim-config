@@ -1,6 +1,7 @@
 local toggle_key = "<M-c>"
 --- @type LazySpec
 return {
+  enabled = false,
   "coder/claudecode.nvim",
   dependencies = { "folke/snacks.nvim" },
   config = true,

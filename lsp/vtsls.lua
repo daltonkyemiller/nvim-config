@@ -80,6 +80,9 @@ return {
         includeCompletionsForImportStatements = true,
       },
       maxTsServerMemory = 16384,
+      tsserver = {
+        maxTsServerMemory = 16384,
+      },
       inlayHints = {
         parameterNames = {
           enabled = "all",

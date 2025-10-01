@@ -55,6 +55,7 @@ require("which-key").add({
   { "<leader>c", group = "[C]ode" },
   { "<leader>d", group = "[D]ocument" },
   { "<leader>g", group = "[G]it" },
+  { "<leader>gb", group = "[G]it [B]rowse" },
   { "<leader>h", group = "Git [H]unk" },
   { "<leader>r", group = "[R]ename" },
   { "<leader>f", group = "[F]ind" },
