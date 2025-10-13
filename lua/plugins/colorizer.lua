@@ -1,6 +1,7 @@
 ---@type LazySpec
 return {
   "catgoose/nvim-colorizer.lua",
+  enabled = false,
   event = "BufReadPre",
   -- enabled = false,
   opts = {

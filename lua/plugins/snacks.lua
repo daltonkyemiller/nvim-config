@@ -19,6 +19,9 @@ local dropdown_layout = {
   },
 }
 
+---@type snacks.win | nil
+local open_term
+
 --- @type LazySpec
 return {
   "folke/snacks.nvim",
@@ -196,6 +199,29 @@ return {
           snacks.picker.grep()
         end,
         desc = "Find grep [/] in cwd",
+      },
+      {
+        "<M-t>",
+        function()
+          local terminal = require("snacks.terminal")
+          terminal.toggle(nil, {
+            win = {
+              position = "right",
+            },
+          })
+          -- if open_term then
+          --   open_term:close()
+          --   open_term = nil
+          -- else
+          --   open_term = terminal.open(nil, {
+          --     win = {
+          --       position = "right",
+          --     }
+          --   })
+          -- end
+        end,
+        mode = { "n", "t" },
+        desc = "Open [T]erminal",
       },
     }
   end,

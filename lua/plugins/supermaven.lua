@@ -1,14 +1,16 @@
 --- @type LazySpec
 return {
-  enabled = false,
   "supermaven-inc/supermaven-nvim",
+  enabled = true,
   config = function()
     require("supermaven-nvim").setup({
       log_level = "off",
+      -- disable_keymaps = true,
       keymaps = {
-        accept_suggestion = "<C-l>",
+        -- handled in sidekick for next edit suggestions
+        accept_suggestion = nil,
         clear_suggestion = "<C-]>",
-        accept_word = "<C-y>",
+        accept_word = "<S-Tab>",
       },
     })
   end,

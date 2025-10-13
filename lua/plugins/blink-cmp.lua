@@ -132,8 +132,8 @@ return {
         preset = "none",
         ["<Down>"] = { "select_next", "fallback" },
         ["<Up>"] = { "select_prev", "fallback" },
-        ["<C-j>"] = { "select_next", "fallback" },
-        ["<C-k>"] = { "select_prev", "fallback" },
+        -- ["<C-j>"] = { "select_next", "fallback" },
+        -- ["<C-k>"] = { "select_prev", "fallback" },
         ["<C-d>"] = { "scroll_documentation_down", "fallback" },
         ["<C-u>"] = { "scroll_documentation_up", "fallback" },
         ["<C-Space>"] = {
@@ -166,8 +166,10 @@ return {
         },
         keymap = {
           preset = "none",
-          ["<C-j>"] = { "select_next", "fallback" },
-          ["<C-k>"] = { "select_prev", "fallback" },
+          ["<Down>"] = { "select_next", "fallback" },
+          ["<Up>"] = { "select_prev", "fallback" },
+          -- ["<C-j>"] = { "select_next", "fallback" },
+          -- ["<C-k>"] = { "select_prev", "fallback" },
           ["<C-d>"] = { "scroll_documentation_down", "fallback" },
           ["<C-u>"] = { "scroll_documentation_up", "fallback" },
           ["<C-Space>"] = {

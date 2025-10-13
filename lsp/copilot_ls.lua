@@ -62,6 +62,11 @@ return {
     "--stdio",
   },
   root_markers = { ".git" },
+  capabilities = {
+    textDocument = {
+      inlineCompletion = nil
+    }
+  },
   init_options = {
     editorInfo = {
       name = "Neovim",

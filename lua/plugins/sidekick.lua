@@ -58,6 +58,23 @@ return {
           win_p = { "<c-w>p", "blur" }, -- leave the cli window
           blur = { "<M-b>", "blur" }, -- leave the cli window
           prompt = { "<c-p>", "prompt" }, -- insert prompt or context
+          pick_file = {
+            "@",
+            function(t)
+              local snacks_picker = require("snacks.picker")
+              snacks_picker.files({
+                on_show = function()
+                  vim.api.nvim_feedkeys("i", "n", false)
+                end,
+                confirm = function(picker, item)
+                  t:send("@" .. item.file .. "\n")
+                  picker:close()
+                  t:focus()
+                end,
+              })
+            end,
+            expr = true,
+          },
           -- example of custom keymap:
           -- say_hi = {
           --   "<c-h>",
@@ -71,7 +88,7 @@ return {
       ---@field backend? "tmux"|"zellij" Multiplexer backend to persist CLI sessions
       mux = {
         backend = "tmux",
-        enabled = false,
+        enabled = true,
       },
       ---@type table<string, sidekick.cli.Tool.spec>
       tools = {
@@ -97,29 +114,24 @@ return {
         },
         qwen = { cmd = { "qwen" }, url = "https://github.com/QwenLM/qwen-code" },
       },
-      ---@type table<string, sidekick.Prompt.spec>
+      ---@type table<string, sidekick.Prompt|string|fun(ctx:sidekick.context.ctx):(string?)>
       prompts = {
-        explain = "Explain this code",
-        diagnostics = {
-          msg = "What do the diagnostics in this file mean?",
-          diagnostics = true,
-        },
-        diagnostics_all = {
-          msg = "Can you help me fix these issues?",
-          diagnostics = { all = true },
-        },
-        fix = {
-          msg = "Can you fix the issues in this code?",
-          diagnostics = true,
-        },
-        review = {
-          msg = "Can you review this code for any issues or improvements?",
-          diagnostics = true,
-        },
-        optimize = "How can this code be optimized?",
-        tests = "Can you write tests for this code?",
-        file = { location = { row = false, col = false } },
-        position = {},
+        changes = "Can you review my changes?",
+        diagnostics = "Can you help me fix the diagnostics in {file}?\n{diagnostics}",
+        diagnostics_all = "Can you help me fix these diagnostics?\n{diagnostics_all}",
+        document = "Add documentation to {position}",
+        explain = "Explain {this}",
+        fix = "Can you fix {this}?",
+        optimize = "How can {this} be optimized?",
+        review = "Can you review {file} for any issues or improvements?",
+        tests = "Can you write tests for {this}?",
+        -- simple context prompts
+        buffers = "{buffers}",
+        file = "{file}",
+        position = "{position}",
+        selection = "{selection}",
+        ["function"] = "{function}",
+        class = "{class}",
       },
     },
     copilot = {
@@ -131,6 +143,7 @@ return {
     debug = false, -- enable debug logging
   },
   keys = {
+
     {
       "<tab>",
       function()
@@ -139,8 +152,18 @@ return {
           return -- jumped or applied
         end
 
+        local supermaven_completion_preview = require("supermaven-nvim.completion_preview")
+
+        if supermaven_completion_preview.has_suggestion() then
+          vim.schedule(function()
+            supermaven_completion_preview.on_accept_suggestion()
+          end)
+
+          return
+        end
+
         -- if you are using Neovim's native inline completions
-        if vim.lsp.inline_completion.get() then return end
+        -- if vim.lsp.inline_completion.get() then return end
 
         -- any other things (like snippets) you want to do on <tab> go here.
 
@@ -154,7 +177,14 @@ return {
     {
       "<M-c>",
       function()
-        require("sidekick.cli").toggle({ name = "claude", focus = true,  })
+        local sidekick_cli = require("sidekick.cli")
+        local in_vis_mode = vim.fn.mode() == "v" or vim.fn.mode() == "V" or vim.fn.mode() == "\22"
+        if not in_vis_mode then
+          sidekick_cli.toggle({ name = "claude", focus = true })
+          return
+        end
+
+        sidekick_cli.send({ prompt = "position", name = "claude" })
       end,
       desc = "Sidekick Claude Toggle",
       mode = { "n", "v" },
@@ -162,7 +192,7 @@ return {
     {
       "<leader>ap",
       function()
-        require("sidekick.cli").select_prompt()
+        require("sidekick.cli").prompt()
       end,
       desc = "Sidekick Ask Prompt",
       mode = { "n", "v" },
