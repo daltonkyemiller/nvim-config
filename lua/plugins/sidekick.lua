@@ -12,7 +12,7 @@ return {
     },
     nes = {
       ---@type boolean|fun(buf:integer):boolean?
-      enabled = true,
+      enabled = false,
       debounce = 100,
       trigger = {
         -- events that trigger sidekick next edit suggestions
@@ -45,7 +45,7 @@ return {
         -- Options used when layout is "left"|"bottom"|"top"|"right"
         ---@type vim.api.keyset.win_config
         split = {
-          width = 80,
+          width = 100,
           height = 20,
         },
         --- CLI Tool Keymaps
@@ -58,6 +58,12 @@ return {
           win_p = { "<c-w>p", "blur" }, -- leave the cli window
           blur = { "<M-b>", "blur" }, -- leave the cli window
           prompt = { "<c-p>", "prompt" }, -- insert prompt or context
+          send_at = {
+            "\\@",
+            function(t)
+              t:send("@")
+            end,
+          },
           pick_file = {
             "@",
             function(t)
@@ -70,6 +76,7 @@ return {
                   t:send("@" .. item.file .. "\n")
                   picker:close()
                   t:focus()
+                  vim.api.nvim_feedkeys("i", "n", false)
                 end,
               })
             end,

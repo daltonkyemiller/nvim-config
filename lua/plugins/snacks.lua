@@ -223,6 +223,26 @@ return {
         mode = { "n", "t" },
         desc = "Open [T]erminal",
       },
+      {
+        "<M-f>",
+        function()
+          local terminal = require("snacks.terminal")
+          local terms = terminal:list()
+          local term = terms[1]
+          if term then
+            local current_win = vim.api.nvim_get_current_win()
+            local term_win = term.win
+            local last_focused_win = vim.fn.win_getid(vim.fn.winnr("#"))
+            if term_win == current_win then
+              vim.api.nvim_set_current_win(last_focused_win)
+            else
+              term:focus()
+            end
+          end
+        end,
+        mode = { "n", "t" },
+        desc = "Toggle [F]ocus Terminal",
+      },
     }
   end,
 }

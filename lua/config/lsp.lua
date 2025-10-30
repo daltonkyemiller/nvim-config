@@ -6,7 +6,7 @@ vim.lsp.config("*", {
 vim.lsp.enable({
   -- "copilot",
   -- "ast_grep_ls",
-  "copilot_ls",
+  -- "copilot_ls",
   "jinja_ls",
   "ansible_ls",
   "docker_compose_ls",
@@ -25,7 +25,8 @@ vim.lsp.enable({
   "json",
   "lua_ls",
   -- "toml",
-  "vtsls",
+  -- "vtsls",
+  "ts_go_ls",
   "prisma",
   "biome",
   "tailwindcss",

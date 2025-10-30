@@ -10,6 +10,8 @@ vim.o.spelllang = "en_us"
 vim.o.spell = true
 vim.o.spelloptions = "camel,noplainbuffer"
 
+vim.o.linespace = 2
+
 vim.o.laststatus = 3
 
 vim.o.cursorline = true
