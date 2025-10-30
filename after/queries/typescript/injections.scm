@@ -37,6 +37,38 @@
                    (#set! injection.language "python"))
         
 ;query
+;; comment sql injection
+((comment)
+ @comment .
+ (lexical_declaration
+   (variable_declarator 
+     value: [
+             (string(string_fragment)@injection.content) 
+             (template_string(string_fragment)@injection.content)
+             (call_expression(template_string(string_fragment)@injection.content))
+             ]@injection.content)  
+   )
+  (#match? @comment "^//+( )*sql( )*")
+  (#set! injection.language "sql")
+ )
+        
+;query
+;; comment html injection
+((comment)
+ @comment .
+ (lexical_declaration
+   (variable_declarator 
+     value: [
+             (string(string_fragment)@injection.content) 
+             (template_string(string_fragment)@injection.content)
+             (call_expression(template_string(string_fragment)@injection.content))
+             ]@injection.content)  
+   )
+  (#match? @comment "^//+( )*[hH][tT][mM][lL]( )*")
+  (#set! injection.language "html")
+ )
+        
+;query
 ;; comment lua injection
 ((comment)
  @comment .
@@ -50,6 +82,22 @@
    )
   (#match? @comment "^//+( )*lua( )*")
   (#set! injection.language "lua")
+ )
+        
+;query
+;; comment python injection
+((comment)
+ @comment .
+ (lexical_declaration
+   (variable_declarator 
+     value: [
+             (string(string_fragment)@injection.content) 
+             (template_string(string_fragment)@injection.content)
+             (call_expression(template_string(string_fragment)@injection.content))
+             ]@injection.content)  
+   )
+  (#match? @comment "^//+( )*[pP][yY][tT][hH][oO][nN]( )*")
+  (#set! injection.language "python")
  )
         
 ;query
@@ -85,38 +133,6 @@
  )
         
 ;query
-;; comment python injection
-((comment)
- @comment .
- (lexical_declaration
-   (variable_declarator 
-     value: [
-             (string(string_fragment)@injection.content) 
-             (template_string(string_fragment)@injection.content)
-             (call_expression(template_string(string_fragment)@injection.content))
-             ]@injection.content)  
-   )
-  (#match? @comment "^//+( )*[pP][yY][tT][hH][oO][nN]( )*")
-  (#set! injection.language "python")
- )
-        
-;query
-;; comment sql injection
-((comment)
- @comment .
- (lexical_declaration
-   (variable_declarator 
-     value: [
-             (string(string_fragment)@injection.content) 
-             (template_string(string_fragment)@injection.content)
-             (call_expression(template_string(string_fragment)@injection.content))
-             ]@injection.content)  
-   )
-  (#match? @comment "^//+( )*sql( )*")
-  (#set! injection.language "sql")
- )
-        
-;query
 ;; comment css injection
 ((comment)
  @comment .
@@ -130,21 +146,5 @@
    )
   (#match? @comment "^//+( )*[cC][sS][sS]( )*")
   (#set! injection.language "css")
- )
-        
-;query
-;; comment html injection
-((comment)
- @comment .
- (lexical_declaration
-   (variable_declarator 
-     value: [
-             (string(string_fragment)@injection.content) 
-             (template_string(string_fragment)@injection.content)
-             (call_expression(template_string(string_fragment)@injection.content))
-             ]@injection.content)  
-   )
-  (#match? @comment "^//+( )*[hH][tT][mM][lL]( )*")
-  (#set! injection.language "html")
  )
         
