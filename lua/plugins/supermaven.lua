@@ -1,7 +1,7 @@
 --- @type LazySpec
 return {
   "supermaven-inc/supermaven-nvim",
-  enabled = true,
+  enabled = false,
   config = function()
     require("supermaven-nvim").setup({
       log_level = "off",
