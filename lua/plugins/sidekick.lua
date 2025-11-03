@@ -67,13 +67,60 @@ return {
           pick_file = {
             "@",
             function(t)
+              local snacks_picker_proc = require("snacks.picker.source.proc")
               local snacks_picker = require("snacks.picker")
-              snacks_picker.files({
+              local devicons = require("nvim-web-devicons")
+
+              local script_location = vim.fn.stdpath("config") .. "/scripts/claude_find.sh"
+              local cwd = vim.uv.cwd()
+
+              snacks_picker.pick({
+                format = function(item, picker)
+                  if item.file then return snacks_picker.format.file(item, picker) end
+
+                  local agent_icon, icon_hl = devicons.get_icon("ai")
+                  return {
+                    { agent_icon, icon_hl },
+                    { " ", virtual = true },
+                    { item.text },
+                  }
+                end,
+
+                finder = function(opts, ctx)
+                  return snacks_picker_proc.proc(
+                    ctx:opts({
+                      cmd = script_location,
+                      transform = function(item)
+                        local file_path = item.text:match("file://(.*)")
+                        local agent_name = item.text:match("agent://(.*)")
+
+                        if file_path then
+                          local full_path = cwd .. "/" .. file_path
+                          local has_extension = vim.fn.fnamemodify(file_path, ":e") ~= ""
+                          local dir = not has_extension and vim.fn.fnamemodify(file_path, ":h") or nil
+
+                          return vim.tbl_extend("force", item, {
+                            text = file_path,
+                            file = full_path,
+                            dir = dir,
+                          })
+                        end
+
+                        return vim.tbl_extend("force", item, {
+                          text = "agent-" .. agent_name,
+                        })
+                      end,
+                    }),
+                    ctx
+                  )
+                end,
+
                 on_show = function()
                   vim.api.nvim_feedkeys("i", "n", false)
                 end,
+
                 confirm = function(picker, item)
-                  t:send("@" .. item.file .. "\n")
+                  t:send("@" .. (item.file or item.text) .. "\n")
                   picker:close()
                   t:focus()
                   vim.api.nvim_feedkeys("i", "n", false)
@@ -82,13 +129,6 @@ return {
             end,
             expr = true,
           },
-          -- example of custom keymap:
-          -- say_hi = {
-          --   "<c-h>",
-          --   function(t)
-          --     t:send("hi!")
-          --   end,
-          -- },
         },
       },
       ---@class sidekick.cli.Mux
@@ -151,36 +191,39 @@ return {
   },
   keys = {
 
-    {
-      "<tab>",
-      function()
-        -- if there is a next edit, jump to it, otherwise apply it if any
-        if require("sidekick").nes_jump_or_apply() then
-          return -- jumped or applied
-        end
-
-        local supermaven_completion_preview = require("supermaven-nvim.completion_preview")
-
-        if supermaven_completion_preview.has_suggestion() then
-          vim.schedule(function()
-            supermaven_completion_preview.on_accept_suggestion()
-          end)
-
-          return
-        end
-
-        -- if you are using Neovim's native inline completions
-        -- if vim.lsp.inline_completion.get() then return end
-
-        -- any other things (like snippets) you want to do on <tab> go here.
-
-        -- fall back to normal tab
-        return "<tab>"
-      end,
-      mode = { "i", "n" },
-      expr = true,
-      desc = "Goto/Apply Next Edit Suggestion",
-    },
+    -- {
+    --   "<tab>",
+    --   function()
+    --     -- if there is a next edit, jump to it, otherwise apply it if any
+    --     if require("sidekick").nes_jump_or_apply() then
+    --       return -- jumped or applied
+    --     end
+    --
+    --     local foo = require("ninetyfive")
+    --     vim.print(vim.inspect(foo))
+    --
+    --     local supermaven_completion_preview = require("supermaven-nvim.completion_preview")
+    --
+    --     if supermaven_completion_preview.has_suggestion() then
+    --       vim.schedule(function()
+    --         supermaven_completion_preview.on_accept_suggestion()
+    --       end)
+    --
+    --       return
+    --     end
+    --
+    --     -- if you are using Neovim's native inline completions
+    --     -- if vim.lsp.inline_completion.get() then return end
+    --
+    --     -- any other things (like snippets) you want to do on <tab> go here.
+    --
+    --     -- fall back to normal tab
+    --     return "<tab>"
+    --   end,
+    --   mode = { "i", "n" },
+    --   expr = true,
+    --   desc = "Goto/Apply Next Edit Suggestion",
+    -- },
     {
       "<M-c>",
       function()
