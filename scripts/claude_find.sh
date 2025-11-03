@@ -57,7 +57,7 @@ get_claude_agents() {
         if [[ -n "$agent_name" ]]; then
           # Filter by search term if provided (case-insensitive)
           if [[ -z "$search_term" ]] || [[ "${agent_name,,}" == *"${search_term,,}"* ]]; then
-            agents+=("$agent_name")
+            agents+=("$agent_name|$filepath")
           fi
         fi
       done
@@ -65,9 +65,13 @@ get_claude_agents() {
   done
   
   if [[ ${#agents[@]} -gt 0 ]]; then
-    # Print agents (one per line)
-    printf 'agent://%s\n' "${agents[@]}"
+    # Print agents with format: agent://name|/path/to/file.md
+    for agent in "${agents[@]}"; do
+      local name="${agent%%|*}"
+      local path="${agent##*|}"
+      printf 'agent://%s|%s\n' "$name" "$path"
+    done
   fi
 }
 
-get_claude_agents $1 && fd --type file --type directory -E .git "$1" | sed 's|^|file://|'
+get_claude_agents "$1" && fd --type file --type directory -E .git "$1" | sed 's|^|file://|'

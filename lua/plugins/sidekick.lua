@@ -70,14 +70,11 @@ return {
               local snacks_picker_proc = require("snacks.picker.source.proc")
               local snacks_picker = require("snacks.picker")
               local devicons = require("nvim-web-devicons")
-
               local script_location = vim.fn.stdpath("config") .. "/scripts/claude_find.sh"
               local cwd = vim.uv.cwd()
-
               snacks_picker.pick({
                 format = function(item, picker)
-                  if item.file then return snacks_picker.format.file(item, picker) end
-
+                  if item.is_file then return snacks_picker.format.file(item, picker) end
                   local agent_icon, icon_hl = devicons.get_icon("ai")
                   return {
                     { agent_icon, icon_hl },
@@ -85,42 +82,62 @@ return {
                     { item.text },
                   }
                 end,
-
                 finder = function(opts, ctx)
                   return snacks_picker_proc.proc(
                     ctx:opts({
                       cmd = script_location,
                       transform = function(item)
                         local file_path = item.text:match("file://(.*)")
-                        local agent_name = item.text:match("agent://(.*)")
+                        local agent_match = item.text:match("agent://(.+)|(.+)")
 
                         if file_path then
                           local full_path = cwd .. "/" .. file_path
                           local has_extension = vim.fn.fnamemodify(file_path, ":e") ~= ""
                           local dir = not has_extension and vim.fn.fnamemodify(file_path, ":h") or nil
-
                           return vim.tbl_extend("force", item, {
                             text = file_path,
                             file = full_path,
                             dir = dir,
+                            is_file = true,
+                            is_agent = false,
+                          })
+                        elseif agent_match then
+                          local agent_name, agent_path = item.text:match("agent://(.+)|(.+)")
+                          return vim.tbl_extend("force", item, {
+                            text = "agent-" .. agent_name,
+                            file = agent_path,
+                            is_agent = true,
+                            is_file = false,
                           })
                         end
 
-                        return vim.tbl_extend("force", item, {
-                          text = "agent-" .. agent_name,
-                        })
+                        return item
                       end,
                     }),
                     ctx
                   )
                 end,
-
                 on_show = function()
                   vim.api.nvim_feedkeys("i", "n", false)
                 end,
-
                 confirm = function(picker, item)
-                  t:send("@" .. (item.file or item.text) .. "\n")
+                  local selected = picker:selected()
+                  local items_to_send = {}
+
+                  -- Use selected items if any exist, otherwise use the single item
+                  if selected and #selected > 0 then
+                    for _, sel_item in ipairs(selected) do
+                      table.insert(
+                        items_to_send,
+                        "@" .. (sel_item.is_agent and sel_item.text or sel_item.file or sel_item.text)
+                      )
+                    end
+                  else
+                    table.insert(items_to_send, "@" .. (item.is_agent and item.text or item.file or item.text))
+                  end
+
+                  -- Join with newlines and send
+                  t:send(table.concat(items_to_send, "\n") .. "\n")
                   picker:close()
                   t:focus()
                   vim.api.nvim_feedkeys("i", "n", false)
