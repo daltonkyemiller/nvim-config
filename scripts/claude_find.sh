@@ -3,18 +3,25 @@
 while [[ $# -gt 0 ]]; do
     case $1 in
         -f)
-            FILE="$2"
-            # Strip any existing protocol and add current-file://
-            if [[ "$FILE" =~ ^current-file:// ]]; then
-                # Already has current-file://, keep as is
-                FILE="$FILE"
-            elif [[ "$FILE" =~ ^file:// ]]; then
-                # Has file://, replace with current-file://
-                FILE="current-file://${FILE#file://}"
-            else
-                # No protocol, add current-file://
-                FILE="current-file://$FILE"
+            CURRENT_FILE_PATH="$2"
+            # Strip any existing protocol to get the raw path
+            if [[ "$CURRENT_FILE_PATH" =~ ^current-file:// ]]; then
+                CURRENT_FILE_PATH="${CURRENT_FILE_PATH#current-file://}"
+            elif [[ "$CURRENT_FILE_PATH" =~ ^file:// ]]; then
+                CURRENT_FILE_PATH="${CURRENT_FILE_PATH#file://}"
             fi
+            
+            # Get relative path from CWD
+            if [[ "$CURRENT_FILE_PATH" = /* ]]; then
+                # It's an absolute path - make it relative to CWD
+                CURRENT_FILE_PATH_FROM_CWD=$(realpath --relative-to="$(pwd)" "$CURRENT_FILE_PATH" 2>/dev/null || echo "$CURRENT_FILE_PATH")
+            else
+                # Already relative
+                CURRENT_FILE_PATH_FROM_CWD="$CURRENT_FILE_PATH"
+            fi
+            
+            # Create CURRENT_FILE with protocol (using the original path)
+            CURRENT_FILE="current-file://$CURRENT_FILE_PATH"
             shift 2
             ;;
         *)
@@ -99,6 +106,10 @@ get_claude_agents() {
   fi
 }
 
-[[ -n "$FILE" ]] && echo "$FILE"
+[[ -n "$CURRENT_FILE" ]] && echo "$CURRENT_FILE"
 get_claude_agents
-fd --type file --type directory -E .git "$POSITIONAL_ARGS" | sed 's|^|file://|'
+if [[ -n "$CURRENT_FILE_PATH_FROM_CWD" ]]; then
+    fd --type file --type directory -E .git -E "$CURRENT_FILE_PATH_FROM_CWD" "$POSITIONAL_ARGS" | sed 's|^|file://|'
+else
+    fd --type file --type directory -E .git "$POSITIONAL_ARGS" | sed 's|^|file://|'
+fi

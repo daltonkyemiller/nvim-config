@@ -90,7 +90,8 @@ return {
                       ---@param item snacks.picker.Item
                       transform = function(item)
                         local current_file_path = item.text:match("current%-file://(.*)")
-                        local file_path = item.text:match("file://(.*)") or current_file_path
+                        local matched_file_path = item.text:match("file://(.*)")
+                        local file_path = matched_file_path or current_file_path
                         local agent_match = item.text:match("agent://(.+)|(.+)")
 
                         if file_path then
