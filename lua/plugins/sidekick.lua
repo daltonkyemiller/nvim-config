@@ -151,11 +151,11 @@ return {
                     for _, sel_item in ipairs(selected) do
                       table.insert(
                         items_to_send,
-                        "@" .. (sel_item.is_agent and sel_item.text or sel_item.file or sel_item.text)
+                        "@" .. sel_item.text
                       )
                     end
                   else
-                    table.insert(items_to_send, "@" .. (item.is_agent and item.text or item.file or item.text))
+                    table.insert(items_to_send, "@" .. item.text)
                   end
 
                   -- Join with newlines and send

@@ -37,54 +37,6 @@
                    (#set! injection.language "python"))
         
 ;query
-;; comment lua injection
-((comment)
- @comment .
- (lexical_declaration
-   (variable_declarator 
-     value: [
-             (string(string_fragment)@injection.content) 
-             (template_string(string_fragment)@injection.content)
-             (call_expression(template_string(string_fragment)@injection.content))
-             ]@injection.content)  
-   )
-  (#match? @comment "^//+( )*lua( )*")
-  (#set! injection.language "lua")
- )
-        
-;query
-;; comment html injection
-((comment)
- @comment .
- (lexical_declaration
-   (variable_declarator 
-     value: [
-             (string(string_fragment)@injection.content) 
-             (template_string(string_fragment)@injection.content)
-             (call_expression(template_string(string_fragment)@injection.content))
-             ]@injection.content)  
-   )
-  (#match? @comment "^//+( )*[hH][tT][mM][lL]( )*")
-  (#set! injection.language "html")
- )
-        
-;query
-;; comment python injection
-((comment)
- @comment .
- (lexical_declaration
-   (variable_declarator 
-     value: [
-             (string(string_fragment)@injection.content) 
-             (template_string(string_fragment)@injection.content)
-             (call_expression(template_string(string_fragment)@injection.content))
-             ]@injection.content)  
-   )
-  (#match? @comment "^//+( )*[pP][yY][tT][hH][oO][nN]( )*")
-  (#set! injection.language "python")
- )
-        
-;query
 ;; comment css injection
 ((comment)
  @comment .
@@ -117,7 +69,7 @@
  )
         
 ;query
-;; comment javascript injection
+;; comment html injection
 ((comment)
  @comment .
  (lexical_declaration
@@ -128,8 +80,40 @@
              (call_expression(template_string(string_fragment)@injection.content))
              ]@injection.content)  
    )
-  (#match? @comment "^//+( )*[jJ][aA][vV][aA][sS][cC][rR][iI][pP][tT]( )*")
-  (#set! injection.language "javascript")
+  (#match? @comment "^//+( )*[hH][tT][mM][lL]( )*")
+  (#set! injection.language "html")
+ )
+        
+;query
+;; comment lua injection
+((comment)
+ @comment .
+ (lexical_declaration
+   (variable_declarator 
+     value: [
+             (string(string_fragment)@injection.content) 
+             (template_string(string_fragment)@injection.content)
+             (call_expression(template_string(string_fragment)@injection.content))
+             ]@injection.content)  
+   )
+  (#match? @comment "^//+( )*lua( )*")
+  (#set! injection.language "lua")
+ )
+        
+;query
+;; comment python injection
+((comment)
+ @comment .
+ (lexical_declaration
+   (variable_declarator 
+     value: [
+             (string(string_fragment)@injection.content) 
+             (template_string(string_fragment)@injection.content)
+             (call_expression(template_string(string_fragment)@injection.content))
+             ]@injection.content)  
+   )
+  (#match? @comment "^//+( )*[pP][yY][tT][hH][oO][nN]( )*")
+  (#set! injection.language "python")
  )
         
 ;query
@@ -146,5 +130,21 @@
    )
   (#match? @comment "^//+( )*[tT][yY][pP][eE][sS][cC][rR][iI][pP][tT]( )*")
   (#set! injection.language "typescript")
+ )
+        
+;query
+;; comment javascript injection
+((comment)
+ @comment .
+ (lexical_declaration
+   (variable_declarator 
+     value: [
+             (string(string_fragment)@injection.content) 
+             (template_string(string_fragment)@injection.content)
+             (call_expression(template_string(string_fragment)@injection.content))
+             ]@injection.content)  
+   )
+  (#match? @comment "^//+( )*[jJ][aA][vV][aA][sS][cC][rR][iI][pP][tT]( )*")
+  (#set! injection.language "javascript")
  )
         
