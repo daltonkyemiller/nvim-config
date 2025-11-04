@@ -1,6 +1,31 @@
 #!/bin/bash
+
+while [[ $# -gt 0 ]]; do
+    case $1 in
+        -f)
+            FILE="$2"
+            # Strip any existing protocol and add current-file://
+            if [[ "$FILE" =~ ^current-file:// ]]; then
+                # Already has current-file://, keep as is
+                FILE="$FILE"
+            elif [[ "$FILE" =~ ^file:// ]]; then
+                # Has file://, replace with current-file://
+                FILE="current-file://${FILE#file://}"
+            else
+                # No protocol, add current-file://
+                FILE="current-file://$FILE"
+            fi
+            shift 2
+            ;;
+        *)
+            POSITIONAL_ARGS+=("$1")
+            shift
+            ;;
+    esac
+done
+
 get_claude_agents() {
-  local search_term="$1"
+  local search_term="$POSITIONAL_ARGS"
   local agents=()
   local cwd="$(pwd)"
   local home="$HOME"
@@ -74,4 +99,6 @@ get_claude_agents() {
   fi
 }
 
-get_claude_agents "$1" && fd --type file --type directory -E .git "$1" | sed 's|^|file://|'
+[[ -n "$FILE" ]] && echo "$FILE"
+get_claude_agents
+fd --type file --type directory -E .git "$POSITIONAL_ARGS" | sed 's|^|file://|'

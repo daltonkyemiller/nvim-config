@@ -86,20 +86,41 @@ return {
                   return snacks_picker_proc.proc(
                     ctx:opts({
                       cmd = script_location,
+                      args = { "-f", vim.api.nvim_buf_get_name(vim.fn.bufnr("#")) },
+                      ---@param item snacks.picker.Item
                       transform = function(item)
-                        local file_path = item.text:match("file://(.*)")
+                        local current_file_path = item.text:match("current%-file://(.*)")
+                        local file_path = item.text:match("file://(.*)") or current_file_path
                         local agent_match = item.text:match("agent://(.+)|(.+)")
 
                         if file_path then
-                          local full_path = cwd .. "/" .. file_path
-                          local has_extension = vim.fn.fnamemodify(file_path, ":e") ~= ""
-                          local dir = not has_extension and vim.fn.fnamemodify(file_path, ":h") or nil
+                          local full_path
+                          local display_path = file_path
+
+                          -- Handle current-file:// - make it relative to cwd
+                          if current_file_path then
+                            full_path = current_file_path
+                            -- Make the absolute path relative to cwd
+                            if vim.startswith(full_path, cwd) then
+                              display_path = vim.fn.fnamemodify(full_path, ":~:.")
+                            else
+                              display_path = vim.fn.fnamemodify(full_path, ":~")
+                            end
+                          else
+                            -- Regular file:// - already relative
+                            full_path = cwd .. "/" .. file_path
+                            display_path = file_path
+                          end
+
+                          local has_extension = vim.fn.fnamemodify(display_path, ":e") ~= ""
+                          local dir = not has_extension and vim.fn.fnamemodify(display_path, ":h") or nil
                           return vim.tbl_extend("force", item, {
-                            text = file_path,
+                            text = display_path,
                             file = full_path,
                             dir = dir,
                             is_file = true,
                             is_agent = false,
+                            score_add = current_file_path and 100 or 0,
                           })
                         elseif agent_match then
                           local agent_name, agent_path = item.text:match("agent://(.+)|(.+)")

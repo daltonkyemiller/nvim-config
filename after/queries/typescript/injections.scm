@@ -1,43 +1,7 @@
 ;extends
 
-; query
-;; string sql injection
-((string_fragment) @injection.content
-                   (#match? @injection.content "^(\r\n|\r|\n)*-{2,}( )*[sS][qQ][lL]")
-                   (#set! injection.language "sql"))
-        
-; query
-;; string javascript injection
-((string_fragment) @injection.content
-                   (#match? @injection.content "^(\r\n|\r|\n)*/{2,}( )*[jJ][aA][vV][aA][sS][cC][rR][iI][pP][tT]")
-                   (#set! injection.language "javascript"))
-        
-; query
-;; string typescript injection
-((string_fragment) @injection.content
-                   (#match? @injection.content "^(\r\n|\r|\n)//+( )*[tT][yY][pP][eE][sS][cC][rR][iI][pP][tT]")
-                   (#set! injection.language "typescript"))
-        
-; query
-;; string html injection
-((string_fragment) @injection.content
-                   (#match? @injection.content "^(\r\n|\r|\n)\\<\\!-{2,}( )*[hH][tT][mM][lL]( )*-{2,}\\>")
-                   (#set! injection.language "html"))
-        
-; query
-;; string css injection
-((string_fragment) @injection.content
-                   (#match? @injection.content "^(\r\n|\r|\n)/\\*+( )*[cC][sS][sS]( )*\\*+/")
-                   (#set! injection.language "css"))
-        
-; query
-;; string python injection
-((string_fragment) @injection.content
-                   (#match? @injection.content "^(\r\n|\r|\n)*#+( )*[pP][yY][tT][hH][oO][nN]")
-                   (#set! injection.language "python"))
-        
 ;query
-;; comment sql injection
+;; comment lua injection
 ((comment)
  @comment .
  (lexical_declaration
@@ -48,24 +12,8 @@
              (call_expression(template_string(string_fragment)@injection.content))
              ]@injection.content)  
    )
-  (#match? @comment "^//+( )*sql( )*")
-  (#set! injection.language "sql")
- )
-        
-;query
-;; comment python injection
-((comment)
- @comment .
- (lexical_declaration
-   (variable_declarator 
-     value: [
-             (string(string_fragment)@injection.content) 
-             (template_string(string_fragment)@injection.content)
-             (call_expression(template_string(string_fragment)@injection.content))
-             ]@injection.content)  
-   )
-  (#match? @comment "^//+( )*[pP][yY][tT][hH][oO][nN]( )*")
-  (#set! injection.language "python")
+  (#match? @comment "^//+( )*lua( )*")
+  (#set! injection.language "lua")
  )
         
 ;query
@@ -101,7 +49,7 @@
  )
         
 ;query
-;; comment lua injection
+;; comment python injection
 ((comment)
  @comment .
  (lexical_declaration
@@ -112,8 +60,8 @@
              (call_expression(template_string(string_fragment)@injection.content))
              ]@injection.content)  
    )
-  (#match? @comment "^//+( )*lua( )*")
-  (#set! injection.language "lua")
+  (#match? @comment "^//+( )*[pP][yY][tT][hH][oO][nN]( )*")
+  (#set! injection.language "python")
  )
         
 ;query
@@ -133,6 +81,22 @@
  )
         
 ;query
+;; comment sql injection
+((comment)
+ @comment .
+ (lexical_declaration
+   (variable_declarator 
+     value: [
+             (string(string_fragment)@injection.content) 
+             (template_string(string_fragment)@injection.content)
+             (call_expression(template_string(string_fragment)@injection.content))
+             ]@injection.content)  
+   )
+  (#match? @comment "^//+( )*sql( )*")
+  (#set! injection.language "sql")
+ )
+        
+;query
 ;; comment javascript injection
 ((comment)
  @comment .
@@ -147,4 +111,40 @@
   (#match? @comment "^//+( )*[jJ][aA][vV][aA][sS][cC][rR][iI][pP][tT]( )*")
   (#set! injection.language "javascript")
  )
+        
+; query
+;; string sql injection
+((string_fragment) @injection.content
+                   (#match? @injection.content "^(\r\n|\r|\n)*-{2,}( )*[sS][qQ][lL]")
+                   (#set! injection.language "sql"))
+        
+; query
+;; string javascript injection
+((string_fragment) @injection.content
+                   (#match? @injection.content "^(\r\n|\r|\n)*/{2,}( )*[jJ][aA][vV][aA][sS][cC][rR][iI][pP][tT]")
+                   (#set! injection.language "javascript"))
+        
+; query
+;; string typescript injection
+((string_fragment) @injection.content
+                   (#match? @injection.content "^(\r\n|\r|\n)//+( )*[tT][yY][pP][eE][sS][cC][rR][iI][pP][tT]")
+                   (#set! injection.language "typescript"))
+        
+; query
+;; string html injection
+((string_fragment) @injection.content
+                   (#match? @injection.content "^(\r\n|\r|\n)\\<\\!-{2,}( )*[hH][tT][mM][lL]( )*-{2,}\\>")
+                   (#set! injection.language "html"))
+        
+; query
+;; string css injection
+((string_fragment) @injection.content
+                   (#match? @injection.content "^(\r\n|\r|\n)/\\*+( )*[cC][sS][sS]( )*\\*+/")
+                   (#set! injection.language "css"))
+        
+; query
+;; string python injection
+((string_fragment) @injection.content
+                   (#match? @injection.content "^(\r\n|\r|\n)*#+( )*[pP][yY][tT][hH][oO][nN]")
+                   (#set! injection.language "python"))
         
