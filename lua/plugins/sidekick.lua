@@ -83,20 +83,47 @@ return {
                   }
                 end,
                 finder = function(opts, ctx)
+                  local last_buf_num = vim.fn.bufnr("#")
+                  local last_buf_name = last_buf_num and last_buf_num ~= -1 and vim.fn.bufname(last_buf_num) or nil
+
+                  -- Build args with current file and all open buffers
+                  local args = {}
+                  if last_buf_name then
+                    table.insert(args, "-f")
+                    table.insert(args, vim.api.nvim_buf_get_name(vim.fn.bufnr("#")))
+                  end
+
+                  -- Add all other loaded buffers (excluding terminal buffers)
+                  for _, buf in ipairs(vim.api.nvim_list_bufs()) do
+                    if vim.api.nvim_buf_is_loaded(buf) and buf ~= last_buf_num then
+                      local buf_type = vim.api.nvim_get_option_value("buftype", { buf = buf })
+                      -- Skip terminal and other special buffer types
+                      if buf_type == "" or buf_type == "acwrite" then
+                        local buf_name = vim.api.nvim_buf_get_name(buf)
+                        if buf_name and buf_name ~= "" then
+                          table.insert(args, "-b")
+                          table.insert(args, buf_name)
+                        end
+                      end
+                    end
+                  end
+
                   return snacks_picker_proc.proc(
                     ctx:opts({
                       cmd = script_location,
-                      args = { "-f", vim.api.nvim_buf_get_name(vim.fn.bufnr("#")) },
+                      args = #args > 0 and args or nil,
                       ---@param item snacks.picker.Item
                       transform = function(item)
                         local current_file_path = item.text:match("current%-file://(.*)")
+                        local buffer_file_path = item.text:match("buffer://(.*)")
                         local matched_file_path = item.text:match("file://(.*)")
-                        local file_path = matched_file_path or current_file_path
+                        local file_path = matched_file_path or current_file_path or buffer_file_path
                         local agent_match = item.text:match("agent://(.+)|(.+)")
 
                         if file_path then
                           local full_path
                           local display_path = file_path
+                          local score_add = 0
 
                           -- Handle current-file:// - make it relative to cwd
                           if current_file_path then
@@ -107,6 +134,17 @@ return {
                             else
                               display_path = vim.fn.fnamemodify(full_path, ":~")
                             end
+                            score_add = 100
+                          elseif buffer_file_path then
+                            -- Handle buffer:// - make it relative to cwd
+                            full_path = buffer_file_path
+                            -- Make the absolute path relative to cwd
+                            if vim.startswith(full_path, cwd) then
+                              display_path = vim.fn.fnamemodify(full_path, ":~:.")
+                            else
+                              display_path = vim.fn.fnamemodify(full_path, ":~")
+                            end
+                            score_add = 50 -- Give buffers higher priority than regular files
                           else
                             -- Regular file:// - already relative
                             full_path = cwd .. "/" .. file_path
@@ -121,7 +159,7 @@ return {
                             dir = dir,
                             is_file = true,
                             is_agent = false,
-                            score_add = current_file_path and 100 or 0,
+                            score_add = score_add,
                           })
                         elseif agent_match then
                           local agent_name, agent_path = item.text:match("agent://(.+)|(.+)")
@@ -149,10 +187,7 @@ return {
                   -- Use selected items if any exist, otherwise use the single item
                   if selected and #selected > 0 then
                     for _, sel_item in ipairs(selected) do
-                      table.insert(
-                        items_to_send,
-                        "@" .. sel_item.text
-                      )
+                      table.insert(items_to_send, "@" .. sel_item.text)
                     end
                   else
                     table.insert(items_to_send, "@" .. item.text)
@@ -178,7 +213,7 @@ return {
       },
       ---@type table<string, sidekick.cli.Tool.spec>
       tools = {
-        claude = { cmd = { "claude" }, url = "https://github.com/anthropics/claude-code" },
+        claude = { cmd = { "/home/dalton/.claude/local/claude" }, url = "https://github.com/anthropics/claude-code" },
         codex = { cmd = { "codex", "--search" }, url = "https://github.com/openai/codex" },
         copilot = { cmd = { "copilot", "--banner" }, url = "https://github.com/github/copilot-cli" },
         crush = {
@@ -204,7 +239,7 @@ return {
       prompts = {
         changes = "Can you review my changes?",
         diagnostics = "Can you help me fix the diagnostics in {file}?\n{diagnostics}",
-        diagnostics_all = "Can you help me fix these diagnostics?\n{diagnostics_all}",
+        -- diagnostics_all = "Can you help me fix these diagnostics?\n{diagnostics_all}",
         document = "Add documentation to {position}",
         explain = "Explain {this}",
         fix = "Can you fix {this}?",

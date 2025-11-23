@@ -1,5 +1,8 @@
 #!/bin/bash
 
+BUFFER_FILES=()
+BUFFER_EXCLUDES=()
+
 while [[ $# -gt 0 ]]; do
     case $1 in
         -f)
@@ -22,6 +25,29 @@ while [[ $# -gt 0 ]]; do
             
             # Create CURRENT_FILE with protocol (using the original path)
             CURRENT_FILE="current-file://$CURRENT_FILE_PATH"
+            shift 2
+            ;;
+        -b|--buffer)
+            BUFFER_PATH="$2"
+            # Strip any existing protocol to get the raw path
+            if [[ "$BUFFER_PATH" =~ ^buffer:// ]]; then
+                BUFFER_PATH="${BUFFER_PATH#buffer://}"
+            elif [[ "$BUFFER_PATH" =~ ^file:// ]]; then
+                BUFFER_PATH="${BUFFER_PATH#file://}"
+            fi
+            
+            # Get relative path from CWD for exclusion
+            if [[ "$BUFFER_PATH" = /* ]]; then
+                # It's an absolute path - make it relative to CWD
+                BUFFER_PATH_FROM_CWD=$(realpath --relative-to="$(pwd)" "$BUFFER_PATH" 2>/dev/null || echo "$BUFFER_PATH")
+            else
+                # Already relative
+                BUFFER_PATH_FROM_CWD="$BUFFER_PATH"
+            fi
+            
+            # Add to buffer arrays
+            BUFFER_FILES+=("buffer://$BUFFER_PATH")
+            BUFFER_EXCLUDES+=("$BUFFER_PATH_FROM_CWD")
             shift 2
             ;;
         *)
@@ -107,9 +133,20 @@ get_claude_agents() {
 }
 
 [[ -n "$CURRENT_FILE" ]] && echo "$CURRENT_FILE"
+
+# Output buffer files
+for buffer_file in "${BUFFER_FILES[@]}"; do
+    echo "$buffer_file"
+done
+
 get_claude_agents
-if [[ -n "$CURRENT_FILE_PATH_FROM_CWD" ]]; then
-    fd --type file --type directory -E .git -E "$CURRENT_FILE_PATH_FROM_CWD" "$POSITIONAL_ARGS" | sed 's|^|file://|'
-else
-    fd --type file --type directory -E .git "$POSITIONAL_ARGS" | sed 's|^|file://|'
-fi
+
+# Build fd command with all excludes
+FD_EXCLUDES="-E .git"
+[[ -n "$CURRENT_FILE_PATH_FROM_CWD" ]] && FD_EXCLUDES="$FD_EXCLUDES -E \"$CURRENT_FILE_PATH_FROM_CWD\""
+for exclude in "${BUFFER_EXCLUDES[@]}"; do
+    FD_EXCLUDES="$FD_EXCLUDES -E \"$exclude\""
+done
+
+# Execute fd with all excludes
+eval "fd --type file --type directory $FD_EXCLUDES \"$POSITIONAL_ARGS\"" | sed 's|^|file://|'
