@@ -47,7 +47,16 @@ return {
       },
     },
     notifier = { enabled = true, top_down = false },
-    lazygit = { enabled = true },
+    lazygit = {
+      enabled = true,
+      config = {
+        os = {
+          editPreset = "nvim-remote",
+          -- Edit in new buffer, not new tab(the default)
+          edit = '[[ -z "$NVIM" ]] && (nvim -- {{filename}}) || (nvim --server "$NVIM" --remote-send "q" && nvim --server "$NVIM" --remote {{filename}})',
+        },
+      },
+    },
     image = {
       enabled = true,
     },
