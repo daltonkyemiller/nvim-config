@@ -47,7 +47,7 @@ vim.api.nvim_create_autocmd("LspAttach", {
 
     if client:supports_method("textDocument/documentColor") then
       vim.lsp.document_color.enable(true, buffer, {
-        style = "virtual"
+        style = "virtual",
       })
     end
 
@@ -56,3 +56,11 @@ vim.api.nvim_create_autocmd("LspAttach", {
     end
   end,
 })
+
+-- create user command to restart all LSPs
+vim.api.nvim_create_user_command("LspRestart", function()
+  vim.lsp.stop_client(vim.lsp.get_clients({
+    bufnr = vim.api.nvim_get_current_buf(),
+  }))
+  vim.cmd(":e!")
+end, {})
