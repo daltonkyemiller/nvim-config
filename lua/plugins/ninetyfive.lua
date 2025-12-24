@@ -6,7 +6,8 @@ return {
     mappings = {
       enabled = true,
       accept = "<Tab>",
-      reject = "<S-Tab>"
+      reject = "<S-Tab>",
+      -- accept_word = "<C-j>",
     },
   },
 }
