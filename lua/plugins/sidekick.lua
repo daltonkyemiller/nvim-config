@@ -67,6 +67,7 @@ return {
           pick_file = {
             "@",
             function(t)
+              local pid = t.pids[1]
               local snacks_picker_proc = require("snacks.picker.source.proc")
               local snacks_picker = require("snacks.picker")
               local devicons = require("nvim-web-devicons")
@@ -86,8 +87,7 @@ return {
                   local last_buf_num = vim.fn.bufnr("#")
                   local last_buf_name = last_buf_num and last_buf_num ~= -1 and vim.fn.bufname(last_buf_num) or nil
 
-                  -- Build args with current file and all open buffers
-                  local args = {}
+                  local args = { "-p", tostring(pid) }
                   if last_buf_name then
                     table.insert(args, "-f")
                     table.insert(args, vim.api.nvim_buf_get_name(vim.fn.bufnr("#")))
@@ -164,7 +164,7 @@ return {
                         elseif agent_match then
                           local agent_name, agent_path = item.text:match("agent://(.+)|(.+)")
                           return vim.tbl_extend("force", item, {
-                            text = "agent-" .. agent_name,
+                            text = agent_name,
                             file = agent_path,
                             is_agent = true,
                             is_file = false,
@@ -304,13 +304,13 @@ return {
         local sidekick_cli = require("sidekick.cli")
         local in_vis_mode = vim.fn.mode() == "v" or vim.fn.mode() == "V" or vim.fn.mode() == "\22"
         if not in_vis_mode then
-          sidekick_cli.toggle({ name = "claude", focus = true })
+          sidekick_cli.toggle({ name = "opencode", focus = true })
           return
         end
 
-        sidekick_cli.send({ prompt = "position", name = "claude" })
+        sidekick_cli.send({ prompt = "position", name = "opencode" })
       end,
-      desc = "Sidekick Claude Toggle",
+      desc = "Sidekick Opencode Toggle",
       mode = { "n", "v" },
     },
     {

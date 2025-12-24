@@ -2,9 +2,14 @@
 
 BUFFER_FILES=()
 BUFFER_EXCLUDES=()
+PID=""
 
 while [[ $# -gt 0 ]]; do
     case $1 in
+        -p|--pid)
+            PID="$2"
+            shift 2
+            ;;
         -f)
             CURRENT_FILE_PATH="$2"
             # Strip any existing protocol to get the raw path
@@ -56,6 +61,46 @@ while [[ $# -gt 0 ]]; do
             ;;
     esac
 done
+
+get_opencode_port() {
+  local pid="$1"
+  [[ -z "$pid" ]] && return 1
+  
+  local port
+  port=$(lsof -i -P -n -p "$pid" 2>/dev/null | awk '/LISTEN/ && $1 == "opencode" {print $9}' | cut -d: -f2 | head -1)
+  
+  [[ -n "$port" ]] && echo "$port" && return 0
+  return 1
+}
+
+get_opencode_agents() {
+  local port="$1"
+  local search_term="$2"
+  local url="http://127.0.0.1:$port/agent"
+  local cache_dir="/tmp/opencode-agents"
+  
+  local response
+  response=$(curl -sS "$url" 2>/dev/null)
+  [[ -z "$response" ]] && return 1
+  
+  mkdir -p "$cache_dir"
+  
+  if command -v jq &>/dev/null; then
+    echo "$response" | jq -r '.[] | "\(.name)\t\(.description // "")"' 2>/dev/null | while IFS=$'\t' read -r name desc; do
+      if [[ -z "$search_term" ]] || [[ "${name,,}" == *"${search_term,,}"* ]]; then
+        local tmpfile="$cache_dir/${name}.md"
+        printf '%s\n' "$desc" > "$tmpfile"
+        printf 'agent://%s|%s\n' "$name" "$tmpfile"
+      fi
+    done
+  else
+    echo "$response" | grep -oP '"name"\s*:\s*"\K[^"]+' | while read -r name; do
+      if [[ -z "$search_term" ]] || [[ "${name,,}" == *"${search_term,,}"* ]]; then
+        printf 'agent://%s|%s\n' "$name" "$name"
+      fi
+    done
+  fi
+}
 
 get_claude_agents() {
   local search_term="$POSITIONAL_ARGS"
@@ -132,14 +177,29 @@ get_claude_agents() {
   fi
 }
 
+get_agents() {
+  local search_term="$POSITIONAL_ARGS"
+  
+  if [[ -n "$PID" ]]; then
+    local port
+    port=$(get_opencode_port "$PID")
+    
+    if [[ -n "$port" ]]; then
+      get_opencode_agents "$port" "$search_term"
+      return
+    fi
+  fi
+  
+  get_claude_agents
+}
+
 [[ -n "$CURRENT_FILE" ]] && echo "$CURRENT_FILE"
 
-# Output buffer files
 for buffer_file in "${BUFFER_FILES[@]}"; do
     echo "$buffer_file"
 done
 
-get_claude_agents
+get_agents
 
 # Build fd command with all excludes
 FD_EXCLUDES="-E .git"
