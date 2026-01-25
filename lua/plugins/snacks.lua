@@ -39,6 +39,9 @@ return {
     picker = {
       enabled = true,
       layout = dropdown_layout,
+      exclude = {
+        "**/sessions",
+      },
 
       win = {
         keys = {

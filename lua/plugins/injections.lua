@@ -62,6 +62,7 @@ return {
         langs = {
           { name = "lua", match = "^//+( )*lua( )*" },
           { name = "sql", match = "^//+( )*sql( )*" },
+          { name = "glimmer", match = "^//+( )*hbs( )*" },
         },
         query = ts_js_query,
       },

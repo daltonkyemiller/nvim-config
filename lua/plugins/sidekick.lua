@@ -45,7 +45,7 @@ return {
         -- Options used when layout is "left"|"bottom"|"top"|"right"
         ---@type vim.api.keyset.win_config
         split = {
-          width = 100,
+          width = 80,
           height = 20,
         },
         --- CLI Tool Keymaps
@@ -213,7 +213,10 @@ return {
       },
       ---@type table<string, sidekick.cli.Tool.spec>
       tools = {
-        claude = { cmd = { "/home/dalton/.claude/local/claude" }, url = "https://github.com/anthropics/claude-code" },
+        claude = {
+          cmd = { "claude", "--allow-dangerously-skip-permissions" },
+          url = "https://github.com/anthropics/claude-code",
+        },
         codex = { cmd = { "codex", "--search" }, url = "https://github.com/openai/codex" },
         copilot = { cmd = { "copilot", "--banner" }, url = "https://github.com/github/copilot-cli" },
         crush = {
@@ -304,11 +307,11 @@ return {
         local sidekick_cli = require("sidekick.cli")
         local in_vis_mode = vim.fn.mode() == "v" or vim.fn.mode() == "V" or vim.fn.mode() == "\22"
         if not in_vis_mode then
-          sidekick_cli.toggle({ name = "opencode", focus = true })
+          sidekick_cli.toggle({ name = "claude", focus = true })
           return
         end
 
-        sidekick_cli.send({ prompt = "position", name = "opencode" })
+        sidekick_cli.send({ prompt = "position", name = "claude" })
       end,
       desc = "Sidekick Opencode Toggle",
       mode = { "n", "v" },
