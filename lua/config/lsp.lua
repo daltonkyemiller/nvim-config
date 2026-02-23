@@ -8,6 +8,7 @@ vim.lsp.enable({
   -- "ast_grep_ls",
   -- "copilot_ls",
   "jinja_ls",
+  "postgres_ls",
   "ansible_ls",
   "docker_compose_ls",
   "dockerfile_ls",
@@ -45,11 +46,11 @@ vim.api.nvim_create_autocmd("LspAttach", {
     --   vim.lsp.completion.enable(true, client.id, buffer, { autotrigger = true })
     -- end
 
-    if client:supports_method("textDocument/documentColor") then
-      vim.lsp.document_color.enable(true, buffer, {
-        style = "virtual",
-      })
-    end
+    -- if client:supports_method("textDocument/documentColor") then
+    --   vim.lsp.document_color.enable(true, buffer, {
+    --     style = "virtual",
+    --   })
+    -- end
 
     if client:supports_method(vim.lsp.protocol.Methods.textDocument_inlineCompletion) then
       vim.lsp.inline_completion.enable(true)

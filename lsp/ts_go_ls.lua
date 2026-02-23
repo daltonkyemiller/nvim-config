@@ -1,6 +1,6 @@
 ---@type vim.lsp.Config
 return {
-  cmd = { vim.loop.os_homedir() .. "/dev/typescript-go/built/local/tsgo", "--lsp", "-stdio" },
+  cmd = { "tsgo", "--lsp", "-stdio" },
   filetypes = {
     "javascript",
     "javascriptreact",
