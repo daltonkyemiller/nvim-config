@@ -2,15 +2,16 @@
 return {
   "MeanderingProgrammer/render-markdown.nvim",
   init = function()
-    local palette = require("daltonkyemiller.colors"):get_palette()
-    local color1_bg = palette.dragonRed
-    local color2_bg = palette.dragonOrange
-    local color3_bg = palette.dragonYellow
-    local color4_bg = palette.dragonGreen
-    local color5_bg = palette.dragonBlue
-    local color6_bg = palette.dragonPurple
+    local colors = require("daltonkyemiller.colors").miasma
+    local palette = colors.palette
+    local color1_bg = palette.red
+    local color2_bg = palette.orange
+    local color3_bg = palette.yellow
+    local color4_bg = palette.green
+    local color5_bg = palette.olive
+    local color6_bg = palette.brown
 
-    local color_fg = "#191724"
+    local color_fg = palette.bg
 
     -- vim.cmd(string.format([[highlight Headline1Bg guifg=%s guibg=%s]], color_fg, color1_bg))
     -- vim.cmd(string.format([[highlight Headline2Bg guifg=%s guibg=%s]], color_fg, color2_bg))

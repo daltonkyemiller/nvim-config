@@ -3,6 +3,7 @@
 return {
   "rebelot/kanagawa.nvim",
   lazy = false,
+  enabled = false,
   priority = 150,
   config = function()
     local more_saturated_palette = require("daltonkyemiller.colors"):get_palette()
