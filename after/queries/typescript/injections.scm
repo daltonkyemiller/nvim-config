@@ -1,6 +1,38 @@
 ;extends
 
 ;query
+;; comment glimmer injection
+((comment)
+ @comment .
+ (lexical_declaration
+   (variable_declarator 
+     value: [
+             (string(string_fragment)@injection.content) 
+             (template_string(string_fragment)@injection.content)
+             (call_expression(template_string(string_fragment)@injection.content))
+             ]@injection.content)  
+   )
+  (#match? @comment "^//+( )*hbs( )*")
+  (#set! injection.language "glimmer")
+ )
+        
+;query
+;; comment typescript injection
+((comment)
+ @comment .
+ (lexical_declaration
+   (variable_declarator 
+     value: [
+             (string(string_fragment)@injection.content) 
+             (template_string(string_fragment)@injection.content)
+             (call_expression(template_string(string_fragment)@injection.content))
+             ]@injection.content)  
+   )
+  (#match? @comment "^//+( )*[tT][yY][pP][eE][sS][cC][rR][iI][pP][tT]( )*")
+  (#set! injection.language "typescript")
+ )
+        
+;query
 ;; comment javascript injection
 ((comment)
  @comment .
@@ -17,6 +49,22 @@
  )
         
 ;query
+;; comment python injection
+((comment)
+ @comment .
+ (lexical_declaration
+   (variable_declarator 
+     value: [
+             (string(string_fragment)@injection.content) 
+             (template_string(string_fragment)@injection.content)
+             (call_expression(template_string(string_fragment)@injection.content))
+             ]@injection.content)  
+   )
+  (#match? @comment "^//+( )*[pP][yY][tT][hH][oO][nN]( )*")
+  (#set! injection.language "python")
+ )
+        
+;query
 ;; comment lua injection
 ((comment)
  @comment .
@@ -30,22 +78,6 @@
    )
   (#match? @comment "^//+( )*lua( )*")
   (#set! injection.language "lua")
- )
-        
-;query
-;; comment glimmer injection
-((comment)
- @comment .
- (lexical_declaration
-   (variable_declarator 
-     value: [
-             (string(string_fragment)@injection.content) 
-             (template_string(string_fragment)@injection.content)
-             (call_expression(template_string(string_fragment)@injection.content))
-             ]@injection.content)  
-   )
-  (#match? @comment "^//+( )*hbs( )*")
-  (#set! injection.language "glimmer")
  )
         
 ;query
@@ -81,22 +113,6 @@
  )
         
 ;query
-;; comment python injection
-((comment)
- @comment .
- (lexical_declaration
-   (variable_declarator 
-     value: [
-             (string(string_fragment)@injection.content) 
-             (template_string(string_fragment)@injection.content)
-             (call_expression(template_string(string_fragment)@injection.content))
-             ]@injection.content)  
-   )
-  (#match? @comment "^//+( )*[pP][yY][tT][hH][oO][nN]( )*")
-  (#set! injection.language "python")
- )
-        
-;query
 ;; comment css injection
 ((comment)
  @comment .
@@ -110,22 +126,6 @@
    )
   (#match? @comment "^//+( )*[cC][sS][sS]( )*")
   (#set! injection.language "css")
- )
-        
-;query
-;; comment typescript injection
-((comment)
- @comment .
- (lexical_declaration
-   (variable_declarator 
-     value: [
-             (string(string_fragment)@injection.content) 
-             (template_string(string_fragment)@injection.content)
-             (call_expression(template_string(string_fragment)@injection.content))
-             ]@injection.content)  
-   )
-  (#match? @comment "^//+( )*[tT][yY][pP][eE][sS][cC][rR][iI][pP][tT]( )*")
-  (#set! injection.language "typescript")
  )
         
 ; query
