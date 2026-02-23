@@ -48,7 +48,7 @@ return {
       end,
     },
     "Kaiser-Yang/blink-cmp-avante",
-    { "MattiasMTS/cmp-dbee", ft = "sql", opts = {} },
+    -- { "MattiasMTS/cmp-dbee", ft = "sql", opts = {} },
     {
       "saghen/blink.compat",
       lazy = true,
@@ -67,7 +67,7 @@ return {
   ---@type blink.cmp.Config
   opts = function()
     local sources_default = {
-      "cmp-dbee",
+      -- "cmp-dbee",
       "avante",
       "snippets",
       "lsp",
@@ -76,10 +76,10 @@ return {
     }
 
     local providers = {
-      ["cmp-dbee"] = {
-        name = "cmp-dbee",
-        module = "blink.compat.source",
-      },
+      -- ["cmp-dbee"] = {
+      --   name = "cmp-dbee",
+      --   module = "blink.compat.source",
+      -- },
       lsp = {
         transform_items = function(_, items)
           return vim.tbl_filter(function(item)

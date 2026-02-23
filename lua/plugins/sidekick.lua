@@ -1,6 +1,7 @@
 --- @type LazySpec
 return {
   "folke/sidekick.nvim",
+  lazy = false,
   ---@class sidekick.Config
   opts = {
     jump = {
@@ -54,7 +55,15 @@ return {
         keys = {
           stopinsert = { "<esc><esc>", "stopinsert", mode = "t" }, -- enter normal mode
           hide_n = { "q", "hide", mode = "n" }, -- hide from normal mode
-          hide_t = { "<M-c>", "hide" }, -- hide from terminal mode
+          hide_c = { "<M-c>", "hide" }, -- hide from terminal mode
+          hide_o = { "<M-o>", "hide" }, -- hide from terminal mode
+          -- alt shift + c to copy the response
+          copy_response = {
+            "<M-y>",
+            function(t)
+              vim.fn.jobstart({ "/home/dalton/scripts/claude-response.sh", "--copy", "1" })
+            end,
+          },
           win_p = { "<c-w>p", "blur" }, -- leave the cli window
           blur = { "<M-b>", "blur" }, -- leave the cli window
           prompt = { "<c-p>", "prompt" }, -- insert prompt or context
@@ -311,9 +320,24 @@ return {
           return
         end
 
-        sidekick_cli.send({ prompt = "position", name = "claude" })
+        sidekick_cli.send({ name = "claude", prompt = "position" })
       end,
-      desc = "Sidekick Opencode Toggle",
+      desc = "Sidekick [C]laude",
+      mode = { "n", "v" },
+    },
+    {
+      "<M-o>",
+      function()
+        local sidekick_cli = require("sidekick.cli")
+        local in_vis_mode = vim.fn.mode() == "v" or vim.fn.mode() == "V" or vim.fn.mode() == "\22"
+        if not in_vis_mode then
+          sidekick_cli.toggle({ name = "opencode", focus = true })
+          return
+        end
+
+        sidekick_cli.send({ name = "opencode", prompt = "position" })
+      end,
+      desc = "Sidekick [O]pencode",
       mode = { "n", "v" },
     },
     {

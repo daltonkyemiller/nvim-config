@@ -42,6 +42,10 @@ return {
       exclude = {
         "**/sessions",
       },
+      sources = {
+        gh_issue = {},
+        gh_pr = {},
+      },
 
       win = {
         keys = {
@@ -130,6 +134,35 @@ return {
         end,
         desc = "[G]it [B]rowse [B]ranch",
       },
+      {
+        "<leader>gi",
+        function()
+          snacks.picker.gh_issue()
+        end,
+        desc = "GitHub Issues (open)",
+      },
+      {
+        "<leader>gI",
+        function()
+          snacks.picker.gh_issue({ state = "all" })
+        end,
+        desc = "GitHub Issues (all)",
+      },
+      {
+        "<leader>gp",
+        function()
+          snacks.picker.gh_pr()
+        end,
+        desc = "GitHub Pull Requests (open)",
+      },
+      {
+        "<leader>gP",
+        function()
+          snacks.picker.gh_pr({ state = "all" })
+        end,
+        desc = "GitHub Pull Requests (all)",
+      },
+
       {
         mode = { "n", "x" },
         "<leader>gbc",
