@@ -15,6 +15,7 @@ M.miasma = {
 
     -- Foregrounds
     fg = "#d7c483",
+    border = "#424134",
     fg_dark = "#c2c2b0",
 
     -- UI
