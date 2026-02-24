@@ -7,6 +7,7 @@ vim.lsp.enable({
   -- "copilot",
   -- "ast_grep_ls",
   -- "copilot_ls",
+  "tombi_ls",
   "jinja_ls",
   "postgres_ls",
   "ansible_ls",
