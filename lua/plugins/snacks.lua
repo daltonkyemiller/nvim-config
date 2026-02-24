@@ -1,30 +1,42 @@
+-- - "none" — no border
+-- - "single" — single-line border
+-- - "double" — double-line border
+-- - "rounded" — single-line with rounded corners
+-- - "solid" — solid border
+-- - "shadow" — shadow border
+-- - "bold" — bold border
+-- - "top" — border on top only
+-- - "bottom" — border on bottom only
+-- - "left" — border on left only
+-- - "right" — border on right only
+-- - "top_bottom" — borders on top and bottom
+-- - "hpad" — horizontal padding
+-- - "vpad" — vertical padding
+-- - false — no border
+-- - true — default border
+-- - string[] — custom border characters (same as Neovim's nvim_open_win border
+-- format)
+local backdrop = {
+  bg = "NONE",
+  blend = 30,
+}
+
 local dropdown_layout = {
   --- @type snacks.picker.layout.Config
   layout = {
-    backdrop = true,
+    backdrop = backdrop,
     row = 1,
     width = 0.4,
     min_width = 80,
     height = 0.9,
-    border = "none",
+    border = "single",
     box = "vertical",
+
     { win = "preview", title = "{preview}", height = 0.5, border = false },
-    { win = "input", height = 1, border = "rounded" },
+    { win = "input", height = 1, border = "single" },
     { win = "list", border = "hpad" },
-    -- {
-    --   box = "vertical",
-    --   border = "top",
-    --   title = nil,
-    --   -- title = "{title} {live} {flags}",
-    --   title_pos = "center",
-    --   { win = "input", height = 1, border = "bottom" },
-    --   { win = "list", border = false },
-    -- },
   },
 }
-
----@type snacks.win | nil
-local open_term
 
 --- @type LazySpec
 return {
@@ -34,13 +46,21 @@ return {
   ---@type snacks.Config
   opts = {
 
-    -- your configuration comes here
-    -- or leave it empty to use the default settings
-    -- refer to the configuration section below
-    -- bigfile = { enabled = true },
-    -- dashboard = { enabled = true },
-    -- indent = { enabled = true },
-    -- input = { enabled = true },
+    ---@type snacks.terminal.Config
+    terminal = {
+      win = {
+        backdrop = backdrop,
+        wo = {
+          winhighlight = "Normal:SnacksTerminal,NormalFloat:SnacksTerminal",
+        },
+      },
+    },
+    ---@type snacks.win.Config
+    win = {
+      minimal = true,
+      border = "single",
+      backdrop = backdrop,
+    },
     picker = {
       enabled = true,
       layout = dropdown_layout,
@@ -115,8 +135,10 @@ return {
       },
     },
     notifier = { enabled = true, top_down = false },
+    ---@type snacks.lazygit.Config
     lazygit = {
       enabled = true,
+      configure = true,
       config = {
         os = {
           editPreset = "nvim-remote",

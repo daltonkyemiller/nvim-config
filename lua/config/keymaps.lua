@@ -125,5 +125,5 @@ vim.keymap.set("n", "<leader>p", function()
 end, { desc = "[P]aste inside" })
 
 vim.keymap.set("n", "<leader>dd", function()
-  require("snacks").terminal("lazydocker")
+  require("snacks").terminal.open("lazydocker")
 end, { desc = "Open Lazy[D]ocker" })

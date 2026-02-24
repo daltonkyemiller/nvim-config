@@ -28,22 +28,9 @@ return {
     })
 
     vim.g.colors_name = "miasma"
-    local groups = {
-      "FloatBorder",
-      "WinSeparator",
-      "SnacksPickerInputBorder",
-      "SnacksPickerListBorder",
-      "SnacksPickerPreviewBorder",
-      "LspFloatWinBorder",
-      "DiagnosticFloatingBorder",
-      -- "NormalFloat",
-    }
 
-    -- for _, group in ipairs(groups) do
-    --   vim.api.nvim_set_hl(0, group, { fg = palette.bg, bg = palette.bg })
-    -- end
-
-    vim.api.nvim_set_hl(0, "FloatBorder", { fg = palette.border })
+    vim.api.nvim_set_hl(0, "FloatBorder", { fg = palette.border, bg = "NONE" })
+    vim.api.nvim_set_hl(0, "SnacksPickerBorder", { fg = palette.border, bg = "NONE" })
 
     vim.api.nvim_set_hl(0, "SnacksPickerInput", { bg = palette.bg })
     vim.api.nvim_set_hl(0, "SnacksPickerInputBorder", { fg = palette.border })
