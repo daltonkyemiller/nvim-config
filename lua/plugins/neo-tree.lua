@@ -1,14 +1,15 @@
 --- @type LazySpec
 return {
   "nvim-neo-tree/neo-tree.nvim",
+  enabled = false,
   keys = {
-    {
-      "<leader>e",
-      function()
-        require("neo-tree.command").execute({ toggle = true, dir = vim.loop.cwd(), reveal = true })
-      end,
-      desc = "Explorer Neotree (cwd)",
-    },
+    -- {
+    --   "<leader>e",
+    --   function()
+    --     require("neo-tree.command").execute({ toggle = true, dir = vim.loop.cwd(), reveal = true })
+    --   end,
+    --   desc = "Explorer Neotree (cwd)",
+    -- },
   },
   dependencies = {
     "nvim-lua/plenary.nvim",
@@ -172,6 +173,9 @@ return {
     opts.window = {
       position = "float",
       width = 30,
+      float = {
+        border_style = "rounded",
+      },
       -- popup = {
       --   size = { width = '80', height = '60' },
       --   position = '50%',

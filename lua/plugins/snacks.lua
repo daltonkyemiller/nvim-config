@@ -1,21 +1,25 @@
 local dropdown_layout = {
+  --- @type snacks.picker.layout.Config
   layout = {
-    backdrop = false,
+    backdrop = true,
     row = 1,
     width = 0.4,
     min_width = 80,
     height = 0.9,
     border = "none",
     box = "vertical",
-    { win = "preview", title = "{preview}", height = 0.5, border = "rounded" },
-    {
-      box = "vertical",
-      border = "rounded",
-      title = "{title} {live} {flags}",
-      title_pos = "center",
-      { win = "input", height = 1, border = "bottom" },
-      { win = "list", border = "none" },
-    },
+    { win = "preview", title = "{preview}", height = 0.5, border = false },
+    { win = "input", height = 1, border = "rounded" },
+    { win = "list", border = "hpad" },
+    -- {
+    --   box = "vertical",
+    --   border = "top",
+    --   title = nil,
+    --   -- title = "{title} {live} {flags}",
+    --   title_pos = "center",
+    --   { win = "input", height = 1, border = "bottom" },
+    --   { win = "list", border = false },
+    -- },
   },
 }
 
@@ -29,6 +33,7 @@ return {
   lazy = false,
   ---@type snacks.Config
   opts = {
+
     -- your configuration comes here
     -- or leave it empty to use the default settings
     -- refer to the configuration section below
@@ -43,8 +48,64 @@ return {
         "**/sessions",
       },
       sources = {
+        select = {
+          layout = { hidden = { "preview" } },
+        },
         gh_issue = {},
         gh_pr = {},
+        ---@class snacks.picker.explorer.Config
+        explorer = {
+          auto_close = true,
+          actions = {
+            ---@param picker snacks.picker
+            ---@param item snacks.picker.Item
+            yank_choice = function(picker, item)
+              local filepath = item.file
+              if not filepath then return end
+              local filename = vim.fn.fnamemodify(filepath, ":t")
+              local modify = vim.fn.fnamemodify
+
+              local vals = {
+                ["BASENAME"] = modify(filename, ":r"),
+                ["EXTENSION"] = modify(filename, ":e"),
+                ["FILENAME"] = filename,
+                ["PATH (CWD)"] = modify(filepath, ":."),
+                ["PATH (HOME)"] = modify(filepath, ":~"),
+                ["PATH"] = filepath,
+                ["URI"] = vim.uri_from_fname(filepath),
+              }
+
+              local options = vim.tbl_filter(function(val)
+                return vals[val] ~= ""
+              end, vim.tbl_keys(vals))
+              if vim.tbl_isempty(options) then
+                vim.notify("No values to copy", vim.log.levels.WARN)
+                return
+              end
+              table.sort(options)
+              picker:close()
+              vim.ui.select(options, {
+                prompt = "Choose to copy to clipboard:",
+                format_item = function(choice)
+                  return ("%s: %s"):format(choice, vals[choice])
+                end,
+              }, function(choice)
+                local result = vals[choice]
+                if result then
+                  vim.notify(("Copied: `%s`"):format(result))
+                  vim.fn.setreg("+", result)
+                end
+              end)
+            end,
+          },
+          win = {
+            list = {
+              keys = {
+                ["Y"] = "yank_choice",
+              },
+            },
+          },
+        },
       },
 
       win = {
@@ -287,6 +348,13 @@ return {
         end,
         mode = { "n", "t" },
         desc = "Toggle [F]ocus Terminal",
+      },
+      {
+        "<leader>e",
+        function()
+          require("snacks.explorer").open()
+        end,
+        desc = "[E]xplorer",
       },
     }
   end,
