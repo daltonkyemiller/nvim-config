@@ -1,22 +1,6 @@
 ;extends
 
 ;query
-;; comment typescript injection
-((comment)
- @comment .
- (lexical_declaration
-   (variable_declarator 
-     value: [
-             (string(string_fragment)@injection.content) 
-             (template_string(string_fragment)@injection.content)
-             (call_expression(template_string(string_fragment)@injection.content))
-             ]@injection.content)  
-   )
-  (#match? @comment "^//+( )*[tT][yY][pP][eE][sS][cC][rR][iI][pP][tT]( )*")
-  (#set! injection.language "typescript")
- )
-        
-;query
 ;; comment javascript injection
 ((comment)
  @comment .
@@ -30,22 +14,6 @@
    )
   (#match? @comment "^//+( )*[jJ][aA][vV][aA][sS][cC][rR][iI][pP][tT]( )*")
   (#set! injection.language "javascript")
- )
-        
-;query
-;; comment python injection
-((comment)
- @comment .
- (lexical_declaration
-   (variable_declarator 
-     value: [
-             (string(string_fragment)@injection.content) 
-             (template_string(string_fragment)@injection.content)
-             (call_expression(template_string(string_fragment)@injection.content))
-             ]@injection.content)  
-   )
-  (#match? @comment "^//+( )*[pP][yY][tT][hH][oO][nN]( )*")
-  (#set! injection.language "python")
  )
         
 ;query
@@ -97,6 +65,22 @@
  )
         
 ;query
+;; comment python injection
+((comment)
+ @comment .
+ (lexical_declaration
+   (variable_declarator 
+     value: [
+             (string(string_fragment)@injection.content) 
+             (template_string(string_fragment)@injection.content)
+             (call_expression(template_string(string_fragment)@injection.content))
+             ]@injection.content)  
+   )
+  (#match? @comment "^//+( )*[pP][yY][tT][hH][oO][nN]( )*")
+  (#set! injection.language "python")
+ )
+        
+;query
 ;; comment css injection
 ((comment)
  @comment .
@@ -110,6 +94,22 @@
    )
   (#match? @comment "^//+( )*[cC][sS][sS]( )*")
   (#set! injection.language "css")
+ )
+        
+;query
+;; comment typescript injection
+((comment)
+ @comment .
+ (lexical_declaration
+   (variable_declarator 
+     value: [
+             (string(string_fragment)@injection.content) 
+             (template_string(string_fragment)@injection.content)
+             (call_expression(template_string(string_fragment)@injection.content))
+             ]@injection.content)  
+   )
+  (#match? @comment "^//+( )*[tT][yY][pP][eE][sS][cC][rR][iI][pP][tT]( )*")
+  (#set! injection.language "typescript")
  )
         
 ; query
