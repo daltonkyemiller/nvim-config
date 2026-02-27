@@ -1,5 +1,8 @@
 local function get_correct_formatter_js()
   local cwd = vim.fn.getcwd()
+  local has_oxfmt_file = vim.fn.filereadable(cwd .. "/oxfmt.json") == 1
+  if has_oxfmt_file then return { "oxfmt" } end
+
   local has_biome_file = vim.fn.filereadable(cwd .. "/biome.json") == 1
   return has_biome_file and { "biome" } or { "prettierd" }
 end
@@ -28,7 +31,7 @@ return {
       glsl = { "clang_format" },
       reason = { "reason_fmt" },
       rust = { "rustfmt" },
-      toml = { "taplo" },
+      toml = { "tombi" },
       yaml = { "prettierd" },
       sh = { "shfmt" },
       bash = { "shfmt" },
