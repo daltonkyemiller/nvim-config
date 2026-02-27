@@ -1,7 +1,7 @@
 ;extends
 
 ;query
-;; comment javascript injection
+;; comment sql injection
 ((comment)
  @comment .
  (lexical_declaration
@@ -12,8 +12,8 @@
              (call_expression(template_string(string_fragment)@injection.content))
              ]@injection.content)  
    )
-  (#match? @comment "^//+( )*[jJ][aA][vV][aA][sS][cC][rR][iI][pP][tT]( )*")
-  (#set! injection.language "javascript")
+  (#match? @comment "^//+( )*sql( )*")
+  (#set! injection.language "sql")
  )
         
 ;query
@@ -33,7 +33,7 @@
  )
         
 ;query
-;; comment html injection
+;; comment typescript injection
 ((comment)
  @comment .
  (lexical_declaration
@@ -44,12 +44,12 @@
              (call_expression(template_string(string_fragment)@injection.content))
              ]@injection.content)  
    )
-  (#match? @comment "^//+( )*[hH][tT][mM][lL]( )*")
-  (#set! injection.language "html")
+  (#match? @comment "^//+( )*[tT][yY][pP][eE][sS][cC][rR][iI][pP][tT]( )*")
+  (#set! injection.language "typescript")
  )
         
 ;query
-;; comment sql injection
+;; comment javascript injection
 ((comment)
  @comment .
  (lexical_declaration
@@ -60,8 +60,8 @@
              (call_expression(template_string(string_fragment)@injection.content))
              ]@injection.content)  
    )
-  (#match? @comment "^//+( )*sql( )*")
-  (#set! injection.language "sql")
+  (#match? @comment "^//+( )*[jJ][aA][vV][aA][sS][cC][rR][iI][pP][tT]( )*")
+  (#set! injection.language "javascript")
  )
         
 ;query
@@ -97,7 +97,7 @@
  )
         
 ;query
-;; comment typescript injection
+;; comment html injection
 ((comment)
  @comment .
  (lexical_declaration
@@ -108,8 +108,8 @@
              (call_expression(template_string(string_fragment)@injection.content))
              ]@injection.content)  
    )
-  (#match? @comment "^//+( )*[tT][yY][pP][eE][sS][cC][rR][iI][pP][tT]( )*")
-  (#set! injection.language "typescript")
+  (#match? @comment "^//+( )*[hH][tT][mM][lL]( )*")
+  (#set! injection.language "html")
  )
         
 ; query
