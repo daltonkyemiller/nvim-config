@@ -29,8 +29,10 @@ return {
 
     vim.g.colors_name = "miasma"
 
+    vim.api.nvim_set_hl(0, "NormalFloat", { fg = palette.fg, bg = palette.bg })
     vim.api.nvim_set_hl(0, "FloatBorder", { fg = palette.border, bg = "NONE" })
     vim.api.nvim_set_hl(0, "SnacksPickerBorder", { fg = palette.border, bg = "NONE" })
+
 
     vim.api.nvim_set_hl(0, "SnacksPickerInput", { bg = palette.bg })
     vim.api.nvim_set_hl(0, "SnacksPickerInputBorder", { fg = palette.border })
@@ -40,5 +42,17 @@ return {
     vim.api.nvim_set_hl(0, "SnacksPickerPreview", { bg = palette.bg_dark })
     vim.api.nvim_set_hl(0, "SnacksPickerPrompt", { bg = palette.bg })
     vim.api.nvim_set_hl(0, "SnacksPickerTree", { bg = palette.bg, fg = palette.border })
+
+    -- Snacks input
+    vim.api.nvim_set_hl(0, "SnacksInputNormal", { bg = palette.bg })
+    vim.api.nvim_set_hl(0, "SnacksInputBorder", { fg = palette.border, bg = palette.bg })
+    vim.api.nvim_set_hl(0, "SnacksInputTitle", { bg = palette.bg, fg = palette.fg })
+    vim.api.nvim_set_hl(0, "SnacksInputIcon", { bg = palette.bg, fg = palette.fg })
+
+    -- Noice cmdline
+    vim.api.nvim_set_hl(0, "NoiceCmdlineIcon", { bg = "NONE", fg = palette.fg })
+    vim.api.nvim_set_hl(0, "NoiceCmdlinePopupBorder", { fg = palette.border, bg = "NONE"})
+    vim.api.nvim_set_hl(0, "NoiceCmdlinePopupTitle", { bg = "NONE", fg = palette.fg })
+    vim.api.nvim_set_hl(0, "NoiceCmdlinePopup", { bg = palette.bg })
   end,
 }

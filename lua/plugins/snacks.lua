@@ -55,6 +55,20 @@ return {
         },
       },
     },
+    input = {
+      enabled = true,
+    },
+    styles = {
+      input = {
+        relative = "cursor",
+        row = -3,
+        col = 0,
+        border = "single",
+        wo = {
+          winhighlight = "Normal:SnacksInputNormal,NormalFloat:SnacksInputNormal,FloatBorder:SnacksInputBorder,FloatTitle:SnacksInputTitle,LineNr:SnacksInputNormal",
+        },
+      },
+    },
     ---@type snacks.win.Config
     win = {
       minimal = true,
@@ -69,7 +83,23 @@ return {
       },
       sources = {
         select = {
-          layout = { hidden = { "preview" } },
+          layout = {
+            hidden = { "preview" },
+            layout = {
+              backdrop = false,
+              width = 0.4,
+              min_width = 80,
+              height = 0.4,
+              min_height = 2,
+              box = "vertical",
+              border = "single",
+              title = "{title}",
+              title_pos = "center",
+              { win = "input", height = 1, border = "bottom" },
+              { win = "list", border = "none" },
+              { win = "preview", title = "{preview}", height = 0.4, border = "top" },
+            },
+          },
         },
         gh_issue = {},
         gh_pr = {},
