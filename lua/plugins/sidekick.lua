@@ -82,6 +82,7 @@ return {
               local devicons = require("nvim-web-devicons")
               local script_location = vim.fn.stdpath("config") .. "/scripts/claude_find.sh"
               local cwd = vim.uv.cwd()
+              local session_cwd = t.cwd and vim.fn.resolve(t.cwd) or cwd
               snacks_picker.pick({
                 format = function(item, picker)
                   if item.is_file then return snacks_picker.format.file(item, picker) end
@@ -193,13 +194,25 @@ return {
                   local selected = picker:selected()
                   local items_to_send = {}
 
+                  -- Make path relative to the CLI session's cwd
+                  local function to_session_path(sel_item)
+                    if not sel_item.is_file or not sel_item.file then
+                      return sel_item.text
+                    end
+                    local abs = vim.fn.resolve(sel_item.file)
+                    local rel = vim.fn.systemlist({
+                      "realpath", "--relative-to=" .. session_cwd, abs,
+                    })[1]
+                    return rel or sel_item.text
+                  end
+
                   -- Use selected items if any exist, otherwise use the single item
                   if selected and #selected > 0 then
                     for _, sel_item in ipairs(selected) do
-                      table.insert(items_to_send, "@" .. sel_item.text)
+                      table.insert(items_to_send, "@" .. to_session_path(sel_item))
                     end
                   else
-                    table.insert(items_to_send, "@" .. item.text)
+                    table.insert(items_to_send, "@" .. to_session_path(item))
                   end
 
                   -- Join with newlines and send
@@ -276,40 +289,35 @@ return {
     debug = false, -- enable debug logging
   },
   keys = {
-
-    -- {
-    --   "<tab>",
-    --   function()
-    --     -- if there is a next edit, jump to it, otherwise apply it if any
-    --     if require("sidekick").nes_jump_or_apply() then
-    --       return -- jumped or applied
-    --     end
-    --
-    --     local foo = require("ninetyfive")
-    --     vim.print(vim.inspect(foo))
-    --
-    --     local supermaven_completion_preview = require("supermaven-nvim.completion_preview")
-    --
-    --     if supermaven_completion_preview.has_suggestion() then
-    --       vim.schedule(function()
-    --         supermaven_completion_preview.on_accept_suggestion()
-    --       end)
-    --
-    --       return
-    --     end
-    --
-    --     -- if you are using Neovim's native inline completions
-    --     -- if vim.lsp.inline_completion.get() then return end
-    --
-    --     -- any other things (like snippets) you want to do on <tab> go here.
-    --
-    --     -- fall back to normal tab
-    --     return "<tab>"
-    --   end,
-    --   mode = { "i", "n" },
-    --   expr = true,
-    --   desc = "Goto/Apply Next Edit Suggestion",
-    -- },
+    {
+      "<leader>as",
+      function()
+        require("sidekick.cli").select({ filter = { installed = true } })
+      end,
+      desc = "Select CLI",
+    },
+    {
+      "<leader>ac",
+      function()
+        local cli = require("sidekick.cli")
+        local State = require("sidekick.cli.state")
+        -- Synchronously close any attached claude terminal
+        local attached = State.get({ name = "claude", attached = true })
+        for _, state in ipairs(attached) do
+          State.detach(state)
+        end
+        -- Show picker for all claude sessions, attach + show the selection
+        cli.select({
+          filter = { name = "claude" },
+          cb = function(state)
+            if state then
+              State.attach(state, { show = true, focus = true })
+            end
+          end,
+        })
+      end,
+      desc = "Switch Claude Session",
+    },
     {
       "<M-c>",
       function()

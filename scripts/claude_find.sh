@@ -3,11 +3,16 @@
 BUFFER_FILES=()
 BUFFER_EXCLUDES=()
 PID=""
+SESSION_CWD=""
 
 while [[ $# -gt 0 ]]; do
     case $1 in
         -p|--pid)
             PID="$2"
+            shift 2
+            ;;
+        -c|--cwd)
+            SESSION_CWD="$2"
             shift 2
             ;;
         -f)
