@@ -4,25 +4,25 @@ My Neovim config. Built around TypeScript/React but handles most things I throw 
 
 ---
 
-### <picture><source media="(prefers-color-scheme: dark)" srcset=".github/icons/sparkle-light.svg"><img src=".github/icons/sparkle-dark.svg" width="24" style="vertical-align: middle"></picture> AI
+### <picture><source media="(prefers-color-scheme: dark)" srcset=".github/icons/sparkle-light.svg"><img src=".github/icons/sparkle-dark.svg" width="24" align="middle"></picture> AI
 
 - [sidekick.nvim](https://github.com/folke/sidekick.nvim) — Claude Code, OpenCode, Gemini, etc. in a split with tmux persistence
 - [supermaven](https://github.com/supermaven-inc/supermaven-nvim) — inline completions
 
-### <picture><source media="(prefers-color-scheme: dark)" srcset=".github/icons/code-editor-light.svg"><img src=".github/icons/code-editor-dark.svg" width="24" style="vertical-align: middle"></picture> Editor
+### <picture><source media="(prefers-color-scheme: dark)" srcset=".github/icons/code-editor-light.svg"><img src=".github/icons/code-editor-dark.svg" width="24" align="middle"></picture> Editor
 
 - [blink.cmp](https://github.com/Saghen/blink.cmp) — completion engine
 - LSP via Mason — vtsls, rust-analyzer, gopls, lua_ls, pyright, etc.
 - [conform.nvim](https://github.com/stevearc/conform.nvim) — formatting (biome, prettier, stylua, gofmt)
 - Treesitter with custom text objects and injection queries
 
-### <picture><source media="(prefers-color-scheme: dark)" srcset=".github/icons/color-palette-light.svg"><img src=".github/icons/color-palette-dark.svg" width="24" style="vertical-align: middle"></picture> UI
+### <picture><source media="(prefers-color-scheme: dark)" srcset=".github/icons/color-palette-light.svg"><img src=".github/icons/color-palette-dark.svg" width="24" align="middle"></picture> UI
 
 - [kanagawa](https://github.com/rebelot/kanagawa.nvim) — primary theme, custom saturated palette, transparent bg
 - [snacks.nvim](https://github.com/folke/snacks.nvim) — picker, notifications, terminal, scratch buffers
 - [neo-tree](https://github.com/nvim-neo-tree/neo-tree.nvim) — floating file explorer
 
-### <picture><source media="(prefers-color-scheme: dark)" srcset=".github/icons/wrench-light.svg"><img src=".github/icons/wrench-dark.svg" width="24" style="vertical-align: middle"></picture> Tools
+### <picture><source media="(prefers-color-scheme: dark)" srcset=".github/icons/wrench-light.svg"><img src=".github/icons/wrench-dark.svg" width="24" align="middle"></picture> Tools
 
 - [gitsigns](https://github.com/lewis6991/gitsigns.nvim) + lazygit
 - Session persistence via [auto-session](https://github.com/rmagatti/auto-session)
@@ -31,7 +31,7 @@ My Neovim config. Built around TypeScript/React but handles most things I throw 
 
 ---
 
-## <picture><source media="(prefers-color-scheme: dark)" srcset=".github/icons/code-branch-light.svg"><img src=".github/icons/code-branch-dark.svg" width="24" style="vertical-align: middle"></picture> Languages
+## <picture><source media="(prefers-color-scheme: dark)" srcset=".github/icons/code-branch-light.svg"><img src=".github/icons/code-branch-dark.svg" width="24" align="middle"></picture> Languages
 
 **Full LSP + formatting:** TypeScript/React, Rust, Go, Lua, Python
 
@@ -39,7 +39,7 @@ My Neovim config. Built around TypeScript/React but handles most things I throw 
 
 ---
 
-## <picture><source media="(prefers-color-scheme: dark)" srcset=".github/icons/keyboard-light.svg"><img src=".github/icons/keyboard-dark.svg" width="24" style="vertical-align: middle"></picture> Keys
+## <picture><source media="(prefers-color-scheme: dark)" srcset=".github/icons/keyboard-light.svg"><img src=".github/icons/keyboard-dark.svg" width="24" align="middle"></picture> Keys
 
 Leader is `<Space>`.
 
@@ -63,7 +63,7 @@ Leader is `<Space>`.
 
 ---
 
-## <picture><source media="(prefers-color-scheme: dark)" srcset=".github/icons/folder-tree-light.svg"><img src=".github/icons/folder-tree-dark.svg" width="24" style="vertical-align: middle"></picture> Structure
+## <picture><source media="(prefers-color-scheme: dark)" srcset=".github/icons/folder-tree-light.svg"><img src=".github/icons/folder-tree-dark.svg" width="24" align="middle"></picture> Structure
 
 ```
 lua/
