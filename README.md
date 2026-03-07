@@ -39,7 +39,7 @@ My Neovim config. Built around TypeScript/React but handles most things I throw 
 
 ---
 
-## <picture><source media="(prefers-color-scheme: dark)" srcset=".github/icons/keyboard-light.svg"><img src=".github/icons/keyboard-dark.svg" width="24" align="top"></picture> Keys
+## <picture><source media="(prefers-color-scheme: dark)" srcset=".github/icons/command-light.svg"><img src=".github/icons/command-dark.svg" width="24" align="top"></picture> Keys
 
 Leader is `<Space>`.
 
