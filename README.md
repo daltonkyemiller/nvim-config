@@ -1,187 +1,94 @@
-# 🚀 Dalton's Neovim Configuration
+# nvim
 
-A modern, AI-enhanced Neovim configuration built for full-stack development with a focus on TypeScript/React, performance, and developer experience.
+My Neovim config. Built around TypeScript/React but handles most things I throw at it.
 
-## ✨ Features
+---
 
-### 🤖 AI Integration
-- **Claude Code** - Custom Claude AI integration for enhanced coding assistance
-- **Supermaven** - AI-powered code completion
-- **Multiple AI backends** - Avante and CodeCompanion ready for activation
+### <picture><source media="(prefers-color-scheme: dark)" srcset=".github/icons/brain-sparkle-light.svg"><img src=".github/icons/brain-sparkle-dark.svg" width="18"></picture> AI
 
-### ⚡ Modern Development Stack
-- **Blink.cmp** - Lightning-fast completion engine
-- **Comprehensive LSP** - Full language server support with Mason
-- **Smart formatting** - Conform with intelligent formatter selection
-- **Advanced syntax** - Treesitter with custom text objects
+- [sidekick.nvim](https://github.com/folke/sidekick.nvim) — Claude Code, OpenCode, Gemini, etc. in a split with tmux persistence
+- [supermaven](https://github.com/supermaven-inc/supermaven-nvim) — inline completions
 
-### 🎨 Beautiful UI
-- **Snacks.nvim** - Modern fuzzy finder with dropdown layout
-- **Neo-tree** - Floating file explorer with system integration
-- **Kanagawa theme** - Custom saturated palette with transparency
-- **Lualine** - Clean status line with theme integration
+### <picture><source media="(prefers-color-scheme: dark)" srcset=".github/icons/code-editor-light.svg"><img src=".github/icons/code-editor-dark.svg" width="18"></picture> Editor
 
-### 🔧 Developer Tools
-- **Git integration** - Gitsigns, Lazygit, and git blame
-- **Session management** - Automatic session persistence
-- **Daily notes** - Automated note creation with TODO carryover
-- **Docker integration** - Lazydocker terminal integration
+- [blink.cmp](https://github.com/Saghen/blink.cmp) — completion engine
+- LSP via Mason — vtsls, rust-analyzer, gopls, lua_ls, pyright, etc.
+- [conform.nvim](https://github.com/stevearc/conform.nvim) — formatting (biome, prettier, stylua, gofmt)
+- Treesitter with custom text objects and injection queries
 
-## 🌐 Language Support
+### <picture><source media="(prefers-color-scheme: dark)" srcset=".github/icons/color-palette-light.svg"><img src=".github/icons/color-palette-dark.svg" width="18"></picture> UI
 
-### Primary Languages (Full LSP + Formatting)
-- **JavaScript/TypeScript** - VTSLS + Biome/Prettier
-- **React/JSX** - Complete JSX support with custom text objects
-- **Rust** - rust-analyzer integration
-- **Go** - gopls + gofmt
-- **Lua** - lua_ls + stylua
-- **Python** - Full LSP support
+- [kanagawa](https://github.com/rebelot/kanagawa.nvim) — primary theme, custom saturated palette, transparent bg
+- [snacks.nvim](https://github.com/folke/snacks.nvim) — picker, notifications, terminal, scratch buffers
+- [neo-tree](https://github.com/nvim-neo-tree/neo-tree.nvim) — floating file explorer
 
-### Additional Languages
-- **Web**: HTML, CSS, Astro
-- **Database**: SQL (with dbee), Prisma
-- **Systems**: Bash, GLSL, QML
-- **Config**: TOML, YAML, JSON
-- **Documentation**: Markdown with live rendering
+### <picture><source media="(prefers-color-scheme: dark)" srcset=".github/icons/wrench-light.svg"><img src=".github/icons/wrench-dark.svg" width="18"></picture> Tools
 
-## 🎨 Themes
+- [gitsigns](https://github.com/lewis6991/gitsigns.nvim) + lazygit
+- Session persistence via [auto-session](https://github.com/rmagatti/auto-session)
+- Daily notes with TODO carryover
+- Lazydocker
 
-- **Kanagawa** (Primary) - Custom saturated palette with transparency
-- **Catppuccin** - Mocha variant with custom highlights
-- **Rose Pine** - Available but disabled
+---
 
-All themes feature transparent backgrounds and custom highlight groups.
+## <picture><source media="(prefers-color-scheme: dark)" srcset=".github/icons/code-branch-light.svg"><img src=".github/icons/code-branch-dark.svg" width="18"></picture> Languages
 
-## ⚙️ Installation
+**Full LSP + formatting:** TypeScript/React, Rust, Go, Lua, Python
 
-### Prerequisites
-- Neovim >= 0.10.0
-- Git
-- A Nerd Font (for icons)
-- Node.js (for LSP servers)
-- Ripgrep (for searching)
+**Supported:** HTML, CSS, Astro, SQL, Prisma, Bash, GLSL, TOML, YAML, JSON, Markdown
 
-### Quick Setup
+---
+
+## <picture><source media="(prefers-color-scheme: dark)" srcset=".github/icons/keyboard-light.svg"><img src=".github/icons/keyboard-dark.svg" width="18"></picture> Keys
+
+Leader is `<Space>`.
+
+| Key | Action |
+|-----|--------|
+| `<leader>ff` | Find files |
+| `<leader>fg` | Live grep |
+| `<leader>fb` | Buffers |
+| `<leader>fr` | Recent files |
+| `<leader>cf` | Format |
+| `<leader>ca` | Code actions |
+| `<leader>cr` | Rename |
+| `gd` / `gr` | Definition / references |
+| `<leader>gg` | Lazygit |
+| `<leader>gb` | Git blame |
+| `<M-c>` | Toggle Claude |
+| `<M-o>` | Toggle OpenCode |
+| `<leader>ap` | AI prompt |
+| `<leader>l` | Lazy |
+| `\|` / `\\` | Vertical / horizontal split |
+
+---
+
+## <picture><source media="(prefers-color-scheme: dark)" srcset=".github/icons/folder-tree-light.svg"><img src=".github/icons/folder-tree-dark.svg" width="18"></picture> Structure
+
+```
+lua/
+  config/          keymaps, lsp, options
+  daltonkyemiller/ colors, daily notes, utils
+  plugins/         plugin configs
+lsp/               per-server lsp configs
+snippets/          custom snippets
+after/queries/     treesitter injection queries
+scripts/           helper scripts
+```
+
+---
+
+## Setup
+
+Requires Neovim >= 0.10, a [Nerd Font](https://www.nerdfonts.com/), ripgrep, and Node.js.
+
 ```bash
-# Backup existing config
-mv ~/.config/nvim ~/.config/nvim.backup
-
-# Clone this configuration
-git clone <your-repo-url> ~/.config/nvim
-
-# Start Neovim (plugins will auto-install)
+git clone https://github.com/daltonkyemiller/nvim ~/.config/nvim
 nvim
 ```
 
-### Optional Dependencies
-```bash
-# For enhanced functionality
-npm install -g @biomejs/biome prettier
-cargo install stylua
-go install golang.org/x/tools/gopls@latest
-```
+Plugins install on first launch via [lazy.nvim](https://github.com/folke/lazy.nvim).
 
-## 🔑 Key Mappings
-
-### Leader Key: `<Space>`
-
-#### File Operations
-- `<leader>ff` - Find files
-- `<leader>fg` - Live grep
-- `<leader>fb` - Find buffers
-- `<leader>fr` - Recent files
-
-#### Buffer Management
-- `<leader>bd` - Delete buffer
-- `<leader>bo` - Delete other buffers
-- `<leader>bn` - New buffer
-
-#### Code Actions
-- `<leader>cf` - Format code
-- `<leader>ca` - Code actions
-- `<leader>cr` - Rename symbol
-- `gd` - Go to definition
-- `gr` - Go to references
-
-#### Git
-- `<leader>gg` - Lazygit
-- `<leader>gb` - Git blame
-- `<leader>gh` - Git browse
-
-#### Utilities
-- `<leader>l` - Lazy plugin manager
-- `<leader>dd` - Lazydocker
-- `|` - Vertical split
-- `\\` - Horizontal split
-
-## 🏗️ Configuration Structure
-
-```
-├── lua/
-│   ├── config/           # Core configuration
-│   │   ├── keymaps.lua   # Key mappings
-│   │   ├── lsp.lua       # LSP configuration
-│   │   └── opts.lua      # Vim options
-│   ├── daltonkyemiller/  # Custom utilities
-│   │   ├── colors.lua    # Theme customizations
-│   │   ├── daily_note.lua # Daily notes system
-│   │   └── util.lua      # Helper functions
-│   └── plugins/          # Plugin configurations
-├── lsp/                  # LSP server configs
-├── snippets/             # Custom snippets
-└── after/queries/        # Treesitter queries
-```
-
-## 🎯 Highlights
-
-### Daily Notes System
-Automatically creates daily notes with TODO carryover from previous days:
-```markdown
----
-date: 2024-01-15
-tags: [daily]
 ---
 
-# Daily Note - January 15, 2024
-
-## TODOs
-- [ ] Carried over from previous day
-- [ ] New tasks for today
-```
-
-### Smart Formatting
-Automatically detects and uses the appropriate formatter:
-- Biome for projects with `biome.json`
-- Prettier for projects with `.prettierrc`
-- Language-specific formatters as fallback
-
-### Custom LSP Integration
-Enhanced LSP experience with:
-- Floating diagnostics
-- Symbol search across workspace
-- Custom rename integration with file explorer
-- Intelligent hover information
-
-## 🔧 Customization
-
-### Adding New Languages
-1. Add LSP config in `lsp/your-language.lua`
-2. Enable in `lua/config/lsp.lua`
-3. Add formatter in `lua/plugins/conform.lua`
-
-### Theme Customization
-Modify `lua/daltonkyemiller/colors.lua` to adjust the color palette:
-```lua
--- Increase saturation
-local function saturate_color(color, factor)
-  -- Custom saturation logic
-end
-```
-
-### Custom Keymaps
-Add personal keymaps in `lua/config/keymaps.lua`:
-```lua
-vim.keymap.set("n", "<leader>xx", function()
-  -- Your custom function
-end, { desc = "Custom action" })
-```
+<sub>Icons by [Nucleo](https://nucleoapp.com) — &copy; Starter App S.R.L.</sub>
