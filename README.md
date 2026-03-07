@@ -134,4 +134,4 @@ Plugins install on first launch via [lazy.nvim](https://github.com/folke/lazy.nv
 
 ---
 
-<sub>Icons by [Nucleo](https://nucleoapp.com) — &copy; Starter App S.R.L.</sub>
+<sub>Copyright &copy; [Nucleo](https://nucleoapp.com)</sub>
