@@ -134,4 +134,4 @@ Plugins install on first launch via [lazy.nvim](https://github.com/folke/lazy.nv
 
 ---
 
-<sub>Icons by [Nucleo](https://nucleoapp.com). Copyright &copy; Nucleo.</sub>
+<sub>Icons: Copyright &copy; Nucleo. [Nucleo Icons](https://nucleoapp.com/) — Redistribution of icons is prohibited. Icons are restricted for use only within the product they are bundled with. [License](https://nucleoapp.com/license).</sub>
