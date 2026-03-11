@@ -40,7 +40,7 @@ local dropdown_layout = {
 
 --- @type LazySpec
 return {
-  "folke/snacks.nvim",
+  "daltonkyemiller/snacks.nvim",
   priority = 1000,
   lazy = false,
   ---@type snacks.Config
