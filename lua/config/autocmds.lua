@@ -50,6 +50,6 @@ vim.api.nvim_create_autocmd("FileType", {
     "python"
   },
   callback = function()
-    vim.treesitter.start()
+    pcall(vim.treesitter.start)
   end,
 })

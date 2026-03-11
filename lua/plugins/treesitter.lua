@@ -2,7 +2,6 @@
 return {
   -- Highlight, edit, and navigate code
   "nvim-treesitter/nvim-treesitter",
-  branch = "main",
   lazy = false,
   dependencies = {
     {
@@ -12,30 +11,7 @@ return {
   },
   build = ":TSUpdate",
   config = function()
-    require("nvim-treesitter").setup({
-      -- Autoinstall languages that are not installed. Defaults to false (but you can change for yourself!)
-      auto_install = false,
-      -- Install languages synchronously (only applied to `ensure_installed`)
-      sync_install = false,
-      -- List of parsers to ignore installing
-      ignore_install = {},
-      -- You can specify additional Treesitter modules here: -- For example: -- playground = {--enable = true,-- },
-      modules = {},
-      highlight = {
-        enable = true,
-        additional_vim_regex_highlighting = false,
-      },
-      -- indent = {  enable = true },
-      incremental_selection = {
-        enable = true,
-        keymaps = {
-          init_selection = "<c-space>",
-          node_incremental = "<c-space>",
-          scope_incremental = "<c-s>",
-          node_decremental = "<M-space>",
-        },
-      },
-    })
+    require("nvim-treesitter").setup({})
 
     require("nvim-treesitter").install({
       "prisma",
