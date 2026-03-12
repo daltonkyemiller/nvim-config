@@ -47,7 +47,8 @@ vim.api.nvim_create_autocmd("FileType", {
     "terraform-vars",
     "jinja",
     "prisma",
-    "python"
+    "python",
+    "sh"
   },
   callback = function()
     pcall(vim.treesitter.start)
