@@ -240,7 +240,7 @@ return {
           url = "https://github.com/anthropics/claude-code",
         },
         opencode = {
-          cmd = { "opencode" },
+          cmd = { vim.fn.expand("~/.opencode/bin/opencode") },
           -- HACK: https://github.com/sst/opencode/issues/445
           env = { OPENCODE_THEME = "system" },
           url = "https://github.com/sst/opencode",
