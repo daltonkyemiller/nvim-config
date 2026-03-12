@@ -55,8 +55,7 @@ return {
         keys = {
           stopinsert = { "<esc><esc>", "stopinsert", mode = "t" }, -- enter normal mode
           hide_n = { "q", "hide", mode = "n" }, -- hide from normal mode
-          hide_c = { "<M-c>", "hide" }, -- hide from terminal mode
-          hide_o = { "<M-o>", "hide" }, -- hide from terminal mode
+          -- NOTE: <M-c> and <M-o> are handled by global keymaps below
           -- alt shift + c to copy the response
           copy_response = {
             "<M-y>",
@@ -306,31 +305,131 @@ return {
       "<M-c>",
       function()
         local sidekick_cli = require("sidekick.cli")
+        local State = require("sidekick.cli.state")
         local in_vis_mode = vim.fn.mode() == "v" or vim.fn.mode() == "V" or vim.fn.mode() == "\22"
+        local in_term_mode = vim.fn.mode() == "t"
+        local current_buf = vim.api.nvim_get_current_buf()
+        local current_win = vim.api.nvim_get_current_win()
+
+        -- Check if we're in a sidekick terminal
+        local in_sidekick = vim.b[current_buf].sidekick_cli ~= nil
+        local current_tool = vim.b[current_buf].sidekick_cli
+
         if not in_vis_mode then
-          sidekick_cli.toggle({ name = "claude", focus = true })
+          -- If we're in a sidekick terminal and it's claude, hide it (toggle off)
+          if in_term_mode and in_sidekick and current_tool and current_tool.name == "claude" then
+            sidekick_cli.hide({ name = "claude" })
+            return
+          end
+
+          -- If we're in a sidekick terminal and it's opencode, hide it and show claude
+          if in_term_mode and in_sidekick and current_tool and current_tool.name == "opencode" then
+            sidekick_cli.hide({ name = "opencode" })
+            sidekick_cli.show({ name = "claude", focus = true })
+            return
+          end
+
+          -- Normal mode behavior: check if claude is open and focused
+          local claude_states = State.get({ name = "claude", attached = true })
+          local claude_open = false
+          local claude_focused = false
+          for _, state in ipairs(claude_states) do
+            if state.terminal and state.terminal:is_open() then
+              claude_open = true
+              if state.terminal.win == current_win then claude_focused = true end
+            end
+          end
+
+          -- If claude is focused, hide it
+          if claude_focused then
+            sidekick_cli.hide({ name = "claude" })
+            return
+          end
+
+          -- Hide opencode if open
+          local opencode_states = State.get({ name = "opencode", attached = true })
+          for _, state in ipairs(opencode_states) do
+            if state.terminal and state.terminal:is_open() then state.terminal:hide() end
+          end
+
+          -- Show/focus claude
+          if claude_open then
+            sidekick_cli.show({ name = "claude", focus = true })
+          else
+            sidekick_cli.toggle({ name = "claude", focus = true })
+          end
           return
         end
 
         sidekick_cli.send({ name = "claude", prompt = "position" })
       end,
       desc = "Sidekick [C]laude",
-      mode = { "n", "v" },
+      mode = { "n", "v", "t" },
     },
     {
       "<M-o>",
       function()
         local sidekick_cli = require("sidekick.cli")
+        local State = require("sidekick.cli.state")
         local in_vis_mode = vim.fn.mode() == "v" or vim.fn.mode() == "V" or vim.fn.mode() == "\22"
+        local in_term_mode = vim.fn.mode() == "t"
+        local current_buf = vim.api.nvim_get_current_buf()
+        local current_win = vim.api.nvim_get_current_win()
+
+        -- Check if we're in a sidekick terminal
+        local in_sidekick = vim.b[current_buf].sidekick_cli ~= nil
+        local current_tool = vim.b[current_buf].sidekick_cli
+
         if not in_vis_mode then
-          sidekick_cli.toggle({ name = "opencode", focus = true })
+          -- If we're in a sidekick terminal and it's opencode, hide it (toggle off)
+          if in_term_mode and in_sidekick and current_tool and current_tool.name == "opencode" then
+            sidekick_cli.hide({ name = "opencode" })
+            return
+          end
+
+          -- If we're in a sidekick terminal and it's claude, hide it and show opencode
+          if in_term_mode and in_sidekick and current_tool and current_tool.name == "claude" then
+            sidekick_cli.hide({ name = "claude" })
+            sidekick_cli.show({ name = "opencode", focus = true })
+            return
+          end
+
+          -- Normal mode behavior: check if opencode is open and focused
+          local opencode_states = State.get({ name = "opencode", attached = true })
+          local opencode_open = false
+          local opencode_focused = false
+          for _, state in ipairs(opencode_states) do
+            if state.terminal and state.terminal:is_open() then
+              opencode_open = true
+              if state.terminal.win == current_win then opencode_focused = true end
+            end
+          end
+
+          -- If opencode is focused, hide it
+          if opencode_focused then
+            sidekick_cli.hide({ name = "opencode" })
+            return
+          end
+
+          -- Hide claude if open
+          local claude_states = State.get({ name = "claude", attached = true })
+          for _, state in ipairs(claude_states) do
+            if state.terminal and state.terminal:is_open() then state.terminal:hide() end
+          end
+
+          -- Show/focus opencode
+          if opencode_open then
+            sidekick_cli.show({ name = "opencode", focus = true })
+          else
+            sidekick_cli.toggle({ name = "opencode", focus = true })
+          end
           return
         end
 
         sidekick_cli.send({ name = "opencode", prompt = "position" })
       end,
       desc = "Sidekick [O]pencode",
-      mode = { "n", "v" },
+      mode = { "n", "v", "t" },
     },
     {
       "<leader>ap",
