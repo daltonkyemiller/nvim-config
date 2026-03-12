@@ -65,9 +65,9 @@ return {
       {
         "<leader>cf",
         function()
-          if require("daltonkyemiller.util").is_specific_lsp_attached_to_buffer("tailwindcss") then
-            vim.cmd("TailwindSort")
-          end
+          -- if require("daltonkyemiller.util").is_specific_lsp_attached_to_buffer("tailwindcss") then
+          --   vim.cmd("TailwindSort")
+          -- end
 
           vim.cmd("w!")
 
