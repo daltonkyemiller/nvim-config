@@ -196,12 +196,12 @@ return {
 
                   -- Make path relative to the CLI session's cwd
                   local function to_session_path(sel_item)
-                    if not sel_item.is_file or not sel_item.file then
-                      return sel_item.text
-                    end
+                    if not sel_item.is_file or not sel_item.file then return sel_item.text end
                     local abs = vim.fn.resolve(sel_item.file)
                     local rel = vim.fn.systemlist({
-                      "realpath", "--relative-to=" .. session_cwd, abs,
+                      "realpath",
+                      "--relative-to=" .. session_cwd,
+                      abs,
                     })[1]
                     return rel or sel_item.text
                   end
@@ -239,26 +239,12 @@ return {
           cmd = { "claude", "--allow-dangerously-skip-permissions" },
           url = "https://github.com/anthropics/claude-code",
         },
-        codex = { cmd = { "codex", "--search" }, url = "https://github.com/openai/codex" },
-        copilot = { cmd = { "copilot", "--banner" }, url = "https://github.com/github/copilot-cli" },
-        crush = {
-          cmd = { "crush" },
-          url = "https://github.com/charmbracelet/crush",
-          keys = {
-            -- crush uses <a-p> for its own functionality, so we override the default
-            prompt = { "<a-p>", "prompt" }, -- insert prompt or context
-          },
-        },
-        cursor = { cmd = { "cursor-agent" }, url = "https://cursor.com/cli" },
-        gemini = { cmd = { "gemini" }, url = "https://github.com/google-gemini/gemini-cli" },
-        grok = { cmd = { "grok" }, url = "https://github.com/superagent-ai/grok-cli" },
         opencode = {
           cmd = { "opencode" },
           -- HACK: https://github.com/sst/opencode/issues/445
           env = { OPENCODE_THEME = "system" },
           url = "https://github.com/sst/opencode",
         },
-        qwen = { cmd = { "qwen" }, url = "https://github.com/QwenLM/qwen-code" },
       },
       ---@type table<string, sidekick.Prompt|string|fun(ctx:sidekick.context.ctx):(string?)>
       prompts = {
@@ -310,9 +296,7 @@ return {
         cli.select({
           filter = { name = "claude" },
           cb = function(state)
-            if state then
-              State.attach(state, { show = true, focus = true })
-            end
+            if state then State.attach(state, { show = true, focus = true }) end
           end,
         })
       end,
