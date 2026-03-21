@@ -1,5 +1,6 @@
 --- @type LazySpec
 return {
+  enabled = false,
   "ninetyfive-gg/ninetyfive.nvim",
 
   opts = {

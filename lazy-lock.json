@@ -42,7 +42,6 @@
   "ninetyfive.nvim": { "branch": "main", "commit": "818a6287e36cb7b1963ee4ce7f2adccf58681e03" },
   "noice.nvim": { "branch": "main", "commit": "7bfd942445fb63089b59f97ca487d605e715f155" },
   "nui.nvim": { "branch": "main", "commit": "de740991c12411b663994b2860f1a4fd0937c130" },
-  "nvim-colorizer.lua": { "branch": "master", "commit": "51cf7c995ed1eb6642aecf19067ee634fa1b6ba2" },
   "nvim-dbee": { "branch": "master", "commit": "dda517694889a5d238d7aa407403984da9f80cc0" },
   "nvim-nonicons": { "branch": "main", "commit": "0cd3e96efe766fb3688d955c129c78986d4b295f" },
   "nvim-spider": { "branch": "main", "commit": "4bca4dbc53f01b37385146b37ab5ce55bdc083fc" },
