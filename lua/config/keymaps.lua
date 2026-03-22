@@ -24,6 +24,53 @@ vim.keymap.set("n", "<leader>q", vim.diagnostic.setloclist, { desc = "Open diagn
 vim.keymap.set("n", "|", ":vsplit<CR>", { desc = "Split window vertically" })
 vim.keymap.set("n", "\\", ":split<CR>", { desc = "Split window horizontally" })
 
+-- move between windows (and tmux panes when at an edge)
+local function smart_window_nav(vim_direction, tmux_direction)
+  local current_win = vim.api.nvim_get_current_win()
+  vim.cmd("wincmd " .. vim_direction)
+
+  if vim.api.nvim_get_current_win() ~= current_win then return end
+  if vim.env.TMUX == nil or vim.env.TMUX == "" then return end
+
+  vim.fn.system({ "tmux", "select-pane", "-" .. tmux_direction })
+end
+
+vim.keymap.set("n", "<M-h>", function()
+  smart_window_nav("h", "L")
+end, { desc = "Move to left split or tmux pane", silent = true })
+
+vim.keymap.set("n", "<M-j>", function()
+  smart_window_nav("j", "D")
+end, { desc = "Move to lower split or tmux pane", silent = true })
+
+vim.keymap.set("n", "<M-k>", function()
+  smart_window_nav("k", "U")
+end, { desc = "Move to upper split or tmux pane", silent = true })
+
+vim.keymap.set("n", "<M-l>", function()
+  smart_window_nav("l", "R")
+end, { desc = "Move to right split or tmux pane", silent = true })
+
+vim.keymap.set("t", "<M-h>", function()
+  vim.cmd("stopinsert")
+  smart_window_nav("h", "L")
+end, { desc = "Move to left split or tmux pane", silent = true })
+
+vim.keymap.set("t", "<M-j>", function()
+  vim.cmd("stopinsert")
+  smart_window_nav("j", "D")
+end, { desc = "Move to lower split or tmux pane", silent = true })
+
+vim.keymap.set("t", "<M-k>", function()
+  vim.cmd("stopinsert")
+  smart_window_nav("k", "U")
+end, { desc = "Move to upper split or tmux pane", silent = true })
+
+vim.keymap.set("t", "<M-l>", function()
+  vim.cmd("stopinsert")
+  smart_window_nav("l", "R")
+end, { desc = "Move to right split or tmux pane", silent = true })
+
 -- keep cursor in center when scrolling
 vim.keymap.set("n", "<C-u>", "<C-u>zz", { desc = "Move cursor up half page", noremap = true, silent = true })
 vim.keymap.set("n", "<C-d>", "<C-d>zz", { desc = "Move cursor down half page", noremap = true, silent = true })
@@ -127,3 +174,4 @@ end, { desc = "[P]aste inside" })
 vim.keymap.set("n", "<leader>dd", function()
   require("snacks").terminal.open("lazydocker")
 end, { desc = "Open Lazy[D]ocker" })
+

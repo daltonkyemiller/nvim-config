@@ -65,8 +65,8 @@ return {
               vim.fn.jobstart({ "/home/dalton/scripts/claude-response.sh", "--copy", "1" })
             end,
           },
-          win_p = { "<c-w>p", "blur" }, -- leave the cli window
-          blur = { "<M-b>", "blur" }, -- leave the cli window
+          -- win_p = { "<c-w>p", "blur" }, -- leave the cli window
+          -- blur = { "<M-b>", "blur" }, -- leave the cli window
           prompt = { "<c-p>", "prompt" }, -- insert prompt or context
           send_at = {
             "\\@",
@@ -247,7 +247,7 @@ return {
         opencode = {
           cmd = { vim.fn.expand("~/.opencode/bin/opencode") },
           -- HACK: https://github.com/sst/opencode/issues/445
-          env = { OPENCODE_THEME = "system" },
+          env = { OPENCODE_THEME = "system", OPENCODE_EXPERIMENTAL_OXFMT = "true" },
           url = "https://github.com/sst/opencode",
         },
       },
@@ -379,9 +379,7 @@ return {
       {
         "<M-o>",
         function()
-          if _pick.tool then
-            require("sidekick.cli").hide({ name = _pick.tool })
-          end
+          if _pick.tool then require("sidekick.cli").hide({ name = _pick.tool }) end
           _pick.tool = nil
           select_tool()
         end,
