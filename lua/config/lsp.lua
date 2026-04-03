@@ -48,21 +48,12 @@ vim.api.nvim_create_autocmd("LspAttach", {
     -- end
 
     if client:supports_method("textDocument/documentColor") then
-      vim.lsp.document_color.enable(true, buffer, {
-        style = "virtual",
-      })
+      vim.lsp.document_color.enable(true, { bufnr = buffer, style = "virtual" })
     end
 
     if client:supports_method(vim.lsp.protocol.Methods.textDocument_inlineCompletion) then
-      vim.lsp.inline_completion.enable(true)
+      vim.lsp.inline_completion.enable(true, { bufnr = buffer })
     end
   end,
 })
 
--- create user command to restart all LSPs
-vim.api.nvim_create_user_command("LspRestart", function()
-  vim.lsp.stop_client(vim.lsp.get_clients({
-    bufnr = vim.api.nvim_get_current_buf(),
-  }))
-  vim.cmd(":e!")
-end, {})

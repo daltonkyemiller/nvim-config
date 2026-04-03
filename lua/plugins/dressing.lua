@@ -1,3 +1,1 @@
-return {
-  "stevearc/dressing.nvim",
-}
+return {}

@@ -17,6 +17,34 @@ vim.api.nvim_create_autocmd("VimEnter", {
   end,
   nested = true,
 })
+-- Enable treesitter highlighting for filetypes using external parsers
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = {
+    "typescript",
+    "javascript",
+    "typescriptreact",
+    "javascriptreact",
+    "astro",
+    "json",
+    "dockerfile",
+    "caddy",
+    "http",
+    "terraform",
+    "terraform-vars",
+    "jinja",
+    "prisma",
+    "python",
+    "css",
+    "html",
+    "rust",
+    "go",
+    "sql",
+  },
+  callback = function()
+    pcall(vim.treesitter.start)
+  end,
+})
+
 -- custom parsers
 vim.api.nvim_create_autocmd("User", {
   pattern = "TSUpdate",
@@ -31,29 +59,6 @@ vim.api.nvim_create_autocmd("User", {
   end,
 })
 
-vim.api.nvim_create_autocmd("FileType", {
-  pattern = {
-    "typescript",
-    "javascript",
-    "typescriptreact",
-    "javascriptreact",
-    "yaml",
-    "yaml.github",
-    "json",
-    "dockerfile",
-    "caddy",
-    "http",
-    "terraform",
-    "terraform-vars",
-    "jinja",
-    "prisma",
-    "python",
-    "sh",
-  },
-  callback = function()
-    pcall(vim.treesitter.start)
-  end,
-})
 
 local inactive_ns = vim.api.nvim_create_namespace("InactiveWindowDim")
 local last_active_normal_win = nil
