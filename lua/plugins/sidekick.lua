@@ -3,6 +3,7 @@ local _pick = { tool = nil }
 --- @type LazySpec
 return {
   "folke/sidekick.nvim",
+  enabled = false,
   lazy = false,
   ---@class sidekick.Config
   opts = {
@@ -74,158 +75,158 @@ return {
               t:send("@")
             end,
           },
-          pick_file = {
-            "@",
-            function(t)
-              local pid = t.pids[1]
-              local snacks_picker_proc = require("snacks.picker.source.proc")
-              local snacks_picker = require("snacks.picker")
-              local devicons = require("nvim-web-devicons")
-              local script_location = vim.fn.stdpath("config") .. "/scripts/claude_find.sh"
-              local cwd = vim.uv.cwd()
-              local session_cwd = t.cwd and vim.fn.resolve(t.cwd) or cwd
-              snacks_picker.pick({
-                format = function(item, picker)
-                  if item.is_file then return snacks_picker.format.file(item, picker) end
-                  local agent_icon, icon_hl = devicons.get_icon("ai")
-                  return {
-                    { agent_icon, icon_hl },
-                    { " ", virtual = true },
-                    { item.text },
-                  }
-                end,
-                finder = function(opts, ctx)
-                  local last_buf_num = vim.fn.bufnr("#")
-                  local last_buf_name = last_buf_num and last_buf_num ~= -1 and vim.fn.bufname(last_buf_num) or nil
-
-                  local args = { "-p", tostring(pid) }
-                  if last_buf_name then
-                    table.insert(args, "-f")
-                    table.insert(args, vim.api.nvim_buf_get_name(vim.fn.bufnr("#")))
-                  end
-
-                  -- Add all other loaded buffers (excluding terminal buffers)
-                  for _, buf in ipairs(vim.api.nvim_list_bufs()) do
-                    if vim.api.nvim_buf_is_loaded(buf) and buf ~= last_buf_num then
-                      local buf_type = vim.api.nvim_get_option_value("buftype", { buf = buf })
-                      -- Skip terminal and other special buffer types
-                      if buf_type == "" or buf_type == "acwrite" then
-                        local buf_name = vim.api.nvim_buf_get_name(buf)
-                        if buf_name and buf_name ~= "" then
-                          table.insert(args, "-b")
-                          table.insert(args, buf_name)
-                        end
-                      end
-                    end
-                  end
-
-                  return snacks_picker_proc.proc(
-                    ctx:opts({
-                      cmd = script_location,
-                      args = #args > 0 and args or nil,
-                      ---@param item snacks.picker.Item
-                      transform = function(item)
-                        local current_file_path = item.text:match("current%-file://(.*)")
-                        local buffer_file_path = item.text:match("buffer://(.*)")
-                        local matched_file_path = item.text:match("file://(.*)")
-                        local file_path = matched_file_path or current_file_path or buffer_file_path
-                        local agent_match = item.text:match("agent://(.+)|(.+)")
-
-                        if file_path then
-                          local full_path
-                          local display_path = file_path
-                          local score_add = 0
-
-                          -- Handle current-file:// - make it relative to cwd
-                          if current_file_path then
-                            full_path = current_file_path
-                            -- Make the absolute path relative to cwd
-                            if vim.startswith(full_path, cwd) then
-                              display_path = vim.fn.fnamemodify(full_path, ":~:.")
-                            else
-                              display_path = vim.fn.fnamemodify(full_path, ":~")
-                            end
-                            score_add = 100
-                          elseif buffer_file_path then
-                            -- Handle buffer:// - make it relative to cwd
-                            full_path = buffer_file_path
-                            -- Make the absolute path relative to cwd
-                            if vim.startswith(full_path, cwd) then
-                              display_path = vim.fn.fnamemodify(full_path, ":~:.")
-                            else
-                              display_path = vim.fn.fnamemodify(full_path, ":~")
-                            end
-                            score_add = 50 -- Give buffers higher priority than regular files
-                          else
-                            -- Regular file:// - already relative
-                            full_path = cwd .. "/" .. file_path
-                            display_path = file_path
-                          end
-
-                          local has_extension = vim.fn.fnamemodify(display_path, ":e") ~= ""
-                          local dir = not has_extension and vim.fn.fnamemodify(display_path, ":h") or nil
-                          return vim.tbl_extend("force", item, {
-                            text = display_path,
-                            file = full_path,
-                            dir = dir,
-                            is_file = true,
-                            is_agent = false,
-                            score_add = score_add,
-                          })
-                        elseif agent_match then
-                          local agent_name, agent_path = item.text:match("agent://(.+)|(.+)")
-                          return vim.tbl_extend("force", item, {
-                            text = agent_name,
-                            file = agent_path,
-                            is_agent = true,
-                            is_file = false,
-                          })
-                        end
-
-                        return item
-                      end,
-                    }),
-                    ctx
-                  )
-                end,
-                on_show = function()
-                  vim.api.nvim_feedkeys("i", "n", false)
-                end,
-                confirm = function(picker, item)
-                  local selected = picker:selected()
-                  local items_to_send = {}
-
-                  -- Make path relative to the CLI session's cwd
-                  local function to_session_path(sel_item)
-                    if not sel_item.is_file or not sel_item.file then return sel_item.text end
-                    local abs = vim.fn.resolve(sel_item.file)
-                    local rel = vim.fn.systemlist({
-                      "realpath",
-                      "--relative-to=" .. session_cwd,
-                      abs,
-                    })[1]
-                    return rel or sel_item.text
-                  end
-
-                  -- Use selected items if any exist, otherwise use the single item
-                  if selected and #selected > 0 then
-                    for _, sel_item in ipairs(selected) do
-                      table.insert(items_to_send, "@" .. to_session_path(sel_item))
-                    end
-                  else
-                    table.insert(items_to_send, "@" .. to_session_path(item))
-                  end
-
-                  -- Join with newlines and send
-                  t:send(table.concat(items_to_send, "\n") .. "\n")
-                  picker:close()
-                  t:focus()
-                  vim.api.nvim_feedkeys("i", "n", false)
-                end,
-              })
-            end,
-            expr = true,
-          },
+          -- pick_file = {
+          --   "@",
+          --   function(t)
+          --     local pid = t.pids[1]
+          --     local snacks_picker_proc = require("snacks.picker.source.proc")
+          --     local snacks_picker = require("snacks.picker")
+          --     local devicons = require("nvim-web-devicons")
+          --     local script_location = vim.fn.stdpath("config") .. "/scripts/claude_find.sh"
+          --     local cwd = vim.uv.cwd()
+          --     local session_cwd = t.cwd and vim.fn.resolve(t.cwd) or cwd
+          --     snacks_picker.pick({
+          --       format = function(item, picker)
+          --         if item.is_file then return snacks_picker.format.file(item, picker) end
+          --         local agent_icon, icon_hl = devicons.get_icon("ai")
+          --         return {
+          --           { agent_icon, icon_hl },
+          --           { " ", virtual = true },
+          --           { item.text },
+          --         }
+          --       end,
+          --       finder = function(opts, ctx)
+          --         local last_buf_num = vim.fn.bufnr("#")
+          --         local last_buf_name = last_buf_num and last_buf_num ~= -1 and vim.fn.bufname(last_buf_num) or nil
+          --
+          --         local args = { "-p", tostring(pid) }
+          --         if last_buf_name then
+          --           table.insert(args, "-f")
+          --           table.insert(args, vim.api.nvim_buf_get_name(vim.fn.bufnr("#")))
+          --         end
+          --
+          --         -- Add all other loaded buffers (excluding terminal buffers)
+          --         for _, buf in ipairs(vim.api.nvim_list_bufs()) do
+          --           if vim.api.nvim_buf_is_loaded(buf) and buf ~= last_buf_num then
+          --             local buf_type = vim.api.nvim_get_option_value("buftype", { buf = buf })
+          --             -- Skip terminal and other special buffer types
+          --             if buf_type == "" or buf_type == "acwrite" then
+          --               local buf_name = vim.api.nvim_buf_get_name(buf)
+          --               if buf_name and buf_name ~= "" then
+          --                 table.insert(args, "-b")
+          --                 table.insert(args, buf_name)
+          --               end
+          --             end
+          --           end
+          --         end
+          --
+          --         return snacks_picker_proc.proc(
+          --           ctx:opts({
+          --             cmd = script_location,
+          --             args = #args > 0 and args or nil,
+          --             ---@param item snacks.picker.Item
+          --             transform = function(item)
+          --               local current_file_path = item.text:match("current%-file://(.*)")
+          --               local buffer_file_path = item.text:match("buffer://(.*)")
+          --               local matched_file_path = item.text:match("file://(.*)")
+          --               local file_path = matched_file_path or current_file_path or buffer_file_path
+          --               local agent_match = item.text:match("agent://(.+)|(.+)")
+          --
+          --               if file_path then
+          --                 local full_path
+          --                 local display_path = file_path
+          --                 local score_add = 0
+          --
+          --                 -- Handle current-file:// - make it relative to cwd
+          --                 if current_file_path then
+          --                   full_path = current_file_path
+          --                   -- Make the absolute path relative to cwd
+          --                   if vim.startswith(full_path, cwd) then
+          --                     display_path = vim.fn.fnamemodify(full_path, ":~:.")
+          --                   else
+          --                     display_path = vim.fn.fnamemodify(full_path, ":~")
+          --                   end
+          --                   score_add = 100
+          --                 elseif buffer_file_path then
+          --                   -- Handle buffer:// - make it relative to cwd
+          --                   full_path = buffer_file_path
+          --                   -- Make the absolute path relative to cwd
+          --                   if vim.startswith(full_path, cwd) then
+          --                     display_path = vim.fn.fnamemodify(full_path, ":~:.")
+          --                   else
+          --                     display_path = vim.fn.fnamemodify(full_path, ":~")
+          --                   end
+          --                   score_add = 50 -- Give buffers higher priority than regular files
+          --                 else
+          --                   -- Regular file:// - already relative
+          --                   full_path = cwd .. "/" .. file_path
+          --                   display_path = file_path
+          --                 end
+          --
+          --                 local has_extension = vim.fn.fnamemodify(display_path, ":e") ~= ""
+          --                 local dir = not has_extension and vim.fn.fnamemodify(display_path, ":h") or nil
+          --                 return vim.tbl_extend("force", item, {
+          --                   text = display_path,
+          --                   file = full_path,
+          --                   dir = dir,
+          --                   is_file = true,
+          --                   is_agent = false,
+          --                   score_add = score_add,
+          --                 })
+          --               elseif agent_match then
+          --                 local agent_name, agent_path = item.text:match("agent://(.+)|(.+)")
+          --                 return vim.tbl_extend("force", item, {
+          --                   text = agent_name,
+          --                   file = agent_path,
+          --                   is_agent = true,
+          --                   is_file = false,
+          --                 })
+          --               end
+          --
+          --               return item
+          --             end,
+          --           }),
+          --           ctx
+          --         )
+          --       end,
+          --       on_show = function()
+          --         vim.api.nvim_feedkeys("i", "n", false)
+          --       end,
+          --       confirm = function(picker, item)
+          --         local selected = picker:selected()
+          --         local items_to_send = {}
+          --
+          --         -- Make path relative to the CLI session's cwd
+          --         local function to_session_path(sel_item)
+          --           if not sel_item.is_file or not sel_item.file then return sel_item.text end
+          --           local abs = vim.fn.resolve(sel_item.file)
+          --           local rel = vim.fn.systemlist({
+          --             "realpath",
+          --             "--relative-to=" .. session_cwd,
+          --             abs,
+          --           })[1]
+          --           return rel or sel_item.text
+          --         end
+          --
+          --         -- Use selected items if any exist, otherwise use the single item
+          --         if selected and #selected > 0 then
+          --           for _, sel_item in ipairs(selected) do
+          --             table.insert(items_to_send, "@" .. to_session_path(sel_item))
+          --           end
+          --         else
+          --           table.insert(items_to_send, "@" .. to_session_path(item))
+          --         end
+          --
+          --         -- Join with newlines and send
+          --         t:send(table.concat(items_to_send, "\n") .. "\n")
+          --         picker:close()
+          --         t:focus()
+          --         vim.api.nvim_feedkeys("i", "n", false)
+          --       end,
+          --     })
+          --   end,
+          --   expr = true,
+          -- },
         },
       },
       ---@class sidekick.cli.Mux
