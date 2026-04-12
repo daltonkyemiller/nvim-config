@@ -59,6 +59,119 @@ vim.api.nvim_create_autocmd("User", {
   end,
 })
 
+local function normalize_path(path)
+  if not path or path == "" then return nil end
+  return vim.uv.fs_realpath(path) or path
+end
+
+local function is_readable_file(path)
+  return path and path ~= "" and vim.fn.filereadable(path) == 1
+end
+
+local function in_cwd(path, cwd)
+  return path == cwd or vim.startswith(path, cwd .. "/")
+end
+
+local function unique_paths(paths, max_items)
+  local out = {}
+  local seen = {}
+  for _, path in ipairs(paths) do
+    if path and not seen[path] then
+      seen[path] = true
+      out[#out + 1] = path
+      if #out >= max_items then break end
+    end
+  end
+  return out
+end
+
+local function write_tmux_picker_context()
+  local cwd = normalize_path(vim.uv.cwd())
+  if not cwd then return end
+
+  local state_dir = vim.fn.expand("~/.local/state/agent-mux/nvim-context")
+  vim.fn.mkdir(state_dir, "p")
+
+  local hash = vim.fn.sha256(cwd):sub(1, 16)
+  local state_file = state_dir .. "/" .. hash .. ".json"
+
+  local current_name = normalize_path(vim.api.nvim_buf_get_name(vim.api.nvim_get_current_buf()))
+  local current_file = is_readable_file(current_name) and current_name or nil
+  if current_file and not in_cwd(current_file, cwd) then current_file = nil end
+
+  local alternate_num = vim.fn.bufnr("#")
+  local alternate_name = alternate_num > 0 and normalize_path(vim.api.nvim_buf_get_name(alternate_num)) or nil
+  local alternate_file = is_readable_file(alternate_name) and alternate_name or nil
+  if alternate_file and not in_cwd(alternate_file, cwd) then alternate_file = nil end
+
+  local open_buffers = {}
+  for _, buf in ipairs(vim.api.nvim_list_bufs()) do
+    if vim.api.nvim_buf_is_loaded(buf) and vim.bo[buf].buflisted then
+      local name = normalize_path(vim.api.nvim_buf_get_name(buf))
+      if is_readable_file(name) and in_cwd(name, cwd) then
+        open_buffers[#open_buffers + 1] = name
+      end
+    end
+  end
+
+  local recent_files = {}
+  for _, oldfile in ipairs(vim.v.oldfiles or {}) do
+    local name = normalize_path(oldfile)
+    if is_readable_file(name) and in_cwd(name, cwd) then
+      recent_files[#recent_files + 1] = name
+    end
+  end
+
+  local payload = {
+    cwd = cwd,
+    tmux_pane = vim.env.TMUX_PANE or "",
+    updated_at = os.time(),
+    current_file = current_file,
+    alternate_file = alternate_file,
+    open_buffers = unique_paths(open_buffers, 20),
+    recent_files = unique_paths(recent_files, 50),
+  }
+
+  local ok, encoded = pcall(vim.json.encode, payload)
+  if not ok then return end
+  vim.fn.writefile({ encoded }, state_file)
+end
+
+local picker_context_group = vim.api.nvim_create_augroup("TmuxAgentPickerContext", { clear = true })
+local picker_context_timer = nil
+
+local function schedule_tmux_picker_context_write()
+  if picker_context_timer then
+    picker_context_timer:stop()
+    picker_context_timer:close()
+    picker_context_timer = nil
+  end
+
+  picker_context_timer = vim.uv.new_timer()
+  if not picker_context_timer then
+    write_tmux_picker_context()
+    return
+  end
+
+  picker_context_timer:start(150, 0, function()
+    picker_context_timer:stop()
+    picker_context_timer:close()
+    picker_context_timer = nil
+    vim.schedule(write_tmux_picker_context)
+  end)
+end
+
+vim.api.nvim_create_autocmd({
+  "VimEnter",
+  "BufEnter",
+  "WinEnter",
+  "BufWritePost",
+  "DirChanged",
+}, {
+  group = picker_context_group,
+  callback = schedule_tmux_picker_context_write,
+})
+
 
 local inactive_ns = vim.api.nvim_create_namespace("InactiveWindowDim")
 local last_active_normal_win = nil
