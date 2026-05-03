@@ -109,6 +109,23 @@ return {
           actions = {
             ---@param picker snacks.picker
             ---@param item snacks.picker.Item
+            open_in_oil = function(picker, item)
+              local filepath = item.file
+              if not filepath then return end
+
+              local oil_path = item.dir and filepath or vim.fn.fnamemodify(filepath, ":h")
+              picker:close()
+              require("oil").open(oil_path)
+            end,
+            ---@param picker snacks.picker
+            ---@param item snacks.picker.Item
+            system_open = function(picker, item)
+              local filepath = item.file
+              if not filepath then return end
+              vim.fn.system({ "xdg-open", filepath })
+            end,
+            ---@param picker snacks.picker
+            ---@param item snacks.picker.Item
             yank_choice = function(picker, item)
               local filepath = item.file
               if not filepath then return end
@@ -151,7 +168,9 @@ return {
           win = {
             list = {
               keys = {
+                ["-"] = "open_in_oil",
                 ["Y"] = "yank_choice",
+                ["O"] = "system_open",
               },
             },
           },

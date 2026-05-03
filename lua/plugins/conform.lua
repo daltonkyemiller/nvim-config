@@ -1,6 +1,7 @@
 local function get_correct_formatter_js()
   local cwd = vim.fn.getcwd()
   local has_oxfmt_file = vim.fn.filereadable(cwd .. "/oxfmt.json") == 1
+    or vim.fn.filereadable(cwd .. "/.oxfmtrc.json") == 1
   if has_oxfmt_file then return { "oxfmt" } end
 
   local has_biome_file = vim.fn.filereadable(cwd .. "/biome.json") == 1

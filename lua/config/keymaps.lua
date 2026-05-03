@@ -175,3 +175,32 @@ vim.keymap.set("n", "<leader>dd", function()
   require("snacks").terminal.open("lazydocker")
 end, { desc = "Open Lazy[D]ocker" })
 
+vim.keymap.set("x", "<leader>cc", function()
+  local color_convert = require("daltonkyemiller.color_convert")
+
+  if not color_convert.has_pastel() then
+    vim.notify("pastel CLI not found", vim.log.levels.ERROR)
+    return
+  end
+
+  local selected = color_convert.normalize_color(table.concat(vim.fn.getregion(vim.fn.getpos("v"), vim.fn.getpos(".")), "\n"))
+  if selected == "" then
+    vim.notify("No color selected", vim.log.levels.WARN)
+    return
+  end
+
+  vim.ui.select(color_convert.get_pastel_formats(), {
+    prompt = "Convert color to:",
+  }, function(format)
+    if not format then return end
+
+    local converted, err = color_convert.format_color(selected, format)
+    if not converted then
+      vim.notify(err, vim.log.levels.ERROR)
+      return
+    end
+
+    vim.fn.setreg("+", converted)
+    vim.notify(("Copied %s: %s"):format(format, converted))
+  end)
+end, { desc = "[C]olor [C]onvert" })
