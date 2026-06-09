@@ -5,6 +5,7 @@ return {
   opts = function()
     local library = {
       "~/dev/nvim-plugins/claude-code.nvim",
+      "~/dev/switchboard/nvim",
       "~/.config/nvim/lua/daltonkyemiller/globals",
       "kanagawa.nvim",
       "lazy.nvim",

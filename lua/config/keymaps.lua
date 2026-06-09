@@ -175,6 +175,23 @@ vim.keymap.set("n", "<leader>dd", function()
   require("snacks").terminal.open("lazydocker")
 end, { desc = "Open Lazy[D]ocker" })
 
+local function open_codiff(args)
+  local command = { "codiff" }
+  vim.list_extend(command, args or {})
+  table.insert(command, vim.fn.getcwd())
+
+  local job = vim.fn.jobstart(command, { cwd = vim.fn.getcwd(), detach = true })
+  if job <= 0 then vim.notify("Failed to launch codiff", vim.log.levels.ERROR) end
+end
+
+vim.keymap.set("n", "<leader>gd", function()
+  open_codiff()
+end, { desc = "[G]it [D]iff (codiff)" })
+
+vim.keymap.set("n", "<leader>gD", function()
+  open_codiff({ "HEAD" })
+end, { desc = "[G]it [D]iff HEAD (codiff)" })
+
 vim.keymap.set("x", "<leader>cc", function()
   local color_convert = require("daltonkyemiller.color_convert")
 

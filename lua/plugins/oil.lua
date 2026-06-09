@@ -5,6 +5,9 @@ return {
   ---@type oil.SetupOpts
   opts = {
     default_file_explorer = false,
+    view_options = {
+      show_hidden = true,
+    }
   },
   init = function()
     vim.api.nvim_create_autocmd("User", {
