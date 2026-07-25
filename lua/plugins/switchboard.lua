@@ -3,10 +3,6 @@ return {
   dev = true,
   dir = "~/dev/switchboard/nvim/",
   lazy = false,
-  --- @type SwitchboardConfig
-  opts = {
-    command = "/home/dalton/dev/switchboard/cli/dist/debug/switchboard",
-  },
   keys = {
     {
       "<M-s>",
